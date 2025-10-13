@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="register" prefHeight="623.0" prefWidth="519.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RegisterController">
+   <children>
+      <AnchorPane prefHeight="80.0" prefWidth="520.0" style="-fx-background-color: #EBB672;">
+         <children>
+            <ImageView fx:id="userImageView" fitHeight="57.0" fitWidth="61.0" layoutX="20.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/Imagem3.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="83.0" layoutY="28.0" text="Cadastrar novo usuário">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label layoutX="82.0" layoutY="127.0" text="Nome">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cadastroNome" layoutX="82.0" layoutY="152.0" prefHeight="25.0" prefWidth="336.0" promptText="Nome completo" />
+      <Label layoutX="82.0" layoutY="193.0" text="Matrícula">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cadastroMatricula" layoutX="82.0" layoutY="218.0" prefHeight="25.0" prefWidth="336.0" promptText="Número da matrícula" />
+      <Label layoutX="82.0" layoutY="257.0" text="E-mail">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cadastroEmail" layoutX="82.0" layoutY="282.0" prefHeight="25.0" prefWidth="336.0" promptText="E-mail" />
+      <Label layoutX="83.0" layoutY="320.0" text="Código do Cargo">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cadastroCodCargo" layoutX="82.0" layoutY="346.0" prefHeight="25.0" prefWidth="336.0" promptText="1 : Admin, 2: Aprovisionador, 3: Mecânico" />
+      <Label layoutX="82.0" layoutY="382.0" text="Senha">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="cadastroSenha" layoutX="82.0" layoutY="407.0" prefHeight="25.0" prefWidth="336.0" promptText="Senha" />
+      <Label layoutX="82.0" layoutY="445.0" text="Confirme a senha">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="cadastroConfirmarSenha" layoutX="82.0" layoutY="471.0" prefHeight="25.0" prefWidth="336.0" promptText="Confirmação de senha" />
+      <Button fx:id="cadastrarButton" layoutX="82.0" layoutY="515.0" mnemonicParsing="false" onAction="#cadastrarButtonOnAction" prefHeight="27.0" prefWidth="336.0" style="-fx-background-color: #EBB672;" text="Cadastrar">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="cadastrarCancelButton" layoutX="83.0" layoutY="552.0" mnemonicParsing="false" onAction="#cadastrarCancelButtonOnAction" prefHeight="27.0" prefWidth="336.0" text="Voltar">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Label fx:id="registrationSuccessfull" alignment="CENTER" contentDisplay="CENTER" layoutX="82.0" layoutY="93.0" prefHeight="17.0" prefWidth="336.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="passwordError" contentDisplay="CENTER" layoutX="205.0" layoutY="445.0" prefHeight="19.0" prefWidth="211.0" textFill="#bc5353">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

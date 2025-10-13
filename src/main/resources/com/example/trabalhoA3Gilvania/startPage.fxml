@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.StartPageController">
+   <children>
+      <MenuBar fx:id="menuPagina" prefHeight="25.0" prefWidth="900.0" style="-fx-background-color: #EBB672;">
+        <menus>
+          <Menu mnemonicParsing="false" text="Ordem de servico">
+            <items>
+              <MenuItem fx:id="menuImportarOs" mnemonicParsing="false" onAction="#menuImportarOsOnAction" text="Importar Os" />
+                  <MenuItem mnemonicParsing="false" text="Editar Os" />
+                  <MenuItem mnemonicParsing="false" text="Encerrar Os" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Usuario">
+            <items>
+              <MenuItem fx:id="menuAddUser" mnemonicParsing="false" onAction="#menuAddUserOnAction" text="Adicionar Usuario" />
+                  <MenuItem fx:id="menuRemoveUser" mnemonicParsing="false" onAction="#menuRemoveUserOnActino" text="Remover Usuario" />
+                  <MenuItem fx:id="menuSair" mnemonicParsing="false" onAction="#menuSairOnAction" text="Sair" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Solicitacoes">
+               <items>
+                  <MenuItem fx:id="menuSolicitarItem" mnemonicParsing="false" text="Solicitar Item" />
+                  <MenuItem fx:id="menuLancarRetirada" mnemonicParsing="false" text="Lancar Retirada" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>
