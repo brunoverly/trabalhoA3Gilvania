@@ -3,6 +3,9 @@ package com.example.trabalhoA3Gilvania.controller;
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.screen.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -22,6 +25,52 @@ public class StartPageController {
     @FXML private MenuItem menuRemoveUser;
     @FXML private MenuItem menuSair;
     @FXML private MenuItem menuImportarOs;
+    @FXML private MenuItem menuConsultOs;
+    @FXML private MenuItem menuClseOs;
+    @FXML private MenuItem menuEditarItem;
+    @FXML private MenuItem menuRetiradaItem;
+    @FXML private MenuItem menuEntradaItem;
+
+    public void menuEditarItemOnAction(ActionEvent event){
+        try{
+            try {
+                AbrirItem("editar");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
+
+    public void menuRetiradaItemOnAction(ActionEvent event){
+        try{
+            AbrirItem("saida");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
+    public void menuEntradaItemOnAction(ActionEvent event){
+        try{
+            AbrirItem("entrada");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
+
+
+
+
+
+
+
 
     public void menuRemoveUserOnActino(ActionEvent event){
         try{
@@ -34,8 +83,25 @@ public class StartPageController {
     }
 
 
+    public void menuCloseOsOnAction(ActionEvent event){
+        try{
+            FecharOs();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
 
-
+    public void menuConsultOsOnAction(ActionEvent event){
+        try{
+            ConsultarOs();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
 
 
 
@@ -98,4 +164,29 @@ public class StartPageController {
         Stage stage = new Stage();
         importarOs.start(stage);
     }
+    public static void FecharOs() throws Exception {
+        CloseOsScreen importarOs = new CloseOsScreen();
+        Stage stage = new Stage();
+        importarOs.start(stage);
+    }
+
+    public static void ConsultarOs() throws Exception {
+        ConsultOsScreen novaJanela = new ConsultOsScreen();
+        Stage stage = new Stage();
+        novaJanela.start(stage);
+    }
+    public void AbrirItem(String modo) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/consultEditItem.fxml"));
+        Parent root = loader.load();
+
+        // Obtém o controller e passa o parâmetro
+        ConsultEditItemController controller = loader.getController();
+        controller.setModo(modo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Consulta de Itens");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
 }

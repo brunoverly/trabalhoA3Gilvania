@@ -11,24 +11,25 @@
         <menus>
           <Menu mnemonicParsing="false" text="Ordem de servico">
             <items>
-              <MenuItem fx:id="menuImportarOs" mnemonicParsing="false" onAction="#menuImportarOsOnAction" text="Importar Os" />
-                  <MenuItem mnemonicParsing="false" text="Editar Os" />
-                  <MenuItem mnemonicParsing="false" text="Encerrar Os" />
+              <MenuItem fx:id="menuImportarOs" mnemonicParsing="false" onAction="#menuImportarOsOnAction" text="Importar" />
+                  <MenuItem fx:id="menuConsultOs" mnemonicParsing="false" onAction="#menuConsultOsOnAction" text="Consultar" />
+                  <MenuItem fx:id="menuCloseOs" mnemonicParsing="false" onAction="#menuCloseOsOnAction" text="Encerrar" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Usuario">
-            <items>
-              <MenuItem fx:id="menuAddUser" mnemonicParsing="false" onAction="#menuAddUserOnAction" text="Adicionar Usuario" />
-                  <MenuItem fx:id="menuRemoveUser" mnemonicParsing="false" onAction="#menuRemoveUserOnActino" text="Remover Usuario" />
-                  <MenuItem fx:id="menuSair" mnemonicParsing="false" onAction="#menuSairOnAction" text="Sair" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Solicitacoes">
+            <Menu mnemonicParsing="false" text="Itens">
                <items>
-                  <MenuItem fx:id="menuSolicitarItem" mnemonicParsing="false" text="Solicitar Item" />
-                  <MenuItem fx:id="menuLancarRetirada" mnemonicParsing="false" text="Lancar Retirada" />
+                  <MenuItem fx:id="menuEditarItem" mnemonicParsing="false" onAction="#menuEditarItemOnAction" text="Editar" />
+                  <MenuItem fx:id="menuEntradaItem" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" text="Entrada" />
+                  <MenuItem fx:id="menuRetiradaItem" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" text="Saida" />
                </items>
             </Menu>
+          <Menu mnemonicParsing="false" text="Usuario">
+            <items>
+              <MenuItem fx:id="menuAddUser" mnemonicParsing="false" onAction="#menuAddUserOnAction" text="Criar" />
+                  <MenuItem fx:id="menuRemoveUser" mnemonicParsing="false" onAction="#menuRemoveUserOnActino" text="Remover" />
+                  <MenuItem fx:id="menuSair" mnemonicParsing="false" onAction="#menuSairOnAction" text="Log off" />
+            </items>
+          </Menu>
         </menus>
       </MenuBar>
    </children>

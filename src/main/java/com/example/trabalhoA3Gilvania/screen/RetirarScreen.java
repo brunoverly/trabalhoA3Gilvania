@@ -16,5 +16,6 @@ public class RetirarScreen extends Application {
         stage.show();
         Platform.runLater(() -> scene.getRoot().requestFocus());
         stage.setResizable(false);
+
     }
 }

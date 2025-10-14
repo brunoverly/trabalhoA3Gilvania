@@ -117,51 +117,40 @@ public class GerenciadorOperacao {
                         e.printStackTrace();
                     }
 
-                        if (osCadastrada) {
-                            try {
-                                String sqlOrdem = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
-                                try (PreparedStatement ps = connetDB.prepareStatement(sqlOrdem)) {
-                                    ps.setString(1, operacaoString); // data/hora no formato MySQL
-                                    ps.setString(2, osString);
-                                    ps.setString(3, row.getCell(4).getStringCellValue());
-                                    ps.executeUpdate();
-                                }
+                    if (osCadastrada) {
+                        try {
+                            String sqlOperacao = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
+                            try (PreparedStatement ps = connetDB.prepareStatement(sqlOperacao, Statement.RETURN_GENERATED_KEYS)) {
+                                ps.setString(1, operacaoString);
+                                ps.setString(2, osString);
+                                ps.setString(3, row.getCell(4).getStringCellValue());
+                                ps.executeUpdate();
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                e.getCause();
+                                // Recupera o ID gerado automaticamente
+                                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                                    if (generatedKeys.next()) {
+                                        idOperacao = generatedKeys.getInt(1); // aqui temos o id correto da operação
+                                    } else {
+                                        throw new SQLException("Falha ao obter id da operação.");
+                                    }
+                                }
                             }
 
-                            String sqlBucaId = "SELECT id FROM operacao WHERE cod_os =(?)";
-                            try (PreparedStatement statement2 = connetDB.prepareStatement(sqlBucaId)) {
-                                statement2.setString(1, numeroOs);
-                                ResultSet resultadoBuscaOperacao = statement2.executeQuery();
-                                if (resultadoBuscaOperacao.next()) {
-                                    idOperacao = resultadoBuscaOperacao.getInt(1);
-                                } else {
-                                    continue;
-                                }
-
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
+                            // Agora insere o item vinculado ao idOperacao correto
+                            String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
+                            try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
+                                psItem.setInt(1, idOperacao);
+                                psItem.setString(2, row.getCell(4).getStringCellValue());
+                                psItem.setString(3, row.getCell(5).getStringCellValue());
+                                psItem.setInt(4, (int) row.getCell(6).getNumericCellValue());
+                                psItem.executeUpdate();
                             }
 
-                            try {
-                                String sqlOrdem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
-                                try (PreparedStatement ps = connetDB.prepareStatement(sqlOrdem)) {
-                                    ps.setInt(1, idOperacao);
-                                    ps.setString(2, row.getCell(4).getStringCellValue());
-                                    ps.setString(3, row.getCell(5).getStringCellValue());
-                                    ps.setInt(4, (int) row.getCell(6).getNumericCellValue());
-                                    ps.executeUpdate();
-                                }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                e.getCause();
-                            }
-
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            e.getCause();
                         }
+                    }
                     } catch (SQLException e) {
                     e.printStackTrace();
                     e.getCause();

@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RetirarController">
    <children>
       <AnchorPane prefHeight="52.0" prefWidth="520.0" style="-fx-background-color: #EBB672;">
@@ -18,31 +17,23 @@
             </Label>
          </children>
       </AnchorPane>
-      <Label layoutX="41.0" layoutY="74.0" text="Digite o codigo do item a ser retirado:">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Label>
-      <TextField fx:id="retirarCodItem" layoutX="41.0" layoutY="99.0" prefHeight="24.0" prefWidth="434.0" promptText="Ex: 6500893232" />
-      <Label layoutX="43.0" layoutY="142.0" text="Digite o codigo da operacao:">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Label>
-      <TextField fx:id="retirarCodOperacao" layoutX="43.0" layoutY="167.0" prefHeight="24.0" prefWidth="434.0" promptText="Ex: 0010" />
-      <TextField fx:id="retitarQtd" layoutX="43.0" layoutY="246.0" prefHeight="24.0" prefWidth="434.0" promptText="Ex: 2.0, 1.75" />
-      <Label layoutX="43.0" layoutY="218.0" text="Quantidade a ser retirada:">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Label>
-      <TextField fx:id="retirarMatricula" layoutX="43.0" layoutY="312.0" prefHeight="24.0" prefWidth="434.0" promptText="Ex: 340076" />
-      <Label layoutX="43.0" layoutY="287.0" text="Matricula do responsavel pela retiada:">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Label>
-      <Button layoutX="66.0" layoutY="549.0" mnemonicParsing="false" text="Voltar" />
-      <Button layoutX="359.0" layoutY="549.0" mnemonicParsing="false" style="-fx-background-color: #EBB672;" text="Confirmar" />
+      <Button fx:id="retirarCancelButton" layoutX="45.0" layoutY="549.0" mnemonicParsing="false" onAction="#retirarCancelButtonOnAction" text="Cancelar" />
+      <Button fx:id="retirarConfirmarButton" layoutX="238.0" layoutY="549.0" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" style="-fx-background-color: #EBB672;" text="Confirmar" />
+      <Label layoutX="52.0" layoutY="76.0" prefHeight="17.0" prefWidth="174.0" text="Ordem de Servico" />
+      <Label layoutX="52.0" layoutY="131.0" text="Operacao" />
+      <Label layoutX="52.0" layoutY="178.0" text="Codigo do item" />
+      <Label layoutX="52.0" layoutY="242.0" text="Descicao do item" />
+      <Label layoutX="52.0" layoutY="295.0" text="Quantidade" />
+      <Label layoutX="57.0" layoutY="460.0" text="Matricula do responsvael retirada" />
+      <TextField layoutX="51.0" layoutY="485.0" prefHeight="25.0" prefWidth="186.0" />
+      <TextField layoutX="51.0" layoutY="318.0" prefHeight="25.0" prefWidth="186.0" />
+      <TextField layoutX="52.0" layoutY="259.0" prefHeight="25.0" prefWidth="186.0" />
+      <TextField layoutX="52.0" layoutY="195.0" prefHeight="25.0" prefWidth="186.0" />
+      <TextField layoutX="52.0" layoutY="148.0" prefHeight="25.0" prefWidth="186.0" />
+      <TextField layoutX="52.0" layoutY="93.0" prefHeight="25.0" prefWidth="186.0" />
+      <Label layoutX="52.0" layoutY="354.0" text="Status" />
+      <TextField layoutX="51.0" layoutY="371.0" prefHeight="25.0" prefWidth="186.0" />
+      <Label layoutX="52.0" layoutY="410.0" text="Local Armazenado" />
+      <TextField layoutX="51.0" layoutY="427.0" prefHeight="25.0" prefWidth="186.0" />
    </children>
 </AnchorPane>
