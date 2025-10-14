@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.CloseOsController">
+    <children>
+        <AnchorPane prefHeight="54.0" prefWidth="1000.0" style="-fx-background-color: #EBB672;" />
+        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS a ser encerrada">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="consultNumeroOsBuscado" editable="false" layoutX="57.0" layoutY="232.0" prefHeight="25.0" prefWidth="153.0" visible="false" />
+        <Button fx:id="consultBuscarOs" layoutX="306.0" layoutY="116.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="25.0" prefWidth="107.0" text="Buscar">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Label fx:id="consultLabelOsBuscada" layoutX="63.0" layoutY="201.0" prefHeight="17.0" prefWidth="118.0" text="Ordem de Servico" visible="false">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <AnchorPane layoutX="313.0" layoutY="232.0" prefHeight="339.0" prefWidth="570.0">
+            <children>
+                <SplitPane dividerPositions="0.28900949796472186" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="100.0">
+                            <children>
+                                <TableView fx:id="consultTableOperacao" layoutX="1.0" layoutY="-146.0" prefHeight="396.0" prefWidth="365.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="103.0" text="Operacao" />
+                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="105.0" text="Status" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="392.0" prefWidth="338.0">
+                            <children>
+                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="337.0" prefWidth="356.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="88.0" text="Codigo Item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="140.0" text="Descricao" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="83.0" text="Qtd.Pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="93.0" text="Qtd. Recebida" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="115.0" text="Status" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+        <TextField fx:id="consultNumeroOs" layoutX="57.0" layoutY="119.0" prefHeight="25.0" prefWidth="241.0" promptText="Ex: 765234" />
+        <Button fx:id="consultVoltarButton" layoutX="700.0" layoutY="648.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="25.0" prefWidth="107.0" text="Voltar">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+      <Button fx:id="confirmCloseOsButton" layoutX="849.0" layoutY="648.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="25.0" prefWidth="107.0" style="-fx-background-color: #EBB672;" text="Encerrar Os">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+    </children>
+</AnchorPane>

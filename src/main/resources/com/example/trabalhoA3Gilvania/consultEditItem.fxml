@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultEditItemController">
+    <children>
+        <AnchorPane prefHeight="54.0" prefWidth="1000.0" style="-fx-background-color: #EBB672;" />
+        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS do Item e selecione o item que deseja editar">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+        <Button fx:id="consultBuscarOs" layoutX="459.0" layoutY="117.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="25.0" prefWidth="107.0" text="Buscar">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <AnchorPane layoutX="121.0" layoutY="232.0" prefHeight="339.0" prefWidth="782.0">
+            <children>
+                <SplitPane dividerPositions="0.2665964172813488" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="295.0">
+                            <children>
+                                <TableView fx:id="consultTableOperacao" layoutX="-163.0" layoutY="-146.0" prefHeight="396.0" prefWidth="217.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="118.0" text="Operacao" />
+                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="131.0" text="Status" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="392.0" prefWidth="338.0">
+                            <children>
+                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="396.0" prefWidth="672.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="99.0" text="Codigo Item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="188.0" text="Descricao" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="73.0" text="Qtd.Pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="91.0" text="Qtd. Recebida" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="241.0" text="Status" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+        <TextField fx:id="consultNumeroOs" layoutX="57.0" layoutY="119.0" prefHeight="25.0" prefWidth="390.0" promptText="Ex: 765234" />
+        <Button fx:id="consultVoltarButton" layoutX="869.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="25.0" prefWidth="107.0" text="Voltar">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Label fx:id="consultLabelOsBuscada" alignment="CENTER" contentDisplay="CENTER" layoutX="53.0" layoutY="193.0" prefHeight="19.0" prefWidth="895.0" visible="false">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

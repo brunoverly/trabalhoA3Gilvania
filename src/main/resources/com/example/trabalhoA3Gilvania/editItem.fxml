@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="543.0" prefWidth="437.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EditItemControler">
+   <children>
+      <AnchorPane prefHeight="56.0" prefWidth="484.0" style="-fx-background-color: #EBB672;">
+         <children>
+            <Label alignment="CENTER" layoutX="112.0" layoutY="5.0" prefHeight="47.0" prefWidth="246.0" text="Edicao de item">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Button fx:id="editItemCancelar" layoutX="40.0" layoutY="493.0" mnemonicParsing="false" onAction="#editItemCancelarOnAction" text="Cancelar" />
+      <Button fx:id="editItemConfirmar" layoutX="331.0" layoutY="493.0" mnemonicParsing="false" onAction="#editItemConfirmarOnAction" prefWidth="74.0" style="-fx-background-color: #EBB672;" text="Confirmar" />
+      <TextField layoutX="37.0" layoutY="245.0" />
+      <TextField layoutX="279.0" layoutY="245.0" />
+      <TextField layoutX="37.0" layoutY="339.0" prefHeight="25.0" prefWidth="271.0" />
+      <Label layoutX="39.0" layoutY="221.0" text="Quatidade pedido" />
+      <Label layoutX="282.0" layoutY="230.0" text="Quantidade recebida" />
+      <Label layoutX="40.0" layoutY="306.0" text="Localizacao" />
+      <Label layoutX="43.0" layoutY="383.0" prefHeight="17.0" prefWidth="68.0" text="Status" />
+      <ChoiceBox layoutX="37.0" layoutY="411.0" prefWidth="150.0" />
+      <Label layoutX="35.0" layoutY="137.0" text="Codigo do Item" />
+      <TextField layoutX="30.0" layoutY="154.0" />
+      <TextField layoutX="30.0" layoutY="105.0" />
+      <Label layoutX="29.0" layoutY="79.0" text="Ordem de Servico" />
+      <TextField layoutX="279.0" layoutY="163.0" />
+      <Label layoutX="282.0" layoutY="146.0" text="Descricao" />
+      <Label layoutX="279.0" layoutY="79.0" text="Operacao" />
+      <TextField layoutX="279.0" layoutY="105.0" />
+   </children>
+</AnchorPane>
