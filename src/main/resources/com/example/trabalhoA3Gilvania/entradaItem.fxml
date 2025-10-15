@@ -3,35 +3,67 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="543.0" prefWidth="437.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
+<AnchorPane prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
     <children>
-        <AnchorPane prefHeight="56.0" prefWidth="484.0" style="-fx-background-color: #EBB672;">
-            <children>
-                <Label alignment="CENTER" layoutX="112.0" layoutY="5.0" prefHeight="47.0" prefWidth="246.0" text="Entrada Item">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-            </children>
-        </AnchorPane>
-        <Button fx:id="entradaItemCancelar" layoutX="40.0" layoutY="493.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" text="Cancelar" />
-        <Button fx:id="entradaItemConfirmar" layoutX="331.0" layoutY="493.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefWidth="74.0" style="-fx-background-color: #EBB672;" text="Confirmar" />
-        <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="37.0" layoutY="245.0" />
-        <TextField fx:id="entradaQtdRecebida" layoutX="279.0" layoutY="245.0" />
-        <TextField fx:id="entradaLocalArmazenado" layoutX="37.0" layoutY="339.0" prefHeight="25.0" prefWidth="271.0" />
-        <Label layoutX="39.0" layoutY="221.0" text="Quatidade pedido" />
-        <Label layoutX="282.0" layoutY="230.0" text="Quantidade recebida" />
-        <Label layoutX="40.0" layoutY="315.0" text="Local armazenado" />
-        <Label layoutX="35.0" layoutY="146.0" text="Codigo do Item" />
-        <TextField fx:id="entradadCodItem" disable="true" layoutX="30.0" layoutY="176.0" />
-        <TextField fx:id="entradaOrdemServico" disable="true" layoutX="30.0" layoutY="105.0" />
-        <Label layoutX="29.0" layoutY="79.0" text="Ordem de Servico" />
-        <TextField fx:id="entradaItemDescricao" disable="true" layoutX="279.0" layoutY="163.0" />
-        <Label layoutX="282.0" layoutY="146.0" text="Descricao" />
-        <Label layoutX="279.0" layoutY="79.0" text="Operacao" />
-        <TextField fx:id="entradaCodOperacao" disable="true" layoutX="279.0" layoutY="105.0" />
+        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #14213d;" text="Cancelar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Button>
+        <Button fx:id="entradaItemConfirmar" layoutX="601.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefHeight="40.0" prefWidth="119.0" style="-fx-background-color: #fca311;" text="Confirmar" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../Downloads/box_add_150dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+        <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="42.0" layoutY="286.0" prefHeight="35.0" />
+        <TextField fx:id="entradaQtdRecebida" layoutX="42.0" layoutY="364.0" prefHeight="35.0" />
+        <TextField fx:id="entradaLocalArmazenado" layoutX="42.0" layoutY="458.0" prefHeight="35.0" prefWidth="271.0" />
+        <Label layoutX="42.0" layoutY="256.0" text="Quatidade pedido" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label layoutX="42.0" layoutY="334.0" text="Quantidade recebida" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label layoutX="42.0" layoutY="413.0" text="Local armazenado" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label layoutX="502.0" layoutY="80.0" text="Codigo do Item" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <TextField fx:id="entradadCodItem" disable="true" layoutX="502.0" layoutY="110.0" prefHeight="35.0" prefWidth="233.0" />
+        <TextField fx:id="entradaOrdemServico" disable="true" layoutX="40.0" layoutY="110.0" prefHeight="35.0" prefWidth="204.0" />
+        <Label layoutX="40.0" layoutY="80.0" text="Ordem de Servico" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <TextField fx:id="entradaItemDescricao" disable="true" layoutX="42.0" layoutY="197.0" prefHeight="35.0" prefWidth="507.0" />
+        <Label layoutX="42.0" layoutY="167.0" text="Descricao" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label layoutX="288.0" layoutY="78.0" text="Operacao" textFill="#14213d">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <TextField fx:id="entradaCodOperacao" disable="true" layoutX="288.0" layoutY="110.0" prefHeight="35.0" prefWidth="174.0" />
+          <Label alignment="CENTER" layoutX="23.0" layoutY="14.0" prefHeight="47.0" prefWidth="246.0" text="Entrada Item" textFill="#14213d">
+              <font>
+                  <Font name="System Bold" size="36.0" />
+              </font>
+          </Label>
     </children>
 </AnchorPane>

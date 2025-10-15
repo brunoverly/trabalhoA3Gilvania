@@ -77,27 +77,8 @@ public class EntradaItemController {
         stage.close();
     }
 
-    public void entradaItemConfirmarOnAction(ActionEvent event){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmação");
-        alert.setHeaderText(null);
-        alert.setContentText("Confirmar a entrada do item?");
-
-        Optional<ButtonType> resultado = alert.showAndWait();
-
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            Alert usuarioRemovido = new Alert(Alert.AlertType.INFORMATION);
-            usuarioRemovido.setTitle("Alerta");
-            usuarioRemovido.setHeaderText(null);
-            usuarioRemovido.setContentText("Item atualizado!");
-            usuarioRemovido.show();
-
-            // mostrar o que foi atualizado do item
-        }
-    }
-
     public void entradaItemConfirmarOnAction(){
-        if((entradaLocalArmazenado.getText().isBlank()) || (entradaLocalArmazenado.getText().isBlank())){
+        if((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
@@ -105,11 +86,12 @@ public class EntradaItemController {
             alert.showAndWait();
         }
         else{
+                System.out.println("idItem = " + idItem);
                 try (Connection connectDB = new DataBaseConection().getConection()) {
                     String querySqlItem = """
                              UPDATE item
                                 SET status = ?, localizacao = ?, qtd_recebida = ?, ultima_atualizacao = ?
-                                WHERE id_item = ?
+                                WHERE id = ?
                         """;
 
                     LocalDateTime agora = LocalDateTime.now();
@@ -123,16 +105,21 @@ public class EntradaItemController {
                         statement.setInt(5, idItem);
 
                         int linhasAfetadas = statement.executeUpdate();
+                        if(linhasAfetadas > 0){
+                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                            alert2.setTitle("Aviso");
+                            alert2.setHeaderText(null);
+                            alert2.setContentText("Item atualizado com sucesso!");
+                            alert2.showAndWait();
+                        }
 
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                alert2.setTitle("Aviso");
-                alert2.setHeaderText(null);
-                alert2.setContentText("Item atualizado com sucesso!");
-                alert2.showAndWait();
+
+                Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
+                stage.close();
             }
         }
 

@@ -3,6 +3,7 @@ package com.example.trabalhoA3Gilvania.controller;
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.screen.RegisterScreen;
 import com.example.trabalhoA3Gilvania.screen.StartPageScreen;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -27,9 +28,11 @@ public class LoginController {
     @FXML
     private Label  loginErrorMessage;
     @FXML
-    private ImageView brandingImageView;
+    private ImageView login1;
     @FXML
-    private ImageView lockImageView;
+    private ImageView login2;
+    @FXML
+    private ImageView login3;
     @FXML
     private TextField enterUserNameField;
     @FXML
@@ -40,14 +43,19 @@ public class LoginController {
 
     //Conexao com banco de dados
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL brandingImageUrl = getClass().getResource("/imagens/Imagem1.jpg");
-        Image brandingImage = new Image(brandingImageUrl.toExternalForm());
-        brandingImageView.setImage(brandingImage);
+       URL imagemPrincipalURL = getClass().getResource("/imagens/login1.png");
+       Image imagemPrincipal= new Image(imagemPrincipalURL.toExternalForm());
+        login1.setImage(imagemPrincipal);
 
 
-        URL lockImageUrl = getClass().getResource("/imagens/Imagem2.jpg");
-        Image lockImage = new Image(lockImageUrl.toExternalForm());
-        lockImageView.setImage(lockImage);
+       URL imagemUsuarioURL = getClass().getResource("/imagens/login2.png");
+       Image imagemUsuario = new Image(imagemUsuarioURL.toExternalForm());
+        login2.setImage(imagemUsuario);
+
+        URL imagemPinURL = getClass().getResource("/imagens/login3.png");
+        Image imagemPin = new Image(imagemPinURL.toExternalForm());
+        login3.setImage(imagemPin);
+
     }
 
 

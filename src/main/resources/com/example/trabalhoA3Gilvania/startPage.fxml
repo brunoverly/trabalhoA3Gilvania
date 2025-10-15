@@ -1,13 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.StartPageController">
+<AnchorPane prefHeight="523.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.StartPageController">
    <children>
-      <MenuBar fx:id="menuPagina" prefHeight="25.0" prefWidth="900.0" style="-fx-background-color: #EBB672;">
+      <BorderPane layoutX="-2.0" layoutY="-1.0" prefHeight="523.0" prefWidth="1071.0" style="-fx-background-color: #e5e5e5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <VBox prefHeight="523.0" prefWidth="150.0" style="-fx-background-color: #fca311;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label prefHeight="54.0" prefWidth="149.0" text="              logo aqui" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="importar os">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/file_export_150dp_000000_FILL0_wght400_GRAD0_opsz48%20(1).png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="64.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Consultar Os">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/database_upload_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="122.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Encerrar Os">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/file_export_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="180.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Registar Entrada">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/box_add_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="238.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Registrar Saida">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/hand_package_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="296.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Criar Usuario">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="31.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/person_add_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="354.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" style="-fx-background-color: #fca311;" text="Excluir Usuario">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/person_remove_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="412.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="151.0" style="-fx-background-color: #fca311;" text="Log off">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/logout_150dp_000000_FILL0_wght400_GRAD0_opsz48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+         </left>
+      </BorderPane>
+      <MenuBar fx:id="menuPagina" layoutX="801.0" layoutY="8.0" prefHeight="33.0" prefWidth="270.0" style="-fx-background-color: #EBB672;">
         <menus>
           <Menu mnemonicParsing="false" text="Ordem de servico">
             <items>
@@ -18,7 +134,6 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Itens">
                <items>
-                  <MenuItem fx:id="menuEditarItem" mnemonicParsing="false" onAction="#menuEditarItemOnAction" text="Editar" />
                   <MenuItem fx:id="menuEntradaItem" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" text="Entrada" />
                   <MenuItem fx:id="menuRetiradaItem" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" text="Saida" />
                </items>

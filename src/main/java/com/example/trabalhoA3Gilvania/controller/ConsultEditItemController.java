@@ -3,6 +3,7 @@ package com.example.trabalhoA3Gilvania.controller;
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.screen.ConsultEditItemScreen;
 import com.example.trabalhoA3Gilvania.screen.EditItemScreen;
+import com.example.trabalhoA3Gilvania.screen.RetirarScreen;
 import com.example.trabalhoA3Gilvania.screen.SolicitarScreen;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +27,6 @@ public class ConsultEditItemController {
 
     @FXML private Label consultLabelOsBuscada;
 
-    @FXML private TextField consultNumeroOsBuscado;
     @FXML private TextField consultNumeroOs;
 
     @FXML private TableView<Item> consultTableItem;
@@ -50,6 +50,9 @@ public class ConsultEditItemController {
     private String descricaoItem;
     private String qtdPedido;
     private int idItem;
+    private String localizacao;
+    private String status;
+    private int qtdRecebida;
 
     public void setModo(String modo) {
         this.modo = modo;
@@ -69,9 +72,14 @@ public class ConsultEditItemController {
     public void setQtdPedido(int qtdPedido) {
         this.qtdPedido = String.valueOf(qtdPedido);
     }
-    public void setIdItem(int idItem) {
-        this.idItem = idItem;
-    }
+    public void setIdItem(int idItem) {this.idItem = idItem;}
+    public void setLocalizacao(String localizacao){this.localizacao = localizacao;}
+    public void setStatus(String status){this.status = status;}
+    public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
+
+
+
+
 
     public static void TelaSolicitar() throws Exception {
         SolicitarScreen telaSolicitar = new SolicitarScreen();
@@ -107,8 +115,7 @@ public class ConsultEditItemController {
         });
         ContextMenu contextMenuItem = new ContextMenu();
         MenuItem solicitarItem = new MenuItem("Requisitar Item");
-        MenuItem editarItem = new MenuItem("Requisitar Item");
-        contextMenuItem.getItems().addAll(solicitarItem, editarItem);
+        contextMenuItem.getItems().addAll(solicitarItem);
 
         solicitarItem.setOnAction(event -> {
             Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
@@ -123,61 +130,58 @@ public class ConsultEditItemController {
 
             }
         });
-        editarItem.setOnAction(event -> {
-            Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
-            if (selecionado != null) {
-                int idItem = selecionado.getIdItem();
-
-            }
-        });
 
         consultTableItem.setRowFactory(table -> {
             TableRow<Item> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
                     Item selecionado = row.getItem();
-                    int idItem = selecionado.getIdItem();
+
+                    String codItemSelecionado = selecionado.getCodItem();
+                    String codOperacaoItemSelecionado = selecionado.getCodOperacao();
+                    String codOsItemSelecionado = consultNumeroOs.getText();
+                    String statusItemSelecionado = selecionado.getDescricao();
+                    int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
+                    int idItemselecionado = selecionado.getIdItem();
+
                     try {
                         if (modo == null) return;
 
                         switch (modo) {
                             case "editar":
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/editItem.fxml"));
-                                Parent root = loader.load();
 
-                                // Obtém o controller e passa o parâmetro
-                                // ConsultEditItemController controller = loader.getController();
-                                //controller.setModo(modo);
 
-                                Stage stage = new Stage();
-                                stage.setTitle(null);
-                                stage.setScene(new Scene(root));
-                                stage.show();
                                 break;
 
                             case "entrada":
-                                String codItemSelecionado = selecionado.getCodItem();
-                                String codOperacaoItemSelecionado = selecionado.getCodOperacao();
-                                String codOsItemSelecionado = consultNumeroOs.getText();
-                                String statusItemSelecionado = selecionado.getDescricao();
-                                int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
-                                int idItemselecionado = selecionado.getIdItem();
+
                                 LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,statusItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado);
 
                                 break;
                             case "saida":
-                                FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/retirar.fxml"));
-                                Parent root3 = loader3.load();
+                                try (Connection connectDB = new DataBaseConection().getConection()) {
+                                    String querySqlItem = """
+                                                    SELECT localizacao, status, qtd_recebida
+                                                    FROM item
+                                                    WHERE id = ?
+                                                """;
 
-                                // Obtém o controller e passa o parâmetro
-                                // ConsultEditItemController controller = loader.getController();
-                                //controller.setModo(modo);
+                                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                                        statement.setInt(1, idItemselecionado);
+                                        ResultSet rs = statement.executeQuery();
 
-                                Stage stage3 = new Stage();
-                                stage3.setTitle(null);
-                                stage3.setScene(new Scene(root3));
-                                stage3.show();
-                                break;
+                                        if (rs.next()) {
+                                            localizacao =  rs.getString("localizacao");
+                                            status =  rs.getString("status");
+                                            qtdRecebida = rs.getInt("qtd_recebida");
+
+                                        }
+                                    }
+
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,statusItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,localizacao,status,qtdRecebida);
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -198,8 +202,8 @@ public class ConsultEditItemController {
         if (verificarNumeroOS()) {
             BuscarDB();
             consultLabelOsBuscada.setVisible(true);
-            consultNumeroOsBuscado.setText(consultNumeroOs.getText());
-            consultNumeroOsBuscado.setVisible(true);
+            consultNumeroOs.setText(consultNumeroOs.getText());
+            consultNumeroOs.setVisible(true);
         }
     }
 
@@ -210,6 +214,9 @@ public class ConsultEditItemController {
     }
 
     public void BuscarDB() {
+
+        consultLabelOsBuscada.setVisible(true);
+        consultLabelOsBuscada.setText(consultNumeroOs.getText());
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
@@ -370,15 +377,12 @@ public class ConsultEditItemController {
         public String getDescricao() {
             return descricao.get();
         }
-
         public int getQtdPedido() {
             return qtdPedido.get();
         }
-
         public int getQtdRecebida() {
             return qtdRecebida.get();
         }
-
         public String getStatus() {
             return status.get();
         }
@@ -512,4 +516,32 @@ public class ConsultEditItemController {
         stage.show();
     }
 
+    public void LancaSaidaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, String localizacao, String status, int qtdRecebida) throws Exception {
+
+
+
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/retirar.fxml"));
+            Parent root = loader.load();
+
+            RetirarController controller = loader.getController();
+            controller.setCodItem(codItem);
+            controller.setCodOperacao(codOperacao);
+            controller.setCodOs(codOs);
+            controller.setDescricaoItem(descricaoItem);
+            controller.setQtdPedido(qtdPedido);
+            controller.setIdItem(idItem);
+            controller.setLocalizacao(localizacao);
+            controller.setStatus(status);
+            controller.setQtdRecebida(qtdRecebida);
+
+            controller.carregaDados();
+
+            System.out.println("ate aqui funcionou");
+
+            Stage stage = new Stage();
+            stage.setTitle("Retirada de itens");
+            stage.setScene(new Scene(root));
+            stage.show();
+    }
 }
