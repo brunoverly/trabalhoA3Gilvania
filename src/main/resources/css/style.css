@@ -1,0 +1,36 @@
+/* Aplica a Poppins em toda a aplicação */
+.root {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 16px;
+}
+
+.root-pane {  /* classe que você pode definir no Scene Builder */
+    -fx-border-color: #3498db;    /* cor da borda */
+    -fx-border-width: 4;           /* espessura da borda */
+    -fx-border-radius: 15;         /* cantos arredondados da borda */
+    -fx-background-radius: 15;     /* cantos arredondados do fundo */
+    -fx-background-color: #f0f0f0; /* cor de fundo do pane */
+}
+
+.button {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.text-field {
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+}
+/* Mantém consistência, mas é opcional, pois herdará da raiz */
+.label,
+.button,
+.text-field,
+.text-area,
+.check-box,
+.radio-button,
+.table-view,
+.list-view {
+    -fx-font-family: "Poppins";
+}
