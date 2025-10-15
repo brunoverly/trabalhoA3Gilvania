@@ -44,9 +44,33 @@ public class ConsultEditItemController {
     private FilteredList<Item> itensFiltrados;
 
     private String modo;
+    private String codOperacao;
+    private String codOs;
+    private String codItem;
+    private String descricaoItem;
+    private String qtdPedido;
+    private int idItem;
 
     public void setModo(String modo) {
         this.modo = modo;
+    }
+    public void setCodItem(String codItem) {
+        this.codItem = codItem;
+    }
+    public void setCodOperacao(String codOperacao) {
+        this.codOperacao = codOperacao;
+    }
+    public void setCodOs(String codOs) {
+        this.codOs = codOs;
+    }
+    public void setDescricaoItem(String descricaoItem) {
+        this.descricaoItem = descricaoItem;
+    }
+    public void setQtdPedido(int qtdPedido) {
+        this.qtdPedido = String.valueOf(qtdPedido);
+    }
+    public void setIdItem(int idItem) {
+        this.idItem = idItem;
     }
 
     public static void TelaSolicitar() throws Exception {
@@ -132,17 +156,14 @@ public class ConsultEditItemController {
                                 break;
 
                             case "entrada":
-                                FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml"));
-                                Parent root2 = loader2.load();
+                                String codItemSelecionado = selecionado.getCodItem();
+                                String codOperacaoItemSelecionado = selecionado.getCodOperacao();
+                                String codOsItemSelecionado = consultNumeroOs.getText();
+                                String statusItemSelecionado = selecionado.getDescricao();
+                                int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
+                                int idItemselecionado = selecionado.getIdItem();
+                                LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,statusItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado);
 
-                                // Obtém o controller e passa o parâmetro
-                                // ConsultEditItemController controller = loader.getController();
-                                //controller.setModo(modo);
-
-                                Stage stage2 = new Stage();
-                                stage2.setTitle(null);
-                                stage2.setScene(new Scene(root2));
-                                stage2.show();
                                 break;
                             case "saida":
                                 FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/retirar.fxml"));
@@ -469,6 +490,26 @@ public class ConsultEditItemController {
         EditItemScreen novaJanela = new EditItemScreen();
         Stage stage = new Stage();
         novaJanela.start(stage);
+    }
+
+    public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml"));
+        Parent root = loader.load();
+
+        // Obtém o controller e passa o parâmetro
+        EntradaItemController controller = loader.getController();
+        controller.setCodItem(codItem);
+        controller.setCodOperacao(codOperacao);
+        controller.setCodOs(codOs);
+        controller.setDescricaoItem(descricaoItem);
+        controller.setQtdPedido(qtdPedido);
+        controller.setIdItem(idItem);
+        controller.carregaDados();
+
+        Stage stage = new Stage();
+        stage.setTitle("Entrada de itens");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 }
