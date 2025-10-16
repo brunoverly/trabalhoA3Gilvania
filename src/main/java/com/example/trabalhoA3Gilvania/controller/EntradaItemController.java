@@ -96,7 +96,7 @@ public class EntradaItemController {
                     Timestamp ts = Timestamp.valueOf(agora);
 
                     try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                        statement.setString(1, "armazenado");
+                        statement.setString(1, "recebido");
                         statement.setString(2, entradaLocalArmazenado.getText());
                         statement.setInt(3,Integer.parseInt(entradaQtdRecebida.getText()));
                         statement.setTimestamp(4, ts);

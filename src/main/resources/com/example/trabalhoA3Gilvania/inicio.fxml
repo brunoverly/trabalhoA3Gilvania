@@ -14,7 +14,7 @@
          <left>
             <VBox fx:id="inicioVbox" prefHeight="562.0" prefWidth="218.0" style="-fx-background-color: #264653;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="inicioLogo" fitHeight="85.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="iniciologo" fitHeight="85.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../imagens/iniciologo.png" />
                      </image>
@@ -51,6 +51,18 @@
                         <ImageView fx:id="inicio3" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../imagens/fechar1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuSolcitarItem" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#menuSolcitarItemOnAction" prefHeight="45.0" prefWidth="224.0" style="-fx-background-color: #264653;" text="Solicitar Item" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio9" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/inicio9.png" />
                            </image>
                         </ImageView>
                      </graphic>

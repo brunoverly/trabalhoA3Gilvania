@@ -68,7 +68,7 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-      <Label layoutX="53.0" layoutY="30.0" text="Consultar Item" textFill="#14213d">
+      <Label fx:id="consultItemLabel" layoutX="53.0" layoutY="30.0" text="Solicitar Item" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>

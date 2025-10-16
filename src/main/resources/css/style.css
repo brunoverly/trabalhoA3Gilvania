@@ -54,6 +54,7 @@
 #menuConsultOs,
 #menuCloseOs,
 #menuEditarItem,
+#menuSolcitarItem,
 #menuRetiradaItem,
 #menuEntradaItem {
     -fx-background-color: transparent;  /* mantém cor do VBox */
@@ -69,7 +70,8 @@
 }
 
 /* ========================
-   Hover: exibe linha inferior laranja e aumenta levemente a fonte
+   Hover: exibe linha inferior laranja, aumenta levemente a fonte,
+   muda cor do texto e deixa em negrito
    ======================== */
 #menuAddUser:hover,
 #menuRemoveUser:hover,
@@ -78,9 +80,12 @@
 #menuConsultOs:hover,
 #menuCloseOs:hover,
 #menuEditarItem:hover,
+#menuSolcitarItem:hover,
 #menuRetiradaItem:hover,
 #menuEntradaItem:hover {
     -fx-border-color: transparent transparent #fca311 transparent; /* linha inferior laranja */
     -fx-border-width: 0 0 2 0;  /* altura da linha inferior */
-    -fx-font-size: 1.1em;       /* aumenta levemente a fonte apenas no hover */
+    -fx-font-size: 1.5em;       /* aumenta levemente a fonte apenas no hover */
+    -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
+    -fx-font-weight: bold;       /* deixa o texto em negrito no hover */
 }

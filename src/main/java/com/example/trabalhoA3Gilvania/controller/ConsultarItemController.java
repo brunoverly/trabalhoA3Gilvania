@@ -1,6 +1,8 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Sessao;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -8,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,13 +23,15 @@ import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.sql.*;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class ConsultarItemController {
+public class ConsultarItemController implements Initializable{
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
 
     @FXML private Label consultLabelOsBuscada;
-
+    @FXML private Label consultItemLabel;
     @FXML private TextField consultNumeroOs;
 
     @FXML private TableView<Item> consultTableItem;
@@ -78,12 +83,11 @@ public class ConsultarItemController {
     public void setStatus(String status){this.status = status;}
     public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         URL consultarItem1URL = getClass().getResource("/imagens/remover1.png");
         Image consultar1Image = new Image(consultarItem1URL.toExternalForm());
         consultarItem1.setImage(consultar1Image);
-
-
 
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -98,6 +102,7 @@ public class ConsultarItemController {
         consultTableOperacao.setItems(todasOperacoes); // tabela de operações
         itensFiltrados = new FilteredList<>(todosItens, item -> false);
         consultTableItem.setItems(itensFiltrados); // tabela de itens
+
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
@@ -107,25 +112,25 @@ public class ConsultarItemController {
                 itensFiltrados.setPredicate(item -> false);
             }
         });
-        ContextMenu contextMenuItem = new ContextMenu();
-        MenuItem solicitarItem = new MenuItem("Requisitar Item");
-        contextMenuItem.getItems().addAll(solicitarItem);
 
-        solicitarItem.setOnAction(event -> {
-            Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
-            if (selecionado != null) {
-                // Abre tela de solicitação
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText(null);
-                alert.setContentText("Requisitado a entrega do Item!");
-                alert.showAndWait();
-
-            }
-        });
-
+        // Configuração do TableRow com ContextMenu
         consultTableItem.setRowFactory(table -> {
             TableRow<Item> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+
+            // atualiza o menu sempre que o item da linha mudar
+            row.itemProperty().addListener((obs, oldItem, newItem) -> {
+                configurarContextMenu(row, contextMenu);
+            });
+
+            // só mostrar o menu em linhas não vazias
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+
+            // Clique duplo para entrada/saída
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
                     Item selecionado = row.getItem();
@@ -139,54 +144,51 @@ public class ConsultarItemController {
 
                     try {
                         if (modo == null) return;
+                        if(Sessao.getCargo().equals("Administrador") || Sessao.getCargo().equals("Aprovisionador")) {
+                            switch (modo) {
+                                case "entrada":
+                                    LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado,
+                                            codOsItemSelecionado, statusItemSelecionado,
+                                            qtdPedidoItemSelecionado, idItemselecionado);
+                                    break;
 
-                        switch (modo) {
-                            case "editar":
-
-
-                                break;
-
-                            case "entrada":
-
-                                LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,statusItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado);
-
-                                break;
-                            case "saida":
-                                try (Connection connectDB = new DataBaseConection().getConection()) {
-                                    String querySqlItem = """
+                                case "retirar":
+                                    try (Connection connectDB = new DataBaseConection().getConection()) {
+                                        String querySqlItem = """
                                                     SELECT localizacao, status, qtd_recebida
                                                     FROM item
                                                     WHERE id = ?
                                                 """;
-
-                                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                                        statement.setInt(1, idItemselecionado);
-                                        ResultSet rs = statement.executeQuery();
-
-                                        if (rs.next()) {
-                                            localizacao =  rs.getString("localizacao");
-                                            status =  rs.getString("status");
-                                            qtdRecebida = rs.getInt("qtd_recebida");
-
+                                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                                            statement.setInt(1, idItemselecionado);
+                                            ResultSet rs = statement.executeQuery();
+                                            if (rs.next()) {
+                                                localizacao = rs.getString("localizacao");
+                                                status = rs.getString("status");
+                                                qtdRecebida = rs.getInt("qtd_recebida");
+                                            }
                                         }
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
                                     }
 
-                                } catch (SQLException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,statusItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,localizacao,status,qtdRecebida);
+                                    LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado,
+                                            codOsItemSelecionado, statusItemSelecionado,
+                                            qtdPedidoItemSelecionado, idItemselecionado,
+                                            localizacao, status, qtdRecebida);
+                                    break;
+                            }
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-
                 }
             });
+
             return row;
         });
-
-
     }
+
 
 
 
@@ -495,6 +497,7 @@ public class ConsultarItemController {
         stage.show();
     }
 
+
     public void LancaSaidaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, String localizacao, String status, int qtdRecebida) throws Exception {
 
 
@@ -522,4 +525,136 @@ public class ConsultarItemController {
             stage.setScene(new Scene(root));
             stage.show();
     }
+
+    public void AtualizarTituloPorModo() {
+        if (Sessao.getCargo().equals("Mecanico")) {
+            consultItemLabel.setText("Solicitar Item");
+        } else if (modo != null) {
+
+            switch (modo) {
+                case "entrada":
+                    consultItemLabel.setText("Lançar entrada de item");
+                    break;
+                case "retirar":
+                    consultItemLabel.setText("Lançar retirada de item");
+                    break;
+                default:
+                    consultItemLabel.setText("Solicitar Item");
+            }
+        }
+    }
+    public void configurarContextMenu(TableRow<Item> row, ContextMenu contextMenu) {
+        if (modo != null) {
+            Item selecionado = row.getItem();
+            if (selecionado != null && selecionado.getStatus().equals("recebido")) {
+                MenuItem solicitarItem = new MenuItem("Requisitar Item");
+                contextMenu.getItems().add(solicitarItem);
+
+                solicitarItem.setOnAction(event -> {
+
+                    if (selecionado != null) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmação");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Deseja solicitar a entrega do item na oficina?");
+
+                        Optional<ButtonType> resultado = alert.showAndWait();
+                        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+                            alert2.setTitle("Aviso");
+                            alert2.setHeaderText(null);
+                            alert2.setContentText("Requisitado a entrega do Item: " + selecionado.getCodItem());
+                            alert2.showAndWait();
+
+                            // Atualiza status do item
+                            try (Connection connectDB = new DataBaseConection().getConection()) {
+                                String querySqlItem = "UPDATE item SET status = 'solicitado na oficina' WHERE id = ?";
+                                try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                                    statement.setInt(1, selecionado.getIdItem());
+                                    statement.executeUpdate();
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            // Insere registro na tabela de controle de solicitações
+                            try (Connection connectDB = new DataBaseConection().getConection()) {
+                                String querySqlSolicitacao = "INSERT INTO controle_solicitacao_item (solicitador_por, id_item) VALUES (?, ?)";
+                                try (PreparedStatement statement = connectDB.prepareStatement(querySqlSolicitacao)) {
+                                    statement.setInt(1, Sessao.getMatricula());
+                                    statement.setInt(2, selecionado.getIdItem());
+                                    statement.executeUpdate();
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Administrador ou Aprovisionador
+        if (!Sessao.getCargo().equals("Mecanico") && modo != null) {
+            if (modo.equals("entrada")) {
+                MenuItem solicitarItem = new MenuItem("Lancar entrada");
+                contextMenu.getItems().add(solicitarItem);
+                solicitarItem.setOnAction(event -> {
+                    Item selecionado = row.getItem();
+                    try {
+                        LancarEntradaItem(
+                                selecionado.getCodItem(),
+                                selecionado.getCodOperacao(),
+                                consultNumeroOs.getText(),
+                                selecionado.getDescricao(),
+                                selecionado.getQtdPedido(),
+                                selecionado.getIdItem()
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else if (modo.equals("retirar")) {
+                MenuItem solicitarItem = new MenuItem("Lancar retirada");
+                contextMenu.getItems().add(solicitarItem);
+                solicitarItem.setOnAction(event -> {
+                    Item selecionado = row.getItem();
+
+                    try (Connection connectDB = new DataBaseConection().getConection()) {
+                        String querySqlItem = "SELECT localizacao, status, qtd_recebida FROM item WHERE id = ?";
+                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                            statement.setInt(1, selecionado.getIdItem());
+                            ResultSet rs = statement.executeQuery();
+                            if (rs.next()) {
+                                localizacao = rs.getString("localizacao");
+                                status = rs.getString("status");
+                                qtdRecebida = rs.getInt("qtd_recebida");
+                            }
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try {
+                        LancaSaidaItem(
+                                selecionado.getCodItem(),
+                                selecionado.getCodOperacao(),
+                                consultNumeroOs.getText(),
+                                selecionado.getDescricao(),
+                                selecionado.getQtdPedido(),
+                                selecionado.getIdItem(),
+                                localizacao,
+                                status,
+                                qtdRecebida
+                        );
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        }
+    }
+
 }
+
+

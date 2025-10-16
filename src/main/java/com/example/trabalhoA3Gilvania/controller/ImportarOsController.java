@@ -20,6 +20,7 @@ public class ImportarOsController {
     @FXML private Button importSelecionarExcel;
 
     @FXML private TextField importNumeroOs;
+    @FXML private TextField importOsPathField;
     @FXML private TableView<String> importTableOs;
     @FXML private TableView<String> importTableOperacao;
     @FXML private TableView<String> importTableItem;
@@ -45,6 +46,7 @@ public class ImportarOsController {
 
     public void importSelecionarExcelOnAction(ActionEvent event){
        filePath = cadastrarOs.selecionarArquivo();
+       importOsPathField.setText(filePath.getAbsolutePath());
     }
 
     public void importVoltarOnAction(ActionEvent event){

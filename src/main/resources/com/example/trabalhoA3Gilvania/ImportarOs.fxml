@@ -49,7 +49,7 @@
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <TextField fx:id="importNumeroOs1" layoutX="50.0" layoutY="153.0" prefHeight="35.0" prefWidth="383.0" promptText="C:\documents\">
+      <TextField fx:id="importOsPathField" editable="false" layoutX="50.0" layoutY="153.0" prefHeight="35.0" prefWidth="574.0" promptText="C:\documents\">
          <font>
             <Font size="15.0" />
          </font>

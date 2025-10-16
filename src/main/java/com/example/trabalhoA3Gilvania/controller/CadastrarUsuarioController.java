@@ -40,7 +40,6 @@ public class CadastrarUsuarioController implements Initializable {
         Image registarImagem1 = new Image(registrarImagem1URL.toExternalForm());
         registrar1.setImage(registarImagem1);
         cadastroComboBox.getItems().addAll("Administrador", "Aprovisionador", "Mecanico");
-
     }
 
     public void cadastrarCancelButtonOnAction(ActionEvent event) {
@@ -58,47 +57,54 @@ public class CadastrarUsuarioController implements Initializable {
 
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
+            alert.setHeaderText(null);
             alert.setContentText("Preencha todos os campos para prosseguir");
             alert.showAndWait();
-        }else if(!cadastroMatricula.getText().isBlank()){
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String verifcarCadastroBanco = "SELECT COUNT(*) FROM users WHERE matricula = ?";
-                try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
-                    statement1.setInt(1, Integer.parseInt(cadastroMatricula.getText()));
-                    ResultSet resultadoBuscaOs = statement1.executeQuery();
-                    if (resultadoBuscaOs.next()) {
-                        int count = resultadoBuscaOs.getInt(1);
-                        if (count > 0) {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Aviso");
-                            alert.setHeaderText(null); // opcional, sem cabeçalho
-                            alert.setContentText("Ja existe um usuario cadastrado com essa matricula");
-                            alert.showAndWait();
-                        }
+            return;
+        }
+
+        // Verificar se matrícula já existe
+        try (Connection connectDB = new DataBaseConection().getConection()) {
+            String verifcarCadastroBanco = "SELECT COUNT(*) FROM users WHERE matricula = ?";
+            try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
+                statement1.setInt(1, Integer.parseInt(cadastroMatricula.getText()));
+                ResultSet resultadoBuscaOs = statement1.executeQuery();
+                if (resultadoBuscaOs.next()) {
+                    int count = resultadoBuscaOs.getInt(1);
+                    if (count > 0) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Já existe um usuário cadastrado com essa matrícula");
+                        alert.showAndWait();
+                        return;
                     }
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        else if(!verificarPIN()){
+
+        if (!verificarPIN()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("PIN deve ser numero e possuir 6 digitos!");
+            alert.setHeaderText(null);
+            alert.setContentText("PIN deve ser número e possuir 6 dígitos!");
             alert.showAndWait();
+            return;
         }
-        else if(!cadastroSenha.getText().equals(cadastroConfirmarSenha.getText())){
+
+        if (!cadastroSenha.getText().equals(cadastroConfirmarSenha.getText())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("PIN informados nao correspondem!");
+            alert.setHeaderText(null);
+            alert.setContentText("PIN informados não correspondem!");
             alert.showAndWait();
+            return;
         }
-        else {
-            registerUser();
-        }
+
+        // Tudo certo — prossegue com o cadastro
+        registerUser();
     }
 
     public void registerUser() {
@@ -122,9 +128,8 @@ public class CadastrarUsuarioController implements Initializable {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
+            alert.setHeaderText(null);
             alert.setContentText("Usuário cadastrado com sucesso!");
-            // Exibe o pop-up e espera o usuário clicar
             Optional<ButtonType> resultado = alert.showAndWait();
 
         } catch (Exception e) {
@@ -148,5 +153,3 @@ public class CadastrarUsuarioController implements Initializable {
         return tipoValido && tamanhoValido;
     }
 }
-
-

@@ -1,8 +1,10 @@
 package com.example.trabalhoA3Gilvania.controller;
 
+import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.screen.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,16 +18,16 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class InicioController {
+public class InicioController implements Initializable {
     @FXML private Button menuAddUser;
     @FXML private Button menuRemoveUser;
     @FXML private Button menuSair;
     @FXML private Button menuImportarOs;
     @FXML private Button menuConsultOs;
     @FXML private Button menuCloseOs;
-    @FXML private Button menuEditarItem;
     @FXML private Button menuRetiradaItem;
     @FXML private Button menuEntradaItem;
+    @FXML private Button menuSolcitarItem;
 
     @FXML private ImageView iniciologo;
     @FXML private ImageView inicio1;
@@ -36,11 +38,12 @@ public class InicioController {
     @FXML private ImageView inicio6;
     @FXML private ImageView inicio7;
     @FXML private ImageView inicio8;
+    @FXML private ImageView inicio9;
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        URL inicioLogoURL = getClass().getResource("/imagens/brandlogo.png");
+        URL inicioLogoURL = getClass().getResource("/imagens/brand.png");
         Image inicioLogo = new Image(inicioLogoURL.toExternalForm());
         iniciologo.setImage(inicioLogo);
 
@@ -76,34 +79,37 @@ public class InicioController {
         Image inicio8Img = new Image(inicio7URL.toExternalForm());
         inicio8.setImage(inicio7Img);
 
+        URL inicio9URL = getClass().getResource("/imagens/inicio9.png");
+        Image inicio9Img = new Image(inicio7URL.toExternalForm());
+        inicio9.setImage(inicio7Img);
 
+        verificarUsuario();
     }
 
-    public void menuRetiradaItemOnAction(ActionEvent event){
-        try{
-            AbrirItem("saida");
+    private void verificarUsuario() {
+
+        if (Sessao.getCargo().equals("Mecanico")) {
+            menuEntradaItem.setVisible(false);
+            menuEntradaItem.setManaged(false);
+
+            menuImportarOs.setVisible(false);
+            menuImportarOs.setManaged(false);
+
+            menuRetiradaItem.setVisible(false);
+            menuRetiradaItem.setManaged(false);
+
+            menuRemoveUser.setVisible(false);
+            menuRemoveUser.setManaged(false);
+
+            menuAddUser.setVisible(false);
+            menuAddUser.setManaged(false);
+
+            menuCloseOs.setVisible(false);
+            menuCloseOs.setManaged(false);
         }
-        catch (Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
+
+
     }
-    public void menuEntradaItemOnAction(ActionEvent event){
-        try{
-            AbrirItem("entrada");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
-    }
-
-
-
-
-
-
-
 
     public void menuRemoveUserOnAction(ActionEvent event){
         try{
@@ -135,7 +141,12 @@ public class InicioController {
             e.getCause();
         }
     }
-
+    public void menuSolcitarItemOnAction(ActionEvent event){
+        try{
+            menuSolcitarItem("solicitar");
+        }
+        catch (Exception e){}
+    }
 
 
     public void menuAddUserOnAction(ActionEvent event){
@@ -148,6 +159,17 @@ public class InicioController {
         }
     }
 
+    public void menuEntradaItemOnAction(ActionEvent event){
+        try{
+            menuSolcitarItem("entrada");
+        }
+        catch (Exception e){}
+    }
+
+    public void menuRetiradaItemOnAction(ActionEvent event) throws Exception {
+        menuSolcitarItem("retirar");
+    }
+
 
 
     public void menuSairOnAction (ActionEvent event){
@@ -155,13 +177,14 @@ public class InicioController {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmação");
             alert.setHeaderText(null);
-            alert.setContentText("Tem certeza que deseja fazer log off?");
+            alert.setContentText("Encerrar sessao?");
 
             Optional<ButtonType> resultado = alert.showAndWait();
 
             if (resultado.isPresent() && resultado.get() == ButtonType.OK){
-                Stage stageAtual = (Stage) ((MenuItem) event.getSource()).getParentPopup().getOwnerWindow();
-                stageAtual.close();
+                Stage stage = (Stage) menuSair.getScene().getWindow();
+                stage.close();
+                Sessao.getCargo();
                 Login();
             }
         }
@@ -208,13 +231,15 @@ public class InicioController {
         Stage stage = new Stage();
         novaJanela.start(stage);
     }
-    public void AbrirItem(String modo) throws Exception {
+    public void menuSolcitarItem(String modo) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/consultarItem.fxml"));
         Parent root = loader.load();
 
         // Obtém o controller e passa o parâmetro
         ConsultarItemController controller = loader.getController();
         controller.setModo(modo);
+        controller.AtualizarTituloPorModo();
+
 
         Stage stage = new Stage();
         stage.setTitle("Consulta de Itens");

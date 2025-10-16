@@ -100,8 +100,8 @@ public class LoginController {
                         WHERE matricula = ? AND pin = ?
                     """;
             try (PreparedStatement buscaUsuario = connectDB.prepareStatement(querySqlUser)) {
-                buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText()));
-                buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText()));
+                buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText().trim()));
+                buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText().trim()));
                 ResultSet rs = buscaUsuario.executeQuery();
                 if (rs.next()) {
                     Sessao.setUsuario(

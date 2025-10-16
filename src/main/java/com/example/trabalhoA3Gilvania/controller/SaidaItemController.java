@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -100,8 +101,6 @@ public class SaidaItemController {
                                     (id_item, entregue_para, data_retirada, cod_os, cod_operacao, entregue_por)
                                 VALUES (?, ?, ?, ?, ?, ?)
                             """;
-
-
                     LocalDateTime agora = LocalDateTime.now();
                     Timestamp ts = Timestamp.valueOf(agora);
 
@@ -111,7 +110,7 @@ public class SaidaItemController {
                         statement.setTimestamp(3, ts);
                         statement.setString(4, codOs);
                         statement.setString(5, codOperacao);
-                        statement.setInt(6, 111111111);
+                        statement.setInt(6, Sessao.getMatricula());
 
                         int linhasAfetadas = statement.executeUpdate();
                         if(linhasAfetadas > 0){
@@ -121,12 +120,28 @@ public class SaidaItemController {
                             alert2.setContentText("Registro cadastrado com sucesso!");
                             alert2.showAndWait();
                         }
-
+                        statement.close();
+                        connectDB.close();
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                /// //////////////////////////////////////
+                try (Connection connectDB = new DataBaseConection().getConection()) {
+                    String querySqlItem = """
+                                    UPDATE item
+                                    SET status = 'entregue na oficina'
+                                    WHERE id = ?
+                                """;
+                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                        statement.setInt(1, idItem);
+                        statement.executeUpdate();
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
 
+/// ///////////////////////////////////////////////
                 Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
                 stage.close();
             }
