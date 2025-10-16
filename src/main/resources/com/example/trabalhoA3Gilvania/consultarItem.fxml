@@ -18,7 +18,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="147.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="107.0" style="-fx-background-color: #fca311;" text="    Consultar" textFill="WHITE">
+        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="108.0" style="-fx-base: #fca311;" text="      Consultar" textFill="#fefefe">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
@@ -58,22 +58,17 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Button fx:id="consultVoltarButton" layoutX="26.0" layoutY="643.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
+        <Button fx:id="consultVoltarButton" layoutX="26.0" layoutY="643.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Button>
-        <Label fx:id="consultLabelOsBuscada" alignment="CENTER" contentDisplay="CENTER" layoutX="53.0" layoutY="193.0" prefHeight="19.0" prefWidth="895.0" visible="false">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Label>
-      <Label layoutX="53.0" layoutY="30.0" text="Consultar Item" textFill="#14213d">
+      <Label fx:id="consultItemLabel" layoutX="53.0" layoutY="30.0" text="Solicitar Item" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fx:id="consultarItem1" fitHeight="24.0" fitWidth="25.0" layoutX="389.0" layoutY="153.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="consultarItem1" fitHeight="24.0" fitWidth="25.0" layoutX="389.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/remover1.png" />
          </image>

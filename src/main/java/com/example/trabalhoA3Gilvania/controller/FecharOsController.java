@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -104,50 +105,113 @@ public class FecharOsController {
             try (PreparedStatement buscar = connectDB.prepareStatement(querySqlConsultaStatus)) {
                 buscar.setString(1, consultNumeroOs.getText());
                 ResultSet rs = buscar.executeQuery();
+                if (rs.next()) {
+                    String status = rs.getString("status");
 
-                if (!rs.next()) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmação");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Tem certeza que deseja encerrar a OS?");
-
-                    Optional<ButtonType> resultado = alert.showAndWait();
-
-                    if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                        try{
-                            String querySqlItem = """
-                                         UPDATE ordem_servico
-                                                        SET status = ?, datahora_encerramento = ?
-                                                        WHERE cod_os = ?
-                                    """;
-
-                            LocalDateTime agora = LocalDateTime.now();
-                            Timestamp ts = Timestamp.valueOf(agora);
-
-                            try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlItem)) {
-                                atualizar.setString(1, "encerrada");
-                                atualizar.setTimestamp(2, ts);
-                                atualizar.setString(3, consultNumeroOs.getText());
-
-                                int linhasAfetadas = atualizar.executeUpdate();
-
-                            }
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                    if (status.equals("encerrada")) {
+                        Alert alert2 = new Alert(Alert.AlertType.WARNING);
                         alert2.setTitle("Aviso");
                         alert2.setHeaderText(null);
-                        alert2.setContentText("Ordem de servico encerrada!");
+                        alert2.setContentText("OS ja se encontra encerrada");
+                        Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
+                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                         alert2.showAndWait();
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmação");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Tem certeza que deseja encerrar a OS?");
+                        Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+
+                        Optional<ButtonType> resultado = alert.showAndWait();
+
+                        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                            try {
+                                String querySqlOs = """
+                                             UPDATE ordem_servico
+                                                            SET status = ?, datahora_encerramento = ?
+                                                            WHERE cod_os = ?
+                                        """;
+
+                                LocalDateTime agora = LocalDateTime.now();
+                                Timestamp ts = Timestamp.valueOf(agora);
+
+                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlOs)) {
+                                    atualizar.setString(1, "encerrada");
+                                    atualizar.setTimestamp(2, ts);
+                                    atualizar.setString(3, consultNumeroOs.getText());
+                                    atualizar.executeUpdate();
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            DataBaseConection registarAtualizacao = new DataBaseConection();
+                            registarAtualizacao.AtualizarBanco(
+                                    "ordem de servico",
+                                    consultNumeroOs.getText(),
+                                    "ordem de servico encerrada",
+                                    Sessao.getMatricula()
+                            );
+                            try {
+                                String querySqlOperacao = """
+                                             UPDATE operacao
+                                                            SET status = ?
+                                                            WHERE cod_os = ?
+                                        """;
+
+                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlOperacao)) {
+                                    atualizar.setString(1, "OS encerrada");
+                                    atualizar.setString(2, consultNumeroOs.getText());
+                                    atualizar.executeUpdate();
+
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            try {
+                                String querySqlCodOperacao = """
+                                             SELECT id
+                                             FROM operacao
+                                             WHERE cod_os = ?
+                                        """;
+                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlCodOperacao)) {
+                                    atualizar.setString(1, consultNumeroOs.getText());
+                                    ResultSet busca = atualizar.executeQuery();
+
+                                    while (busca.next()) {
+                                        try {
+                                            String querySqlItem = """
+                                                         UPDATE item
+                                                                        SET status = ?
+                                                                        WHERE id_operacao = ?
+                                                    """;
+
+                                            try (PreparedStatement atualizarItem = connectDB.prepareStatement(querySqlItem)) {
+                                                atualizarItem.setString(1, "OS encerrada");
+                                                atualizarItem.setString(2, busca.getString("id"));
+                                                atualizarItem.executeUpdate();
+                                            }
+                                        } catch (SQLException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
+                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                            alert2.setTitle("Aviso");
+                            alert2.setHeaderText(null);
+                            alert2.setContentText("Ordem de servico encerrada!");
+                            stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
+                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                            alert2.showAndWait();
+                        }
                     }
-                }
-                else{
-                    Alert alert2 = new Alert(Alert.AlertType.WARNING);
-                    alert2.setTitle("Aviso");
-                    alert2.setHeaderText(null);
-                    alert2.setContentText("Ordem de ja esta encerrada!");
-                    alert2.showAndWait();
                 }
             }
 
@@ -237,6 +301,8 @@ public class FecharOsController {
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
             alert.setContentText("Informe o numero da ordem de servico!");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
             retorno = false;
         }
@@ -255,6 +321,8 @@ public class FecharOsController {
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
                             alert.setContentText("O número da ordem de serviço informada não foi localizada");
+                            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert.showAndWait();
                             retorno =  false;
                         }

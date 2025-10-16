@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -17,8 +18,9 @@ import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.sql.*;
+import java.util.ResourceBundle;
 
-public class ConsultarOsController {
+public class ConsultarOsController implements Initializable {
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
 
@@ -43,7 +45,7 @@ public class ConsultarOsController {
     private FilteredList<Item> itensFiltrados;
 
 
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
         URL consultar1ImageURL = getClass().getResource("/imagens/remover1.png");
         Image consultar1Image = new Image(consultar1ImageURL.toExternalForm());
@@ -60,6 +62,8 @@ public class ConsultarOsController {
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
         consultTableOperacao.setItems(todasOperacoes); // tabela de operações
+
+
         itensFiltrados = new FilteredList<>(todosItens, item -> false);
         consultTableItem.setItems(itensFiltrados); // tabela de itens
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -83,6 +87,8 @@ public class ConsultarOsController {
                 alert.setTitle("Aviso");
                 alert.setHeaderText(null);
                 alert.setContentText("Requisitado a entrega do Item!");
+                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                 alert.showAndWait();
 
             }
@@ -204,6 +210,8 @@ public class ConsultarOsController {
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
             alert.setContentText("Informe o numero da ordem de servico!");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
             retorno = false;
         }
@@ -222,6 +230,8 @@ public class ConsultarOsController {
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
                             alert.setContentText("O número da ordem de serviço informada não foi localizada");
+                            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert.showAndWait();
                             retorno =  false;
                         }
@@ -246,7 +256,7 @@ public class ConsultarOsController {
         private SimpleStringProperty status;
 
 
-        public Item() {
+        public Item(String codItem, String operacaoString, String descricaoItem, int qtdItem) {
         }
 
         public Item(int idItem, String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status) {
@@ -346,7 +356,7 @@ public class ConsultarOsController {
             private SimpleStringProperty status;
 
 
-            public Operacao() {
+            public Operacao(String operacaoString) {
             }
 
             public Operacao(int id,String codOperacao, String status) {

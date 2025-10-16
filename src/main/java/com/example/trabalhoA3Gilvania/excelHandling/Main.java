@@ -15,10 +15,10 @@ public class Main {
         //itensdaOs.Imprimir(listaItensdaOs);
 
         //Teste da busca de Operacoes por OS
-        GerenciadorOperacao operacoesdaOs = new GerenciadorOperacao();
-        File filePath;
-        filePath = operacoesdaOs.selecionarArquivo();
-        operacoesdaOs.criar("6500640702", filePath);
+        //GerenciadorOperacao operacoesdaOs = new GerenciadorOperacao();
+       // File filePath;
+        //filePath = operacoesdaOs.selecionarArquivo();
+       // operacoesdaOs.criar("6500640702", filePath);
 
     }
 }

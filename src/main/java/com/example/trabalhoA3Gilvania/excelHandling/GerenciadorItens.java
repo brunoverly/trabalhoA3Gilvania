@@ -72,13 +72,4 @@ public class GerenciadorItens {
         return itens;
     }
 
-    //Imprime os itens da lista no cmd
-    public void Imprimir (List<Item> itens){
-        itens.forEach(System.out::println);
-    }
-
-
-    //Cadastra
-
-
 }

@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -41,9 +42,12 @@ public class SaidaItemScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Login Screen");
+            stage.setTitle("Lancar Entrega de Item");
             stage.setScene(scene);
             stage.show();
+
+            TextField tf = (TextField) root.lookup("#retirarMatriculaMecanico"); // seu TextField pelo id
+            tf.requestFocus();
 
         } catch (Exception e) {
             e.printStackTrace();

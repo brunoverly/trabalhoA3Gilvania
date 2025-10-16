@@ -28,30 +28,21 @@
             <font>
                 <Font size="14.0" />
             </font></TextField>
-        <Label layoutX="40.0" layoutY="408.0" text="E-mail">
+        <Label layoutX="40.0" layoutY="413.0" text="Cargo">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="removeDadosEmail" disable="true" layoutX="40.0" layoutY="438.0" prefHeight="35.0" prefWidth="271.0">
+        <TextField fx:id="removeDadosCargo" disable="true" layoutX="40.0" layoutY="443.0" prefHeight="35.0" prefWidth="271.0">
             <font>
                 <Font size="14.0" />
             </font></TextField>
-        <Label layoutX="40.0" layoutY="478.0" text="Cargo">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="removeDadosCargo" disable="true" layoutX="40.0" layoutY="508.0" prefHeight="35.0" prefWidth="271.0">
-            <font>
-                <Font size="14.0" />
-            </font></TextField>
-        <Button fx:id="removeConfirmarButton" layoutX="348.0" layoutY="599.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="40.0" prefWidth="118.0" style="-fx-background-color: #fca311;" text="        Remover" textFill="WHITE">
+        <Button fx:id="removeConfirmarButton" layoutX="348.0" layoutY="599.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="35.0" prefWidth="125.0" style="-fx-base: #fca311;" text="        Remover" textFill="#fefefe">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
         </Button>
-        <Button fx:id="removeCancelarButton" layoutX="41.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
+        <Button fx:id="removeCancelarButton" layoutX="40.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -88,17 +79,17 @@
             </ImageView>
          </graphic>
       </Label>
-          <ImageView fx:id="remover3" fitHeight="30.0" fitWidth="30.0" layoutX="354.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true">
+          <ImageView fx:id="remover3" fitHeight="30.0" fitWidth="30.0" layoutX="354.0" layoutY="602.0" pickOnBounds="true" preserveRatio="true">
               <image>
                   <Image url="@../../../imagens/remover3.png" />
               </image>
           </ImageView>
-      <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #fca311;" text="        Consultar" textFill="WHITE">
+      <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="35.0" prefWidth="125.0" style="-fx-base: #fca311;" text="        Consultar" textFill="#fefefe">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <ImageView fx:id="remover1" fitHeight="30.0" fitWidth="30.0" layoutX="214.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="remover1" fitHeight="29.0" fitWidth="28.0" layoutX="214.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/remover1.png" />
          </image>

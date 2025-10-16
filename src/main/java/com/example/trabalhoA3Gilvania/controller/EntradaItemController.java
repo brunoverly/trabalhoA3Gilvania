@@ -1,7 +1,9 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,7 +15,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
-public class EntradaItemController {
+public class EntradaItemController implements Initializable {
 
     @FXML private Button entradaItemCancelar;
     @FXML private Button entradaItemConfirmar;
@@ -60,12 +62,14 @@ public class EntradaItemController {
     entradadCodItem.setText(codItem);
     entradaItemDescricao.setText(descricaoItem);
     entrdadaQtdPedido.setText(qtdPedido);
+
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         URL entrada1ImageURL = getClass().getResource("/imagens/entrada1.png");
         Image entrada1Image = new Image(entrada1ImageURL.toExternalForm());
         entrada1.setImage(entrada1Image);
+
     }
 
 
@@ -82,6 +86,17 @@ public class EntradaItemController {
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
             alert.setContentText("Informe a quantidade recebida e local armazenado");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+            alert.showAndWait();
+        }
+        else if(!verificarValorDigitado()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null); // opcional, sem cabeçalho
+            alert.setContentText("Quantidade recebida e invalida ou maior que a quantidade informada na ordem de servico.");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
         }
         else{
@@ -96,7 +111,7 @@ public class EntradaItemController {
                     Timestamp ts = Timestamp.valueOf(agora);
 
                     try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                        statement.setString(1, "armazenado");
+                        statement.setString(1, "recebido");
                         statement.setString(2, entradaLocalArmazenado.getText());
                         statement.setInt(3,Integer.parseInt(entradaQtdRecebida.getText()));
                         statement.setTimestamp(4, ts);
@@ -108,6 +123,8 @@ public class EntradaItemController {
                             alert2.setTitle("Aviso");
                             alert2.setHeaderText(null);
                             alert2.setContentText("Item atualizado com sucesso!");
+                            Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
+                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert2.showAndWait();
                         }
 
@@ -115,13 +132,31 @@ public class EntradaItemController {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                DataBaseConection registarAtualizacao = new DataBaseConection();
+                registarAtualizacao.AtualizarBanco(
+                        "item",
+                         codOs,
+                        "item recebido na base",
+                        Sessao.getMatricula()
+                );
 
                 Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
                 stage.close();
             }
         }
 
-
+        public boolean verificarValorDigitado(){
+            try{
+                Integer.parseInt(entradaQtdRecebida.getText().trim());
+            }
+            catch(Exception e){
+                return false;
+            }
+            if(Integer.parseInt(entrdadaQtdPedido.getText()) < Integer.parseInt(entradaQtdRecebida.getText().trim())){
+                return false;
+            }
+        return true;
+        }
 
     }
 

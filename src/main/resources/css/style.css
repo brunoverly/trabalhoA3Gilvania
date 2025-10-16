@@ -13,8 +13,9 @@
    Botões e campos de texto
    ======================== */
 .button {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
+     -fx-background-radius: 6;
+     -fx-border-radius: 6;
+     -fx-padding: 2 8 2 8;
 }
 
 .text-field {
@@ -54,6 +55,7 @@
 #menuConsultOs,
 #menuCloseOs,
 #menuEditarItem,
+#menuSolcitarItem,
 #menuRetiradaItem,
 #menuEntradaItem {
     -fx-background-color: transparent;  /* mantém cor do VBox */
@@ -69,7 +71,8 @@
 }
 
 /* ========================
-   Hover: exibe linha inferior laranja e aumenta levemente a fonte
+   Hover: exibe linha inferior laranja, aumenta levemente a fonte,
+   muda cor do texto e deixa em negrito
    ======================== */
 #menuAddUser:hover,
 #menuRemoveUser:hover,
@@ -78,9 +81,25 @@
 #menuConsultOs:hover,
 #menuCloseOs:hover,
 #menuEditarItem:hover,
+#menuSolcitarItem:hover,
 #menuRetiradaItem:hover,
 #menuEntradaItem:hover {
     -fx-border-color: transparent transparent #fca311 transparent; /* linha inferior laranja */
     -fx-border-width: 0 0 2 0;  /* altura da linha inferior */
-    -fx-font-size: 1.1em;       /* aumenta levemente a fonte apenas no hover */
+    -fx-font-size: 1.5em;       /* aumenta levemente a fonte apenas no hover */
+    -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
+    -fx-font-weight: bold;       /* deixa o texto em negrito no hover */
+}
+.text-field:disabled {
+    -fx-opacity: 1;                 /* mantém aparência normal */
+    -fx-text-fill: #888888;         /* cinza claro */
+    -fx-background-color: white;    /* fundo normal */
+    -fx-border-color: #cccccc;      /* borda igual aos outros */
+    -fx-border-radius: 8;           /* mesmo arredondamento que os outros campos */
+    -fx-background-radius: 8;
+}
+
+.text-field:disabled:focused {
+    -fx-border-color: #cccccc;      /* remove borda azul quando focado */
+    -fx-background-color: white;    /* mantém fundo */
 }

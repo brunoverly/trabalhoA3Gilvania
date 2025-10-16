@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -21,6 +22,7 @@ public class LoginScreen extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
+            // Carregar fontes
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
@@ -29,21 +31,19 @@ public class LoginScreen extends Application {
             // Criar cena
             Scene scene = new Scene(root);
 
-            // Carregar CSS
+            // Carregar CSS com teste de retorno
             URL cssUrl = getClass().getResource("/css/style.css");
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-
-            // 🔹 Adicionar o ícone (logo)
+            // Adicionar o ícone (logo)
             URL logoUrl = getClass().getResource("/imagens/logo.png");
-
-                stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-
+            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
 
             // Configurar stage
-            stage.setTitle("Login Screen");
+            stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
+
+            TextField tf = (TextField) root.lookup("#enterUserNameField"); // seu TextField pelo id
+            tf.requestFocus();
 
         } catch (Exception e) {
             e.printStackTrace();

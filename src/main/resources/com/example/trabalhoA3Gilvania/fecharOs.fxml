@@ -19,7 +19,7 @@
             </font>
         </Label>
         <TextField fx:id="consultNumeroOsBuscado" editable="false" layoutX="57.0" layoutY="232.0" prefHeight="25.0" prefWidth="153.0" visible="false" />
-        <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="125.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="118.0" style="-fx-background-color: #fca311;" text="     Consultar" textFill="WHITE">
+        <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="129.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="118.0" style="-fx-base: #fca311;" text="     Consultar" textFill="#fefefe">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
@@ -31,7 +31,7 @@
         </Label>
         <AnchorPane layoutX="142.0" layoutY="201.0" prefHeight="339.0" prefWidth="727.0">
             <children>
-                <SplitPane dividerPositions="0.28900949796472186" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.28900949796472186" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="904.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-82.0" AnchorPane.topAnchor="0.0">
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="100.0">
                             <children>
@@ -45,13 +45,13 @@
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="392.0" prefWidth="338.0">
                             <children>
-                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="396.0" prefWidth="633.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="396.0" prefWidth="637.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
                                     <columns>
                                         <TableColumn fx:id="consultTableCodItem" prefWidth="125.0" text="Codigo Item" />
                                         <TableColumn fx:id="consultTableDescricaoItem" prefWidth="166.0" text="Descricao" />
                                         <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="84.0" text="Qtd.Pedido" />
                                         <TableColumn fx:id="consultTableRecebidoItem" prefWidth="101.0" text="Qtd. Recebida" />
-                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="156.0" text="Status" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="165.0" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -64,31 +64,29 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Button fx:id="consultVoltarButton" layoutX="55.0" layoutY="631.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="107.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
+        <Button fx:id="consultVoltarButton" layoutX="48.0" layoutY="630.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="107.0" text="Voltar" textFill="#14213d">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Button>
-      <Button fx:id="confirmCloseOsButton" layoutX="814.0" layoutY="631.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="40.0" prefWidth="126.0" style="-fx-background-color: #EBB672;" text="Encerrar Os" textFill="WHITE">
+      <Button fx:id="confirmCloseOsButton" layoutX="832.0" layoutY="629.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="35.0" prefWidth="120.0" style="-fx-base: #fca311;" text="      Encerrar Os" textFill="#fefefe">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
-         <graphic>
-            <ImageView fx:id="fechar2" fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../imagens/fechar1.png" />
-               </image>
-            </ImageView>
-         </graphic>
       </Button>
       <Label layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Servico" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fx:id="fechar1" fitHeight="24.0" fitWidth="33.0" layoutX="313.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="fechar1" fitHeight="24.0" fitWidth="33.0" layoutX="310.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/remover1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="fechar2" fitHeight="29.0" fitWidth="27.0" layoutX="837.0" layoutY="634.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../imagens/fechar1.png" />
          </image>
       </ImageView>
     </children>

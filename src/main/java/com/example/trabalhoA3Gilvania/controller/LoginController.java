@@ -81,6 +81,8 @@ public class LoginController {
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
             alert.setContentText("Informe usuario e senha para prosseguir");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
         }
 
@@ -100,8 +102,8 @@ public class LoginController {
                         WHERE matricula = ? AND pin = ?
                     """;
             try (PreparedStatement buscaUsuario = connectDB.prepareStatement(querySqlUser)) {
-                buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText()));
-                buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText()));
+                buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText().trim()));
+                buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText().trim()));
                 ResultSet rs = buscaUsuario.executeQuery();
                 if (rs.next()) {
                     Sessao.setUsuario(
@@ -119,6 +121,8 @@ public class LoginController {
                     alert.setTitle("Aviso");
                     alert.setHeaderText(null); // opcional, sem cabeçalho
                     alert.setContentText("Usuario ou senha invalidos!");
+                    Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                     alert.showAndWait();
                 }
             }

@@ -2,6 +2,8 @@ package com.example.trabalhoA3Gilvania.excelHandling;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lombok.Cleanup;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,28 +20,22 @@ import java.util.List;
 public class GerenciadorOperacao {
 
 
-    public File selecionarArquivo() {
-        // Abre a janela do seletor de arquivo
-        JFileChooser fileChooser = new JFileChooser();
+    public File selecionarArquivo(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Planilhas Excel (*.xlsx, *.xls)", "*.xlsx", "*.xls")
+        );
 
-        //Ativa filtro para somente arquivos de planilhas
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Planilhas Excel (*.xlsx, *.xls)", "xlsx", "xls"));
+        File fileSelected = fileChooser.showOpenDialog(stage);
 
-        //Checa se algum arquivo foi selecionado
-        boolean alert = false;
-        int result = fileChooser.showOpenDialog(null);
-        if (result != JFileChooser.APPROVE_OPTION) {
-            JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            alert = true;
+        if (fileSelected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Nenhum arquivo selecionado.");
+            alert.showAndWait();
         }
-        File fileSelected = fileChooser.getSelectedFile();
 
-        if (fileSelected == null || !fileSelected.exists() || !fileSelected.isFile()) {
-           if(alert == false){
-               JOptionPane.showMessageDialog(null, "Arquivo inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-           }
-        }
         return fileSelected;
     }
 

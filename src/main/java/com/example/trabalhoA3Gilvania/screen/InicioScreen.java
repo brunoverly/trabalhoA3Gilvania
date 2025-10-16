@@ -40,7 +40,7 @@ public class InicioScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Login Screen");
+            stage.setTitle("Pagina inicial");
             stage.setScene(scene);
             stage.show();
 

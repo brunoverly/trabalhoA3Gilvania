@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="562.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
+<AnchorPane fx:id="inicioPane" prefHeight="608.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
    <children>
       <BorderPane layoutX="-2.0" layoutY="-1.0" prefHeight="471.0" prefWidth="1071.0" style="-fx-background-color: #e5e5e5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox fx:id="inicioVbox" prefHeight="562.0" prefWidth="218.0" style="-fx-background-color: #264653;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="inicioLogo" fitHeight="85.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="iniciologo" fitHeight="85.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../imagens/iniciologo.png" />
                      </image>
@@ -51,6 +54,18 @@
                         <ImageView fx:id="inicio3" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../imagens/fechar1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuSolcitarItem" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#menuSolcitarItemOnAction" prefHeight="45.0" prefWidth="224.0" style="-fx-background-color: #264653;" text="Solicitar Item" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio9" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/inicio9.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -118,6 +133,85 @@
                </children>
             </VBox>
          </left>
+         <center>
+            <AnchorPane prefHeight="599.0" prefWidth="853.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane fx:id="inicioDashboardOsAbertas1" layoutX="107.0" layoutY="72.0" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: #c48113; -fx-background-radius: 20;">
+                     <children>
+                        <AnchorPane fx:id="inicioDashboardOsAbertas" layoutX="2.0" prefHeight="170.0" prefWidth="202.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
+                           <children>
+                              <Label alignment="CENTER" layoutY="14.0" prefHeight="35.0" prefWidth="202.0" text="OS ABERTAS" textFill="#14213d">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="inicioLabelOsAbertas" alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="44.0" prefHeight="125.0" prefWidth="203.0" text="50" textFill="#c48113">
+                                 <font>
+                                    <Font name="System Bold" size="72.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <TableView fx:id="inicioTableView" layoutX="28.0" layoutY="293.0" prefHeight="304.0" prefWidth="794.0">
+                    <columns>
+                        <TableColumn fx:id="inicioTableData" prefWidth="153.0" text="Data hora" />
+                      <TableColumn fx:id="inicioTableTipo" prefWidth="130.0" text="Tipo" />
+                      <TableColumn fx:id="inicioTableOs" minWidth="0.0" prefWidth="156.0" text="OS" />
+                        <TableColumn fx:id="inicioTableDescricao" prefWidth="192.0" text="Descricao" />
+                        <TableColumn fx:id="inicioTableUsuario" prefWidth="171.0" text="Usuario" />
+                    </columns>
+                  </TableView>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="7.0" prefHeight="53.0" prefWidth="580.0" text="Overview Ordems de Servico" textFill="#14213d">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="31.0" layoutY="264.0" prefHeight="29.0" prefWidth="798.0" text="Ultimas atualizacoes" textFill="#14213d">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="inicioDashboardOsAbertas11" layoutX="318.0" layoutY="72.0" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: #264653; -fx-background-radius: 20;">
+                     <children>
+                        <AnchorPane fx:id="inicioDashboardOsAbertas1" layoutX="2.0" prefHeight="170.0" prefWidth="198.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
+                           <children>
+                              <Label alignment="CENTER" layoutY="14.0" prefHeight="35.0" prefWidth="196.0" text="OS EM ANDAMENTO" textFill="#14213d">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="inicioLabelOsEmAndamento" alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="41.0" prefHeight="128.0" prefWidth="200.0" text="50" textFill="#264653">
+                                 <font>
+                                    <Font name="System Bold" size="72.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="inicioDashboardOsAbertas111" layoutX="526.0" layoutY="72.0" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: #c48113; -fx-background-radius: 20;">
+                     <children>
+                        <AnchorPane fx:id="inicioDashboardOsAbertas11" layoutX="2.0" prefHeight="170.0" prefWidth="197.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;">
+                           <children>
+                              <Label alignment="CENTER" layoutY="14.0" prefHeight="35.0" prefWidth="194.0" text="OS CONCLUIDAS" textFill="#14213d">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="inicioLabelOsEncerrada" alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="42.0" prefHeight="127.0" prefWidth="199.0" text="50" textFill="#c48113">
+                                 <font>
+                                    <Font name="System Bold" size="72.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>

@@ -18,7 +18,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="147.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="107.0" style="-fx-background-color: #fca311;" text="      Consultar" textFill="WHITE">
+      <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="114.0" style="-fx-base: #fca311;" text="      Consultar" textFill="#fefefe">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -58,7 +58,7 @@
          <font>
             <Font size="15.0" />
          </font></TextField>
-      <Button fx:id="consultVoltarButton" layoutX="29.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
+      <Button fx:id="consultVoltarButton" layoutX="29.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

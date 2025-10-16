@@ -10,11 +10,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.SaidaItemController">
    <children>
-      <Button fx:id="retirarCancelButton" layoutX="40.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarCancelButtonOnAction" prefHeight="40.0" style="-fx-background-color: #14213d;" text="Cancelar" textFill="WHITE">
+      <Button fx:id="retirarCancelButton" layoutX="40.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarCancelButtonOnAction" prefHeight="35.0" text="Cancelar" textFill="#14213d">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
-      <Button fx:id="retirarConfirmarButton" layoutX="603.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" prefHeight="40.0" style="-fx-background-color: #EBB672;" text="        Confirmar" textFill="WHITE">
+      <Button fx:id="retirarConfirmarButton" layoutX="603.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" prefHeight="35.0" style="-fx-base: #EBB672;" text="      Confirmar" textFill="#fefefe">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
@@ -46,27 +46,51 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <TextField fx:id="retirarQtdItemOs" disable="true" layoutX="40.0" layoutY="290.0" prefHeight="35.0" prefWidth="186.0" />
-      <TextField fx:id="retirarDescricaoItem" disable="true" layoutX="40.0" layoutY="208.0" prefHeight="35.0" prefWidth="431.0" />
-      <TextField fx:id="retirarCodItem" disable="true" layoutX="501.0" layoutY="128.0" prefHeight="35.0" prefWidth="219.0" />
-      <TextField fx:id="retirarCodOperacao" disable="true" layoutX="270.0" layoutY="130.0" prefHeight="35.0" prefWidth="195.0" />
-      <TextField fx:id="retiraraCodOs" disable="true" editable="false" layoutX="40.0" layoutY="130.0" prefHeight="35.0" prefWidth="207.0" />
+      <TextField fx:id="retirarQtdItemOs" disable="true" layoutX="40.0" layoutY="290.0" prefHeight="35.0" prefWidth="186.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <TextField fx:id="retirarDescricaoItem" disable="true" layoutX="40.0" layoutY="208.0" prefHeight="35.0" prefWidth="431.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <TextField fx:id="retirarCodItem" disable="true" layoutX="501.0" layoutY="128.0" prefHeight="35.0" prefWidth="219.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <TextField fx:id="retirarCodOperacao" disable="true" layoutX="270.0" layoutY="130.0" prefHeight="35.0" prefWidth="195.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <TextField fx:id="retiraraCodOs" disable="true" editable="false" layoutX="40.0" layoutY="130.0" prefHeight="35.0" prefWidth="207.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label layoutX="40.0" layoutY="340.0" text="Status" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <TextField fx:id="retirarStatusItem" disable="true" layoutX="40.0" layoutY="370.0" prefHeight="35.0" prefWidth="186.0" />
+      <TextField fx:id="retirarStatusItem" disable="true" layoutX="40.0" layoutY="370.0" prefHeight="35.0" prefWidth="186.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label layoutX="270.0" layoutY="340.0" text="Local Armazenado" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <TextField fx:id="retirarLocalItem" disable="true" layoutX="270.0" layoutY="370.0" prefHeight="35.0" prefWidth="186.0" />
+      <TextField fx:id="retirarLocalItem" disable="true" layoutX="270.0" layoutY="370.0" prefHeight="35.0" prefWidth="186.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label layoutX="270.0" layoutY="260.0" text="Quantidade Recebida" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <TextField fx:id="retirarQtdItemRecebida" disable="true" layoutX="270.0" layoutY="290.0" prefHeight="35.0" prefWidth="186.0" />
-      <ImageView fx:id="retirar1" fitHeight="34.0" fitWidth="33.0" layoutX="611.0" layoutY="532.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="retirarQtdItemRecebida" disable="true" layoutX="270.0" layoutY="290.0" prefHeight="35.0" prefWidth="186.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <ImageView fx:id="retirar1" fitHeight="27.0" fitWidth="27.0" layoutX="609.0" layoutY="533.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/entrega1.png" />
          </image>
