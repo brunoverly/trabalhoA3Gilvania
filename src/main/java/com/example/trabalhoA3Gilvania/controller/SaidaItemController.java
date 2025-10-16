@@ -1,28 +1,19 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.ConsultEditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.EditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.SolicitarScreen;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ResourceBundle;
 
-    public class RetirarController {
+public class SaidaItemController {
         @FXML private Button retirarConfirmarButton;
         @FXML private Button retirarCancelButton;
 
@@ -37,6 +28,7 @@ import java.util.Optional;
         @FXML private TextField retirarStatusItem;
         @FXML private TextField retirarLocalItem;
         @FXML private TextField retirarMatriculaMecanico;
+        @FXML private ImageView retirar1;
 
         private int idItem;
         private String codItem;
@@ -71,6 +63,11 @@ import java.util.Optional;
         public void setStatus(String status){this.status = status;}
         public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
 
+        public void initialize(URL url, ResourceBundle resourceBundle) {
+        URL retitar1ImageURL = getClass().getResource("/imagens/retirar1.png");
+        Image retirar1Image = new Image(retitar1ImageURL.toExternalForm());
+        retirar1.setImage(retirar1Image);
+    }
 
         public void carregaDados(){
             retiraraCodOs.setText(codOs);
@@ -97,7 +94,6 @@ import java.util.Optional;
                 alert.showAndWait();
             }
             else{
-                System.out.println("idItem = " + idItem);
                 try (Connection connectDB = new DataBaseConection().getConection()) {
                     String querySqlRetirada = """
                                 INSERT INTO controle_retirada_itens

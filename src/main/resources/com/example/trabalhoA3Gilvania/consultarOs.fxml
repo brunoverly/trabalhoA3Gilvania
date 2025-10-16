@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultOsController">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarOsController">
    <children>
       <Label layoutX="53.0" layoutY="107.0" text="Digite o numero da OS a ser consultada" textFill="#14213d">
          <font>
@@ -58,7 +58,7 @@
          <font>
             <Font size="15.0" />
          </font></TextField>
-      <Button fx:id="consultVoltarButton" layoutX="29.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #14213d;" text="Voltar" textFill="WHITE">
+      <Button fx:id="consultVoltarButton" layoutX="29.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
@@ -73,9 +73,9 @@
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fitHeight="27.0" fitWidth="27.0" layoutX="390.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="consultar1" fitHeight="27.0" fitWidth="27.0" layoutX="390.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../Downloads/database_search_150dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png" />
+            <Image url="@../../../imagens/remover1.png" />
          </image>
       </ImageView>
    </children>

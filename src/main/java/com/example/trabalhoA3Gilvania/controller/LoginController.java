@@ -1,9 +1,11 @@
 package com.example.trabalhoA3Gilvania.controller;
 
+
+
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.RegisterScreen;
-import com.example.trabalhoA3Gilvania.screen.StartPageScreen;
-import javafx.application.Platform;
+import com.example.trabalhoA3Gilvania.screen.InicioScreen;
+import com.example.trabalhoA3Gilvania.Sessao;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -13,20 +15,20 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.net.URL;
-import java.io.File;
+
 import javafx.scene.image.Image;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 
 public class LoginController {
     @FXML
-    private Button loginCancelButton;
+    private Button loginButton;
     @FXML
-    private Label  loginErrorMessage;
+    private Label loginErrorMessage;
+    @FXML
+    ImageView brand;
     @FXML
     private ImageView login1;
     @FXML
@@ -39,22 +41,26 @@ public class LoginController {
     private TextField enterPasswordField;
 
 
-
-
     //Conexao com banco de dados
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       URL imagemPrincipalURL = getClass().getResource("/imagens/login1.png");
-       Image imagemPrincipal= new Image(imagemPrincipalURL.toExternalForm());
+        Image test = new Image(getClass().getResourceAsStream("/imagens/brand.png"));
+
+        URL imagemPrincipalURL = getClass().getResource("/imagens/login1.png");
+        Image imagemPrincipal = new Image(imagemPrincipalURL.toExternalForm());
         login1.setImage(imagemPrincipal);
 
 
-       URL imagemUsuarioURL = getClass().getResource("/imagens/login2.png");
-       Image imagemUsuario = new Image(imagemUsuarioURL.toExternalForm());
+        URL imagemUsuarioURL = getClass().getResource("/imagens/login2.png");
+        Image imagemUsuario = new Image(imagemUsuarioURL.toExternalForm());
         login2.setImage(imagemUsuario);
 
         URL imagemPinURL = getClass().getResource("/imagens/login3.png");
         Image imagemPin = new Image(imagemPinURL.toExternalForm());
         login3.setImage(imagemPin);
+
+        URL imagemBrandURL = getClass().getResource("/imagens/brand.png");
+        Image imagemBrand = new Image(imagemBrandURL.toExternalForm());
+        brand.setImage(imagemBrand);
 
     }
 
@@ -62,16 +68,15 @@ public class LoginController {
     //BOTOES
     //Acao do botao cancelar login
     public void LoginCancelButtonOnAction(ActionEvent event) {
-        Stage stage = (Stage) loginCancelButton.getScene().getWindow();
+        Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.close();
     }
 
     //Acao do botao fazer login
-    public void LoginButtonOnAction(ActionEvent event){
-        if((enterUserNameField.getText().isBlank() == false) && (enterPasswordField.getText().isBlank() == false )){
-                validateLogin();
-        }
-        else{
+    public void LoginButtonOnAction(ActionEvent event) {
+        if ((enterUserNameField.getText().isBlank() == false) && (enterPasswordField.getText().isBlank() == false)) {
+            validateLogin();
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
@@ -82,31 +87,32 @@ public class LoginController {
 
     }
 
-
-
-
-
-
-
-
-
     //METODOS
     //Validar o login conectando ao banco de dados
-    public void validateLogin(){
+    public void validateLogin() {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connectDB = connectNow.getConection();
-
-        String verifyLogin = "SELECT COUNT(1) FROM USERS WHERE NOME = '" + enterUserNameField.getText() + "' AND SENHA = '"+ enterPasswordField.getText() + "';";
-
-        try{
-            Statement statement = connectDB.createStatement();
-            ResultSet queryResult = statement.executeQuery(verifyLogin);
-
-            while(queryResult.next()){
-                if(queryResult.getInt(1) == 1){
-                    Stage stage = (Stage) loginCancelButton.getScene().getWindow();
-                    stage.close();
+/// ////////////////////////////////////////////////////////
+        try {
+            String querySqlUser = """
+                        SELECT nome, matricula, cargo
+                        FROM users
+                        WHERE matricula = ? AND pin = ?
+                    """;
+            try (PreparedStatement buscaUsuario = connectDB.prepareStatement(querySqlUser)) {
+                buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText()));
+                buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText()));
+                ResultSet rs = buscaUsuario.executeQuery();
+                if (rs.next()) {
+                    Sessao.setUsuario(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cargo")
+                    );
                     TelaInicial();
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.close();
+
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -116,20 +122,20 @@ public class LoginController {
                     alert.showAndWait();
                 }
             }
-        }
-        catch(Exception e){
+            catch (NumberFormatException e){
+                e.printStackTrace();
+                e.getCause();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
             e.getCause();
         }
     }
 
-
-
-    //ALTERNAR ENTRE AS TELAS
-    //Tela de cadstro de usuarios
-    public static void TelaInicial() throws Exception {
-        StartPageScreen telaInicial = new StartPageScreen();
+    public static void TelaInicial() {
+        InicioScreen telaInicial = new InicioScreen();
         Stage stage = new Stage();
         telaInicial.start(stage);
     }
 }
+

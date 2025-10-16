@@ -27,22 +27,18 @@ public class GerenciadorOperacao {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Planilhas Excel (*.xlsx, *.xls)", "xlsx", "xls"));
 
         //Checa se algum arquivo foi selecionado
+        boolean alert = false;
         int result = fileChooser.showOpenDialog(null);
         if (result != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            alert = true;
         }
         File fileSelected = fileChooser.getSelectedFile();
-        if (fileSelected == null || !fileSelected.exists() || !fileSelected.isFile()) {
-            JOptionPane.showMessageDialog(null, "Arquivo inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        if (!fileSelected.exists() || !fileSelected.isFile()) {
-            JOptionPane.showMessageDialog(null, "Arquivo inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
 
-        //Verifica se o arquivo escolhido e uma planilha
-        String nome = fileSelected.getName().toLowerCase();
-        if (!nome.endsWith(".xlsx") && !nome.endsWith(".xls")) {
-            JOptionPane.showMessageDialog(null, "Selecione apenas arquivos Excel (.xlsx ou .xls)!", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (fileSelected == null || !fileSelected.exists() || !fileSelected.isFile()) {
+           if(alert == false){
+               JOptionPane.showMessageDialog(null, "Arquivo inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+           }
         }
         return fileSelected;
     }

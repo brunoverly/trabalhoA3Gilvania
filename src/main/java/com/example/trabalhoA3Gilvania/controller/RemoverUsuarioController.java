@@ -1,9 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,14 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
-import java.awt.*;
-import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Optional;
@@ -30,9 +23,11 @@ import java.util.ResourceBundle;
 
 
 
-public class RemoveUserController implements Initializable {
+public class RemoverUsuarioController implements Initializable {
 
-    @FXML private ImageView removeUserImageView;
+    @FXML private ImageView remover1;
+    @FXML private ImageView remover2;
+    @FXML private ImageView remover3;
 
 
     @FXML private Button removeBuscarMatricula;
@@ -55,9 +50,19 @@ public class RemoveUserController implements Initializable {
 
     //Carregar imagens
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL removeUserImageUrl = getClass().getResource("/imagens/Imagem3.png");
-        Image removeUserImage = new Image(removeUserImageUrl.toExternalForm());
-        removeUserImageView.setImage(removeUserImage);
+        URL remover1ImageURL = getClass().getResource("/imagens/remover1.png");
+        Image remover1Image = new Image(remover1ImageURL.toExternalForm());
+        remover1.setImage(remover1Image);
+
+        URL reomver2ImageURL = getClass().getResource("/imagens/remover2.png");
+        Image remover2Image = new Image(reomver2ImageURL.toExternalForm());
+        remover2.setImage(remover2Image);
+
+        URL remover3ImageUrl = getClass().getResource("/imagens/remover3.png");
+        Image remover3Image = new Image(remover3ImageUrl.toExternalForm());
+        remover3.setImage(remover3Image);
+
+
     }
 
     public void removeCancelarButtonOnAction(ActionEvent event) {

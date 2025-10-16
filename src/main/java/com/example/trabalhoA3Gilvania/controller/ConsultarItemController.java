@@ -1,10 +1,6 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.ConsultEditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.EditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.RetirarScreen;
-import com.example.trabalhoA3Gilvania.screen.SolicitarScreen;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,12 +12,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import java.net.URL;
 import java.sql.*;
 
-public class ConsultEditItemController {
+public class ConsultarItemController {
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
 
@@ -38,6 +38,7 @@ public class ConsultEditItemController {
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
+    @FXML private ImageView consultarItem1;
 
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
@@ -77,17 +78,13 @@ public class ConsultEditItemController {
     public void setStatus(String status){this.status = status;}
     public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
 
-
-
-
-
-    public static void TelaSolicitar() throws Exception {
-        SolicitarScreen telaSolicitar = new SolicitarScreen();
-        Stage stage = new Stage();
-        telaSolicitar.start(stage);
-    }
-
     public void initialize() {
+        URL consultarItem1URL = getClass().getResource("/imagens/remover1.png");
+        Image consultar1Image = new Image(consultarItem1URL.toExternalForm());
+        consultarItem1.setImage(consultar1Image);
+
+
+
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -106,9 +103,6 @@ public class ConsultEditItemController {
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
-
-                System.out.println("Operação selecionada: " + codOperacaoSelecionada);
-                System.out.println("Itens filtrados: " + itensFiltrados.size());
             } else {
                 itensFiltrados.setPredicate(item -> false);
             }
@@ -120,7 +114,6 @@ public class ConsultEditItemController {
         solicitarItem.setOnAction(event -> {
             Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
             if (selecionado != null) {
-                //System.out.println("Solicitar item: " + selecionado.getIdItem());
                 // Abre tela de solicitação
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Aviso");
@@ -253,13 +246,8 @@ public class ConsultEditItemController {
                             rs.getString("status")
                     );
                     listaItens.add(item);
-                    System.out.println("Item carregado: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
                 }
             }
-            for (Item item : listaItens) {
-                System.out.println("DEBUG ITEM: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
-            }
-
             todosItens.clear();
             todosItens.addAll(listaItens);
 
@@ -286,7 +274,6 @@ public class ConsultEditItemController {
                             rs.getString("status")
                     );
                     listaOperacao.add(operacao);
-                    System.out.println("Operação carregada: " + operacao.getCodOperacao() + " | Status: " + operacao.getStatus());
                 }
             }
 
@@ -488,14 +475,6 @@ public class ConsultEditItemController {
     }
 
 
-
-
-    public static void AbrirJanelaEditarItem() throws Exception {
-        EditItemScreen novaJanela = new EditItemScreen();
-        Stage stage = new Stage();
-        novaJanela.start(stage);
-    }
-
     public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml"));
         Parent root = loader.load();
@@ -521,10 +500,10 @@ public class ConsultEditItemController {
 
 
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/retirar.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/saidaItem.fxml"));
             Parent root = loader.load();
 
-            RetirarController controller = loader.getController();
+            SaidaItemController controller = loader.getController();
             controller.setCodItem(codItem);
             controller.setCodOperacao(codOperacao);
             controller.setCodOs(codOs);
@@ -537,7 +516,6 @@ public class ConsultEditItemController {
 
             controller.carregaDados();
 
-            System.out.println("ate aqui funcionou");
 
             Stage stage = new Stage();
             stage.setTitle("Retirada de itens");

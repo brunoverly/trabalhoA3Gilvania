@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="removeUser" prefHeight="677.0" prefWidth="519.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RemoveUserController">
+<AnchorPane fx:id="removeUser" prefHeight="677.0" prefWidth="519.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RemoverUsuarioController">
     <children>
         <Label layoutX="40.0" layoutY="248.0" text="Nome Completo" textFill="#14213d">
             <font>
@@ -51,7 +51,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
         </Button>
-        <Button fx:id="removeCancelarButton" layoutX="41.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #14213d;" text="Voltar" textFill="WHITE">
+        <Button fx:id="removeCancelarButton" layoutX="41.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -66,7 +66,7 @@
                 <Font name="System Bold" size="36.0" />
             </font>
         </Label>
-      <TextField fx:id="removeMatricula" layoutX="40.0" layoutY="124.0" prefHeight="35.0" prefWidth="155.0" promptText="Matricula">
+      <TextField fx:id="removeMatricula" layoutX="40.0" layoutY="124.0" prefHeight="35.0" prefWidth="155.0" promptText="Ex: 5675341">
          <font>
             <Font size="14.0" />
          </font>
@@ -81,16 +81,16 @@
             <Font name="System Bold" size="16.0" />
          </font>
          <graphic>
-            <ImageView fitHeight="29.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="remover2" fitHeight="29.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../../Downloads/person_150dp_14213D_FILL0_wght400_GRAD0_opsz48.png" />
+                  <Image url="@../../../imagens/remover2.png" />
                </image>
             </ImageView>
          </graphic>
       </Label>
-          <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="354.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true">
+          <ImageView fx:id="remover3" fitHeight="30.0" fitWidth="30.0" layoutX="354.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true">
               <image>
-                  <Image url="@../../../../../../../../Downloads/person_remove_150dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png" />
+                  <Image url="@../../../imagens/remover3.png" />
               </image>
           </ImageView>
       <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #fca311;" text="        Consultar" textFill="WHITE">
@@ -98,9 +98,9 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="214.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="remover1" fitHeight="30.0" fitWidth="30.0" layoutX="214.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../Downloads/database_search_150dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png" />
+            <Image url="@../../../imagens/remover1.png" />
          </image>
       </ImageView>
     </children>

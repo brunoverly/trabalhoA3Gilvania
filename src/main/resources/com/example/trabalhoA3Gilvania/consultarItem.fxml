@@ -6,25 +6,26 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultEditItemController">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
     <children>
-        <AnchorPane prefHeight="54.0" prefWidth="1000.0" style="-fx-background-color: #EBB672;" />
-        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS do Item e selecione o item que deseja editar">
+        <Label layoutX="53.0" layoutY="107.0" text="Digite o numero da OS e selecione um item especifico" textFill="#14213d">
             <font>
-                <Font size="13.0" />
+                <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="459.0" layoutY="117.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="25.0" prefWidth="107.0" text="Buscar">
+        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="147.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="107.0" style="-fx-background-color: #fca311;" text="    Consultar" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="14.0" />
             </font>
         </Button>
         <AnchorPane layoutX="121.0" layoutY="232.0" prefHeight="339.0" prefWidth="782.0">
             <children>
-                <SplitPane dividerPositions="0.2665964172813488" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.2665964172813488" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="943.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-66.0" AnchorPane.topAnchor="0.0">
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="295.0">
                             <children>
@@ -53,10 +54,13 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <TextField fx:id="consultNumeroOs" layoutX="57.0" layoutY="119.0" prefHeight="25.0" prefWidth="390.0" promptText="Ex: 765234" />
-        <Button fx:id="consultVoltarButton" layoutX="869.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="25.0" prefWidth="107.0" text="Voltar">
+        <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+        <Button fx:id="consultVoltarButton" layoutX="26.0" layoutY="643.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Voltar" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="14.0" />
             </font>
         </Button>
         <Label fx:id="consultLabelOsBuscada" alignment="CENTER" contentDisplay="CENTER" layoutX="53.0" layoutY="193.0" prefHeight="19.0" prefWidth="895.0" visible="false">
@@ -64,5 +68,15 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
+      <Label layoutX="53.0" layoutY="30.0" text="Consultar Item" textFill="#14213d">
+         <font>
+            <Font name="System Bold" size="44.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="consultarItem1" fitHeight="24.0" fitWidth="25.0" layoutX="389.0" layoutY="153.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../imagens/remover1.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

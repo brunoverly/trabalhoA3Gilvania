@@ -1,49 +1,82 @@
 package com.example.trabalhoA3Gilvania.controller;
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.screen.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import java.net.URL;
-import java.io.File;
-import javafx.scene.image.Image;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class StartPageController {
-    @FXML private MenuItem menuAddUser;
-    @FXML private MenuItem menuRemoveUser;
-    @FXML private MenuItem menuSair;
-    @FXML private MenuItem menuImportarOs;
-    @FXML private MenuItem menuConsultOs;
-    @FXML private MenuItem menuClseOs;
-    @FXML private MenuItem menuEditarItem;
-    @FXML private MenuItem menuRetiradaItem;
-    @FXML private MenuItem menuEntradaItem;
+public class InicioController {
+    @FXML private Button menuAddUser;
+    @FXML private Button menuRemoveUser;
+    @FXML private Button menuSair;
+    @FXML private Button menuImportarOs;
+    @FXML private Button menuConsultOs;
+    @FXML private Button menuCloseOs;
+    @FXML private Button menuEditarItem;
+    @FXML private Button menuRetiradaItem;
+    @FXML private Button menuEntradaItem;
 
-    public void menuEditarItemOnAction(ActionEvent event){
-        try{
-            try {
-                AbrirItem("editar");
+    @FXML private ImageView iniciologo;
+    @FXML private ImageView inicio1;
+    @FXML private ImageView inicio2;
+    @FXML private ImageView inicio3;
+    @FXML private ImageView inicio4;
+    @FXML private ImageView inicio5;
+    @FXML private ImageView inicio6;
+    @FXML private ImageView inicio7;
+    @FXML private ImageView inicio8;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        URL inicioLogoURL = getClass().getResource("/imagens/brandlogo.png");
+        Image inicioLogo = new Image(inicioLogoURL.toExternalForm());
+        iniciologo.setImage(inicioLogo);
+
+        URL inicio1URL = getClass().getResource("/imagens/inicio1.png");
+        Image inicio1Img = new Image(inicio1URL.toExternalForm());
+        inicio1.setImage(inicio1Img);
+
+        URL inicio2URL = getClass().getResource("/imagens/remover1.png");
+        Image inicio2Img = new Image(inicio2URL.toExternalForm());
+        inicio2.setImage(inicio2Img);
+
+        URL inicio3URL = getClass().getResource("/imagens/inicio3.png");
+        Image inicio3Img = new Image(inicio3URL.toExternalForm());
+        inicio3.setImage(inicio3Img);
+
+        URL inicio4URL = getClass().getResource("/imagens/entrada1.png");
+        Image inicio4Img = new Image(inicio4URL.toExternalForm());
+        inicio4.setImage(inicio4Img);
+
+        URL inicio5URL = getClass().getResource("/imagens/entrega1.png");
+        Image inicio5Img = new Image(inicio5URL.toExternalForm());
+        inicio5.setImage(inicio5Img);
+
+        URL inicio6URL = getClass().getResource("/imagens/cadastro1.png");
+        Image inicio6Img = new Image(inicio6URL.toExternalForm());
+        inicio6.setImage(inicio6Img);
+
+        URL inicio7URL = getClass().getResource("/imagens/remover3.png");
+        Image inicio7Img = new Image(inicio7URL.toExternalForm());
+        inicio7.setImage(inicio7Img);
+
+        URL inicio8URL = getClass().getResource("/imagens/inicio8.png");
+        Image inicio8Img = new Image(inicio7URL.toExternalForm());
+        inicio8.setImage(inicio7Img);
+
+
     }
 
     public void menuRetiradaItemOnAction(ActionEvent event){
@@ -72,7 +105,7 @@ public class StartPageController {
 
 
 
-    public void menuRemoveUserOnActino(ActionEvent event){
+    public void menuRemoveUserOnAction(ActionEvent event){
         try{
             RemoverUsuario();
         }
@@ -143,13 +176,13 @@ public class StartPageController {
     }
 
     public static void CadastroUsuario() throws Exception {
-        RegisterScreen cadastroUsuario = new RegisterScreen();
+        CadastrarUsuarioScreen cadastroUsuario = new CadastrarUsuarioScreen();
         Stage stage = new Stage();
         cadastroUsuario.start(stage);
     }
 
     public static void RemoverUsuario() throws Exception {
-        RemoveUserScreen removerUsuario = new RemoveUserScreen();
+        RemoverUsuarioScreen removerUsuario = new RemoverUsuarioScreen();
         Stage stage = new Stage();
         removerUsuario.start(stage);
     }
@@ -160,27 +193,27 @@ public class StartPageController {
         login.start(stage);
     }
     public static void ImportarOs() throws Exception {
-        ImportScreen importarOs = new ImportScreen();
+        ImportarOsScreen importarOs = new ImportarOsScreen();
         Stage stage = new Stage();
         importarOs.start(stage);
     }
     public static void FecharOs() throws Exception {
-        CloseOsScreen importarOs = new CloseOsScreen();
+        FecharOsScreen importarOs = new FecharOsScreen();
         Stage stage = new Stage();
         importarOs.start(stage);
     }
 
     public static void ConsultarOs() throws Exception {
-        ConsultOsScreen novaJanela = new ConsultOsScreen();
+        ConsultarOsScreen novaJanela = new ConsultarOsScreen();
         Stage stage = new Stage();
         novaJanela.start(stage);
     }
     public void AbrirItem(String modo) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/consultEditItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/trabalhoA3Gilvania/consultarItem.fxml"));
         Parent root = loader.load();
 
         // Obtém o controller e passa o parâmetro
-        ConsultEditItemController controller = loader.getController();
+        ConsultarItemController controller = loader.getController();
         controller.setModo(modo);
 
         Stage stage = new Stage();

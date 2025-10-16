@@ -1,17 +1,17 @@
-/* Aplica a Poppins em toda a aplicação */
-.root {
-    -fx-font-family: "Poppins";
-    -fx-font-size: 16px;
+/* ========================
+   Painéis com borda arredondada
+   ======================== */
+.root-pane {
+    -fx-border-color: #3498db;
+    -fx-border-width: 4;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-background-color: #f0f0f0;
 }
 
-.root-pane {  /* classe que você pode definir no Scene Builder */
-    -fx-border-color: #3498db;    /* cor da borda */
-    -fx-border-width: 4;           /* espessura da borda */
-    -fx-border-radius: 15;         /* cantos arredondados da borda */
-    -fx-background-radius: 15;     /* cantos arredondados do fundo */
-    -fx-background-color: #f0f0f0; /* cor de fundo do pane */
-}
-
+/* ========================
+   Botões e campos de texto
+   ======================== */
 .button {
     -fx-background-radius: 10;
     -fx-border-radius: 10;
@@ -23,14 +23,64 @@
     -fx-border-color: #cccccc;
     -fx-border-width: 1;
 }
-/* Mantém consistência, mas é opcional, pois herdará da raiz */
-.label,
-.button,
-.text-field,
-.text-area,
-.check-box,
-.radio-button,
-.table-view,
-.list-view {
-    -fx-font-family: "Poppins";
+
+/* ========================
+   VBox de início
+   ======================== */
+#inicioVbox {
+    -fx-background-color: #264653; /* cor de fundo */
+    -fx-border-color: #264653;     /* cor da borda */
+    -fx-border-width: 2;           /* espessura da borda */
+    -fx-border-radius: 0 10 10 0;
+    -fx-background-radius: 0 10 10 0;
+}
+
+/* ========================
+   Alinhamento de ícones + texto nos botões do VBox
+   ======================== */
+.vbox .button {
+    -fx-alignment: center-left;
+    -fx-content-display: left;
+    -fx-graphic-text-gap: 10px;
+}
+
+/* ========================
+   Botões do menu da tela de início
+   ======================== */
+#menuAddUser,
+#menuRemoveUser,
+#menuSair,
+#menuImportarOs,
+#menuConsultOs,
+#menuCloseOs,
+#menuEditarItem,
+#menuRetiradaItem,
+#menuEntradaItem {
+    -fx-background-color: transparent;  /* mantém cor do VBox */
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 10;
+    -fx-padding: 5 10 5 10;
+
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* ========================
+   Hover: exibe linha inferior laranja e aumenta levemente a fonte
+   ======================== */
+#menuAddUser:hover,
+#menuRemoveUser:hover,
+#menuSair:hover,
+#menuImportarOs:hover,
+#menuConsultOs:hover,
+#menuCloseOs:hover,
+#menuEditarItem:hover,
+#menuRetiradaItem:hover,
+#menuEntradaItem:hover {
+    -fx-border-color: transparent transparent #fca311 transparent; /* linha inferior laranja */
+    -fx-border-width: 0 0 2 0;  /* altura da linha inferior */
+    -fx-font-size: 1.1em;       /* aumenta levemente a fonte apenas no hover */
 }

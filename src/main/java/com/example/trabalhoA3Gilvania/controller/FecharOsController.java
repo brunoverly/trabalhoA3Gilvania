@@ -1,30 +1,32 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.StartPageScreen;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-public class CloseOsController {
+public class FecharOsController {
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
     @FXML private Button confirmCloseOsButton;
 
     @FXML private Label consultLabelOsBuscada;
+    @FXML private ImageView fechar1;
+    @FXML private ImageView fechar2;
+
 
     @FXML private TextField consultNumeroOsBuscado;
     @FXML private TextField consultNumeroOs;
@@ -43,6 +45,16 @@ public class CloseOsController {
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
 
     public void initialize() {
+
+        URL fechar1ImageURL = getClass().getResource("/imagens/remover1.png");
+        Image fechar1Image = new Image(fechar1ImageURL.toExternalForm());
+        fechar2.setImage(fechar1Image);
+
+        URL fechar2ImageURL = getClass().getResource("/imagens/fechar1.png");
+        Image fechar2Image = new Image(fechar2ImageURL.toExternalForm());
+        fechar2.setImage(fechar2Image);
+
+
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -81,45 +93,68 @@ public class CloseOsController {
     }
 
     @FXML
-    public void confirmCloseOsButton(ActionEvent event){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmação");
-        alert.setHeaderText(null);
-        alert.setContentText("Tem certeza que deseja encerrar a OS?");
+    public void confirmCloseOsButton(ActionEvent event) {
+        try (Connection connectDB = new DataBaseConection().getConection()) {
+            String querySqlConsultaStatus = """
+                SELECT status
+                FROM ordem_servico
+                WHERE cod_os = ?
+            """;
 
-        Optional<ButtonType> resultado = alert.showAndWait();
+            try (PreparedStatement buscar = connectDB.prepareStatement(querySqlConsultaStatus)) {
+                buscar.setString(1, consultNumeroOs.getText());
+                ResultSet rs = buscar.executeQuery();
 
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String querySqlItem = """
-                             UPDATE ordem_servico
-                                            SET status = ?, datahora_encerramento = ?
-                                            WHERE cod_os = ?
-                        """;
+                if (!rs.next()) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmação");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tem certeza que deseja encerrar a OS?");
 
-                LocalDateTime agora = LocalDateTime.now();
-                Timestamp ts = Timestamp.valueOf(agora);
+                    Optional<ButtonType> resultado = alert.showAndWait();
 
-                try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                    statement.setString(1, "encerrada");
-                    statement.setTimestamp(2, ts);
-                    statement.setString(3, consultNumeroOs.getText());
+                    if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                        try{
+                            String querySqlItem = """
+                                         UPDATE ordem_servico
+                                                        SET status = ?, datahora_encerramento = ?
+                                                        WHERE cod_os = ?
+                                    """;
 
-                    int linhasAfetadas = statement.executeUpdate();
+                            LocalDateTime agora = LocalDateTime.now();
+                            Timestamp ts = Timestamp.valueOf(agora);
 
+                            try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlItem)) {
+                                atualizar.setString(1, "encerrada");
+                                atualizar.setTimestamp(2, ts);
+                                atualizar.setString(3, consultNumeroOs.getText());
+
+                                int linhasAfetadas = atualizar.executeUpdate();
+
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                        alert2.setTitle("Aviso");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText("Ordem de servico encerrada!");
+                        alert2.showAndWait();
+                    }
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                else{
+                    Alert alert2 = new Alert(Alert.AlertType.WARNING);
+                    alert2.setTitle("Aviso");
+                    alert2.setHeaderText(null);
+                    alert2.setContentText("Ordem de ja esta encerrada!");
+                    alert2.showAndWait();
+                }
             }
-            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-            alert2.setTitle("Aviso");
-            alert2.setHeaderText(null);
-            alert2.setContentText("Ordem de servico encerrada!");
-            alert2.showAndWait();
+
+            } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
-
-
 
     public void BuscarDB() {
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
@@ -156,13 +191,8 @@ public class CloseOsController {
                             rs.getString("status")
                     );
                     listaItens.add(item);
-                    System.out.println("Item carregado: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
                 }
             }
-            for (Item item : listaItens) {
-                System.out.println("DEBUG ITEM: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
-            }
-
             todosItens.clear();
             todosItens.addAll(listaItens);
 
@@ -189,7 +219,6 @@ public class CloseOsController {
                             rs.getString("status")
                     );
                     listaOperacao.add(operacao);
-                    System.out.println("Operação carregada: " + operacao.getCodOperacao() + " | Status: " + operacao.getStatus());
                 }
             }
 

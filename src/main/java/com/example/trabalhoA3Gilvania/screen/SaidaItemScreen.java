@@ -9,13 +9,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.net.URL;
 
-public class EntradaItemScreen extends Application {
+public class SaidaItemScreen extends Application {
 
     public void start(Stage stage) {
 
         try {
             // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml");
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/saidaItem.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
@@ -24,6 +24,7 @@ public class EntradaItemScreen extends Application {
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
+
 
             // Criar cena
             Scene scene = new Scene(root);

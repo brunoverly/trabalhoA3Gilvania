@@ -9,13 +9,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.net.URL;
 
-public class EntradaItemScreen extends Application {
+public class RemoverUsuarioScreen extends Application {
 
     public void start(Stage stage) {
 
         try {
             // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml");
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/removerUsuario.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 

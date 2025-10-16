@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="562.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
+   <children>
+      <BorderPane layoutX="-2.0" layoutY="-1.0" prefHeight="471.0" prefWidth="1071.0" style="-fx-background-color: #e5e5e5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <VBox fx:id="inicioVbox" prefHeight="562.0" prefWidth="218.0" style="-fx-background-color: #264653;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="inicioLogo" fitHeight="85.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../imagens/iniciologo.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="menuImportarOs" blendMode="SRC_ATOP" mnemonicParsing="false" onAction="#menuImportarOsOnAction" prefHeight="44.0" prefWidth="217.0" style="-fx-background-color: #264653;" text="Importar OS" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio1" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/importar1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuConsultOs" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#menuConsultOsOnAction" prefHeight="45.0" prefWidth="221.0" style="-fx-background-color: #264653;" text="Consultar OS" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio2" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/remover1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuCloseOs" layoutX="10.0" layoutY="95.0" mnemonicParsing="false" onAction="#menuCloseOsOnAction" prefHeight="45.0" prefWidth="224.0" style="-fx-background-color: #264653;" text="Fechar OS" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio3" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/fechar1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuEntradaItem" layoutX="10.0" layoutY="141.0" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" prefHeight="45.0" prefWidth="222.0" style="-fx-background-color: #264653;" text="Entrada Item" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio4" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/entrada1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuRetiradaItem" layoutX="10.0" layoutY="187.0" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #264653;" text="Retirada de Item" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio5" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/entrega1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuAddUser" layoutX="10.0" layoutY="233.0" mnemonicParsing="false" onAction="#menuAddUserOnAction" prefHeight="45.0" prefWidth="220.0" style="-fx-background-color: #264653;" text="Criar Usuario" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio6" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/cadastro1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuRemoveUser" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" onAction="#menuRemoveUserOnAction" prefHeight="45.0" prefWidth="225.0" style="-fx-background-color: #264653;" text="Remover Usuario" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio7" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/remover3.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="menuSair" layoutX="10.0" layoutY="319.0" mnemonicParsing="false" onAction="#menuSairOnAction" prefHeight="45.0" prefWidth="222.0" style="-fx-background-color: #264653;" text="Sair" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="inicio8" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../imagens/inicio8.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>

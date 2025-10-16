@@ -1,36 +1,44 @@
 package com.example.trabalhoA3Gilvania.controller;
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.excelHandling.GerenciadorOperacao;
-import com.example.trabalhoA3Gilvania.screen.ImportScreen;
-import com.example.trabalhoA3Gilvania.screen.RegisterScreen;
-import com.example.trabalhoA3Gilvania.screen.StartPageScreen;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.io.File;
 import javafx.scene.image.Image;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class ImportOsController {
+public class ImportarOsController {
     @FXML private Button importVoltar;
     @FXML private Button importFazerImport;
     @FXML private Button importSelecionarExcel;
 
     @FXML private TextField importNumeroOs;
+    @FXML private TableView<String> importTableOs;
+    @FXML private TableView<String> importTableOperacao;
+    @FXML private TableView<String> importTableItem;
+
+
+    @FXML private ImageView importar1;
+    @FXML private ImageView importar3;
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        URL importar1ImageURL = getClass().getResource("/imagens/importar1.png");
+        Image importar1Image = new Image(importar1ImageURL.toExternalForm());
+        importar1.setImage(importar1Image);
+
+        URL importar3ImageURL = getClass().getResource("/imagens/importar3.png");
+        Image importar3Image = new Image(importar3ImageURL.toExternalForm());
+        importar3.setImage(importar3Image);
+
+    }
+
 
     GerenciadorOperacao cadastrarOs = new GerenciadorOperacao();
     File filePath;

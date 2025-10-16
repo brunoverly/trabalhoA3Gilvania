@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
     <children>
-        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #14213d;" text="Cancelar" textFill="WHITE">
+        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #264653;" text="Cancelar" textFill="WHITE">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
@@ -19,15 +19,21 @@
             <Font size="15.0" />
          </font>
          <graphic>
-            <ImageView fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="entrada1" fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../../Downloads/box_add_150dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png" />
+                  <Image url="@../../../imagens/entrada1.png" />
                </image>
             </ImageView>
          </graphic></Button>
         <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="42.0" layoutY="286.0" prefHeight="35.0" />
-        <TextField fx:id="entradaQtdRecebida" layoutX="42.0" layoutY="364.0" prefHeight="35.0" />
-        <TextField fx:id="entradaLocalArmazenado" layoutX="42.0" layoutY="458.0" prefHeight="35.0" prefWidth="271.0" />
+        <TextField fx:id="entradaQtdRecebida" layoutX="42.0" layoutY="364.0" prefHeight="35.0" promptText="Ex: 25">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+        <TextField fx:id="entradaLocalArmazenado" layoutX="42.0" layoutY="458.0" prefHeight="35.0" prefWidth="271.0" promptText="Ex: Prateleira A1">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
         <Label layoutX="42.0" layoutY="256.0" text="Quatidade pedido" textFill="#14213d">
          <font>
             <Font size="16.0" />

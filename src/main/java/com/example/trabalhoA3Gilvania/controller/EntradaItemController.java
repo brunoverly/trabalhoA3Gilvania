@@ -1,26 +1,17 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.ConsultEditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.EditItemScreen;
-import com.example.trabalhoA3Gilvania.screen.SolicitarScreen;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class EntradaItemController {
 
@@ -33,6 +24,7 @@ public class EntradaItemController {
     @FXML private TextField entradaCodOperacao;
     @FXML private TextField entradaItemDescricao;
     @FXML private TextField entradaQtdRecebida;
+    @FXML private ImageView entrada1;
 
     private int idItem;
     private String codItem;
@@ -70,6 +62,13 @@ public class EntradaItemController {
     entrdadaQtdPedido.setText(qtdPedido);
     }
 
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        URL entrada1ImageURL = getClass().getResource("/imagens/entrada1.png");
+        Image entrada1Image = new Image(entrada1ImageURL.toExternalForm());
+        entrada1.setImage(entrada1Image);
+    }
+
+
 
 
     public void entradaItemCancelarOnAction(ActionEvent event){
@@ -86,7 +85,6 @@ public class EntradaItemController {
             alert.showAndWait();
         }
         else{
-                System.out.println("idItem = " + idItem);
                 try (Connection connectDB = new DataBaseConection().getConection()) {
                     String querySqlItem = """
                              UPDATE item

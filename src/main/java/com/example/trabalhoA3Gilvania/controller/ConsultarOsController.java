@@ -1,8 +1,6 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.screen.SolicitarScreen;
-import com.example.trabalhoA3Gilvania.screen.StartPageScreen;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -11,18 +9,21 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import java.sql.*;
-import java.util.HashSet;
-import java.util.Set;
 
-public class ConsultOsController {
+import java.net.URL;
+import java.sql.*;
+
+public class ConsultarOsController {
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
 
     @FXML private Label consultLabelOsBuscada;
+    @FXML private ImageView consultar1;
 
     @FXML private TextField consultNumeroOsBuscado;
     @FXML private TextField consultNumeroOs;
@@ -41,13 +42,13 @@ public class ConsultOsController {
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
     private FilteredList<Item> itensFiltrados;
 
-    public static void TelaSolicitar() throws Exception {
-        SolicitarScreen telaSolicitar = new SolicitarScreen();
-        Stage stage = new Stage();
-        telaSolicitar.start(stage);
-    }
 
     public void initialize() {
+
+        URL consultar1ImageURL = getClass().getResource("/imagens/remover1.png");
+        Image consultar1Image = new Image(consultar1ImageURL.toExternalForm());
+        consultar1.setImage(consultar1Image);
+
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -66,9 +67,6 @@ public class ConsultOsController {
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
-
-                System.out.println("Operação selecionada: " + codOperacaoSelecionada);
-                System.out.println("Itens filtrados: " + itensFiltrados.size());
             } else {
                 itensFiltrados.setPredicate(item -> false);
             }
@@ -80,7 +78,6 @@ public class ConsultOsController {
         solicitarItem.setOnAction(event -> {
             Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
             if (selecionado != null) {
-                //System.out.println("Solicitar item: " + selecionado.getIdItem());
                 // Abre tela de solicitação
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Aviso");
@@ -160,11 +157,7 @@ public class ConsultOsController {
                             rs.getString("status")
                     );
                     listaItens.add(item);
-                    System.out.println("Item carregado: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
                 }
-            }
-            for (Item item : listaItens) {
-                System.out.println("DEBUG ITEM: " + item.getCodItem() + " | Operação: " + item.getCodOperacao());
             }
 
             todosItens.clear();
@@ -193,7 +186,6 @@ public class ConsultOsController {
                             rs.getString("status")
                     );
                     listaOperacao.add(operacao);
-                    System.out.println("Operação carregada: " + operacao.getCodOperacao() + " | Status: " + operacao.getStatus());
                 }
             }
 
