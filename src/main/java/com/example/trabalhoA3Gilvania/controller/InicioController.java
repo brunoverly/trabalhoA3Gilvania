@@ -112,12 +112,12 @@ public class InicioController implements Initializable {
         inicio7.setImage(inicio7Img);
 
         URL inicio8URL = getClass().getResource("/imagens/inicio8.png");
-        Image inicio8Img = new Image(inicio7URL.toExternalForm());
-        inicio8.setImage(inicio7Img);
+        Image inicio8Img = new Image(inicio8URL.toExternalForm());
+        inicio8.setImage(inicio8Img);
 
         URL inicio9URL = getClass().getResource("/imagens/inicio9.png");
-        Image inicio9Img = new Image(inicio7URL.toExternalForm());
-        inicio9.setImage(inicio7Img);
+        Image inicio9Img = new Image(inicio9URL.toExternalForm());
+        inicio9.setImage(inicio9Img);
 
         Platform.runLater(() -> {
             inicioPane.requestFocus(); // força o foco para o pane após a tela ser exibida
