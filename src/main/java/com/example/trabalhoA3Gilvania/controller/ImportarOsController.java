@@ -3,6 +3,7 @@ package com.example.trabalhoA3Gilvania.controller;
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.excelHandling.GerenciadorOperacao;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import javafx.scene.input.MouseEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +52,7 @@ public class ImportarOsController implements Initializable {
     @FXML private TableColumn<Item, String> consultTableCodItem;
     @FXML private TableColumn<Item, String> consultTableDescricaoItem;
     @FXML private TableColumn<Item, Integer> consultTablePedidoItem;
+    @FXML private SplitPane imortarSplitPane;
 
     @FXML private ImageView importar1;
     @FXML private ImageView importar3;
@@ -137,6 +141,12 @@ public class ImportarOsController implements Initializable {
                 PreviewTable(filePath);
                 importLabelSelecionar.setVisible(true);
                 importOsAnchorPanelTable.setVisible(true);
+
+                consultTableOperacao.setSelectionModel(null); // remove seleção
+                consultTableItem.setSelectionModel(null);
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 e.getCause();
@@ -145,36 +155,58 @@ public class ImportarOsController implements Initializable {
     }
 
     public void importFazerImportOnAction(ActionEvent event) {
-        OrdemServico ordemSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmação");
-        alert.setHeaderText(null);
-        alert.setContentText("Tem certeza que deseja cadstrar a ordem de numero: '" + ordemSelecionada.getCodOrdemServico() +"' ?");
-        Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-
-        Optional<ButtonType> resultado = alert.showAndWait();
-
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-
-
-            if (ordemSelecionada != null) {
-                String codOrdemSelecionada = ordemSelecionada.getCodOrdemServico();
-                try {
-                    GerenciadorOperacao cadastrarOs = new GerenciadorOperacao();
-                    cadastrarOs.criar(codOrdemSelecionada, filePath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    e.getCause();
-                }
-                DataBaseConection registarAtualizacao = new DataBaseConection();
-                registarAtualizacao.AtualizarBanco(
-                        "Ordem de Servico",
-                        ordemSelecionada.getCodOrdemServico(),
-                        "Cadastro de nova Ordem de Servico",
-                        Sessao.getMatricula()
-                );
+        if (filePath == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Selecione arquivo Excel para fazer o import");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+            alert.showAndWait();
+            return;
             }
+            else if (consultTableOrdemServico.getSelectionModel().getSelectedItem() == null) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Aviso");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Selecione uma ordem da tabela para prosseguir com o import");
+                    Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                    alert.showAndWait();
+                    return;
+                } else {
+                    OrdemServico ordemSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmação");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tem certeza que deseja cadastrar a ordem de número: '" + ordemSelecionada.getCodOrdemServico() + "' ?");
+                    Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+
+                    Optional<ButtonType> resultado = alert.showAndWait();
+
+                    if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+
+
+                        if (ordemSelecionada != null) {
+                            String codOrdemSelecionada = ordemSelecionada.getCodOrdemServico();
+                            try {
+                                GerenciadorOperacao cadastrarOs = new GerenciadorOperacao();
+                                cadastrarOs.criar(codOrdemSelecionada, filePath);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                e.getCause();
+                            }
+                            DataBaseConection registarAtualizacao = new DataBaseConection();
+                            registarAtualizacao.AtualizarBanco(
+                                    "Ordem de serviço",
+                                    ordemSelecionada.getCodOrdemServico(),
+                                    "Cadastro de nova ordem de serviço",
+                                    Sessao.getMatricula()
+                            );
+                        }
+                    }
+
         }
     }
 

@@ -12,7 +12,11 @@ import javafx.event.ActionEvent;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SaidaItemController {
         @FXML private Button retirarConfirmarButton;
@@ -91,7 +95,7 @@ public class SaidaItemController {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Aviso");
                 alert.setHeaderText(null); // opcional, sem cabeçalho
-                alert.setContentText("Informe a matricula do responsvael a quem foi entregue!");
+                alert.setContentText("Informe a matrícula a quem foi entregue");
                 Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                 stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                 alert.showAndWait();
@@ -119,7 +123,7 @@ public class SaidaItemController {
                             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                             alert2.setTitle("Aviso");
                             alert2.setHeaderText(null);
-                            alert2.setContentText("Registro cadastrado com sucesso!");
+                            alert2.setContentText("Registro cadastrado com sucesso");
                             Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert2.showAndWait();
@@ -134,7 +138,7 @@ public class SaidaItemController {
                 try (Connection connectDB = new DataBaseConection().getConection()) {
                     String querySqlItem = """
                                     UPDATE item
-                                    SET status = 'entregue a oficina'
+                                    SET status = 'Entregue a oficina'
                                     WHERE id = ?
                                 """;
                     try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
@@ -144,13 +148,15 @@ public class SaidaItemController {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+
                 DataBaseConection registarAtualizacao = new DataBaseConection();
                 registarAtualizacao.AtualizarBanco(
-                        "item",
+                        "Item",
                          codOs,
-                        "item entregue na oficina",
+                        "Item entregue na oficina",
                         Sessao.getMatricula()
                 );
+
 
 /// ///////////////////////////////////////////////
                 Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
@@ -158,6 +164,7 @@ public class SaidaItemController {
             }
         }
 
-    }
+
+}
 
 

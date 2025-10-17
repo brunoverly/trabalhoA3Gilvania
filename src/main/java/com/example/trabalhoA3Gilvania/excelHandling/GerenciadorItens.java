@@ -26,19 +26,19 @@ public class GerenciadorItens {
         //Checa se algum arquivo foi selecionado
         int result = fileChooser.showOpenDialog(null);
         if (result != JFileChooser.APPROVE_OPTION) {
-            JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado", "Aviso", JOptionPane.WARNING_MESSAGE);
             return itens;
         }
         File fileSelected = fileChooser.getSelectedFile();
         if (!fileSelected.exists() || !fileSelected.isFile()) {
-            JOptionPane.showMessageDialog(null, "Arquivo inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Arquivo inválido", "Erro", JOptionPane.ERROR_MESSAGE);
             return itens;
         }
 
         //Verifica se o arquivo escolhido e uma planilha
         String nome = fileSelected.getName().toLowerCase();
         if (!nome.endsWith(".xlsx") && !nome.endsWith(".xls")) {
-            JOptionPane.showMessageDialog(null, "Selecione apenas arquivos Excel (.xlsx ou .xls)!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Selecione apenas arquivos formato Excel (.xlsx ou .xls)!", "Erro", JOptionPane.ERROR_MESSAGE);
             return itens;
         }
 

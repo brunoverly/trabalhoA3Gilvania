@@ -41,7 +41,8 @@ public class ConsultarItemScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Consultar Item");
+            stage.setTitle("Consultar item");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

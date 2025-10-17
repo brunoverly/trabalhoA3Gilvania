@@ -80,7 +80,7 @@ public class LoginController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Informe usuario e senha para prosseguir");
+            alert.setContentText("Informe usuário e PIN para prosseguir");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -120,7 +120,7 @@ public class LoginController {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Aviso");
                     alert.setHeaderText(null); // opcional, sem cabeçalho
-                    alert.setContentText("Usuario ou senha invalidos!");
+                    alert.setContentText("Usuário ou PIN inválidos");
                     Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                     stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                     alert.showAndWait();

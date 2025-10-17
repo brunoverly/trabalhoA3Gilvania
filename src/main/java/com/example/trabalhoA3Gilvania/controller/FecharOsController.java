@@ -7,10 +7,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
@@ -18,8 +20,9 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class FecharOsController {
+public class FecharOsController implements Initializable {
     @FXML private Button consultVoltarButton;
     @FXML private Button consultBuscarOs;
     @FXML private Button confirmCloseOsButton;
@@ -41,12 +44,13 @@ public class FecharOsController {
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
+    @FXML private AnchorPane fecharAnchorPane;
 
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
 
-    public void initialize() {
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         URL fechar1ImageURL = getClass().getResource("/imagens/remover1.png");
         Image fechar1Image = new Image(fechar1ImageURL.toExternalForm());
         fechar2.setImage(fechar1Image);
@@ -73,7 +77,6 @@ public class FecharOsController {
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
-
     }
 
 
@@ -84,6 +87,7 @@ public class FecharOsController {
             consultLabelOsBuscada.setVisible(true);
             consultNumeroOsBuscado.setText(consultNumeroOs.getText());
             consultNumeroOsBuscado.setVisible(true);
+            fecharAnchorPane.setVisible(true);
         }
     }
 
@@ -95,12 +99,23 @@ public class FecharOsController {
 
     @FXML
     public void confirmCloseOsButton(ActionEvent event) {
+        if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Informe o número da ordem de serviço");
+            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+            alert.showAndWait();
+            return;
+        }
+        else{
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String querySqlConsultaStatus = """
-                SELECT status
-                FROM ordem_servico
-                WHERE cod_os = ?
-            """;
+                        SELECT status
+                        FROM ordem_servico
+                        WHERE cod_os = ?
+                    """;
 
             try (PreparedStatement buscar = connectDB.prepareStatement(querySqlConsultaStatus)) {
                 buscar.setString(1, consultNumeroOs.getText());
@@ -108,11 +123,11 @@ public class FecharOsController {
                 if (rs.next()) {
                     String status = rs.getString("status");
 
-                    if (status.equals("encerrada")) {
+                    if (status.equals("Encerrada")) {
                         Alert alert2 = new Alert(Alert.AlertType.WARNING);
                         alert2.setTitle("Aviso");
                         alert2.setHeaderText(null);
-                        alert2.setContentText("OS ja se encontra encerrada");
+                        alert2.setContentText("OS já se encontra encerrada");
                         Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
                         stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                         alert2.showAndWait();
@@ -139,7 +154,7 @@ public class FecharOsController {
                                 Timestamp ts = Timestamp.valueOf(agora);
 
                                 try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlOs)) {
-                                    atualizar.setString(1, "encerrada");
+                                    atualizar.setString(1, "Encerrada");
                                     atualizar.setTimestamp(2, ts);
                                     atualizar.setString(3, consultNumeroOs.getText());
                                     atualizar.executeUpdate();
@@ -149,9 +164,9 @@ public class FecharOsController {
                             }
                             DataBaseConection registarAtualizacao = new DataBaseConection();
                             registarAtualizacao.AtualizarBanco(
-                                    "ordem de servico",
+                                    "Ordem de serviço",
                                     consultNumeroOs.getText(),
-                                    "ordem de servico encerrada",
+                                    "Ordem de serviço encerrada",
                                     Sessao.getMatricula()
                             );
                             try {
@@ -206,7 +221,7 @@ public class FecharOsController {
                             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                             alert2.setTitle("Aviso");
                             alert2.setHeaderText(null);
-                            alert2.setContentText("Ordem de servico encerrada!");
+                            alert2.setContentText("Ordem de serviço encerrada");
                             stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert2.showAndWait();
@@ -215,8 +230,10 @@ public class FecharOsController {
                 }
             }
 
+
             } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
         }
     }
 
@@ -300,7 +317,7 @@ public class FecharOsController {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("Informe o numero da ordem de servico!");
+            alert.setContentText("Informe o número da ordem de serviço");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -320,7 +337,7 @@ public class FecharOsController {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
-                            alert.setContentText("O número da ordem de serviço informada não foi localizada");
+                            alert.setContentText("O número da ordem de serviço informada não foi localizado");
                             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert.showAndWait();
@@ -334,6 +351,8 @@ public class FecharOsController {
         }
         return retorno;
     }
+
+
 
 
     public static class Item {

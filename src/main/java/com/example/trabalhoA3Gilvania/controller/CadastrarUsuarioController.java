@@ -38,7 +38,7 @@ public class CadastrarUsuarioController implements Initializable {
         URL registrarImagem1URL = getClass().getResource("/imagens/cadastro1.png");
         Image registarImagem1 = new Image(registrarImagem1URL.toExternalForm());
         registrar1.setImage(registarImagem1);
-        cadastroComboBox.getItems().addAll("Administrador", "Aprovisionador", "Mecanico");
+        cadastroComboBox.getItems().addAll("Administrador", "Aprovisionador", "Mecânico");
     }
 
     public void cadastrarCancelButtonOnAction(ActionEvent event) {
@@ -91,7 +91,7 @@ public class CadastrarUsuarioController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("PIN deve ser número e possuir 6 dígitos!");
+            alert.setContentText("PIN deve ser númerico e possuir 6 dígitos");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -102,7 +102,7 @@ public class CadastrarUsuarioController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("PIN informados não correspondem!");
+            alert.setContentText("PIN informados não correspondem");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -134,7 +134,7 @@ public class CadastrarUsuarioController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("Usuário cadastrado com sucesso!");
+            alert.setContentText("Usuário cadastrado com sucesso");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             Optional<ButtonType> resultado = alert.showAndWait();

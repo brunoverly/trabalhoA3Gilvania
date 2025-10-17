@@ -42,7 +42,8 @@ public class SaidaItemScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Lancar Entrega de Item");
+            stage.setTitle("Lancar retirada de item");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

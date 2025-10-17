@@ -41,7 +41,8 @@ public class RemoverUsuarioScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Remover Usuario");
+            stage.setTitle("Remover usuário");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

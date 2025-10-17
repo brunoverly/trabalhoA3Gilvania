@@ -18,21 +18,21 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="114.0" style="-fx-base: #fca311;" text="      Consultar" textFill="#fefefe">
+      <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-base: #fca311;" text="     Consultar" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <AnchorPane layoutX="121.0" layoutY="232.0" prefHeight="339.0" prefWidth="773.0">
+      <AnchorPane fx:id="consultarOsAnchorPane" layoutX="121.0" layoutY="232.0" prefHeight="339.0" prefWidth="773.0" visible="false">
          <children>
-            <SplitPane dividerPositions="0.2665964172813488" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.2478723404255319" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="295.0">
                      <children>
                         <TableView fx:id="consultTableOperacao" layoutX="-163.0" layoutY="-146.0" prefHeight="396.0" prefWidth="217.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="118.0" text="Operacao" />
-                              <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="131.0" text="Status" />
+                            <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="88.0" text="Operação" />
+                              <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="161.0" text="Status" />
                           </columns>
                         </TableView>
                      </children>
@@ -41,11 +41,11 @@
                      <children>
                         <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="396.0" prefWidth="672.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="consultTableCodItem" prefWidth="99.0" text="Codigo Item" />
-                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="188.0" text="Descricao" />
-                              <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="73.0" text="Qtd.Pedido" />
-                              <TableColumn fx:id="consultTableRecebidoItem" prefWidth="91.0" text="Qtd. Recebida" />
-                              <TableColumn fx:id="consultTableItemStatus" prefWidth="241.0" text="Status" />
+                            <TableColumn fx:id="consultTableCodItem" prefWidth="125.0" text="Código do item" />
+                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="168.0" text="Descrição" />
+                              <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="92.0" text="Qtd. pedido" />
+                              <TableColumn fx:id="consultTableRecebidoItem" prefWidth="105.0" text="Qtd. recebida" />
+                              <TableColumn fx:id="consultTableItemStatus" prefWidth="213.0" text="Status" />
                           </columns>
                         </TableView>
                      </children>
@@ -68,12 +68,12 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="53.0" layoutY="30.0" text="Consultar Ordem de Servico" textFill="#14213d">
+      <Label layoutX="53.0" layoutY="30.0" text="Consultar Ordem de Serviço" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fx:id="consultar1" fitHeight="27.0" fitWidth="27.0" layoutX="390.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="consultar1" fitHeight="27.0" fitWidth="27.0" layoutX="390.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/remover1.png" />
          </image>

@@ -14,9 +14,9 @@
    <left>
       <AnchorPane prefHeight="501.0" prefWidth="423.0" style="-fx-background-color: ffffff;" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="-2.0" layoutY="24.0" prefHeight="500.0" prefWidth="426.0" style="-fx-background-color: #264653;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutX="-2.0" layoutY="24.0" prefHeight="500.0" prefWidth="415.0" style="-fx-background-color: #264653;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="enterUserNameField" layoutX="100.0" layoutY="210.0" prefHeight="32.0" prefWidth="233.0" promptText="Matricula">
+                  <TextField fx:id="enterUserNameField" layoutX="100.0" layoutY="210.0" prefHeight="32.0" prefWidth="233.0" promptText="Matrícula">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -33,7 +33,7 @@
                   </Label>
                   <Button fx:id="loginButton" layoutX="167.0" layoutY="314.0" mnemonicParsing="false" onAction="#LoginButtonOnAction" prefHeight="31.0" prefWidth="89.0" style="-fx-base: #fca311;" text="Entrar" textFill="#fefefe">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="Verdana Bold" size="14.0" />
                      </font>
                   </Button>
                   <ImageView fx:id="login2" fitHeight="25.0" fitWidth="29.0" layoutX="70.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">

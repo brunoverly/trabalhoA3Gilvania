@@ -39,11 +39,10 @@ public class LoginScreen extends Application {
 
             // Configurar stage
             stage.setTitle("Login");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 
-            TextField tf = (TextField) root.lookup("#enterUserNameField"); // seu TextField pelo id
-            tf.requestFocus();
 
         } catch (Exception e) {
             e.printStackTrace();

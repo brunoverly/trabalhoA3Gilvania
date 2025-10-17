@@ -100,7 +100,7 @@ public class RemoverUsuarioController implements Initializable {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Aviso");
                         alert.setHeaderText(null);
-                        alert.setContentText("Não foi localizado nenhum usuário cadastrado com a matrícula informada");
+                        alert.setContentText("Matricula informada não localizada");
                         Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                         stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                         alert.showAndWait();
@@ -141,11 +141,13 @@ public class RemoverUsuarioController implements Initializable {
                             Alert usuarioRemovido = new Alert(Alert.AlertType.INFORMATION);
                             usuarioRemovido.setTitle("Alerta");
                             usuarioRemovido.setHeaderText(null);
-                            usuarioRemovido.setContentText("Usuário removido!");
+                            usuarioRemovido.setContentText("Usuário removido");
                             stageAlert = (Stage) usuarioRemovido.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             usuarioRemovido.show();
 
+
+                            removeMatricula.setText("");
                             removeDadosNome.setText("");
                             removeDadosMatricula.setText("");
                             removeDadosCargo.setText("");

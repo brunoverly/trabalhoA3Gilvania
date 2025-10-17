@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
@@ -27,7 +28,6 @@ public class ConsultarOsController implements Initializable {
     @FXML private Label consultLabelOsBuscada;
     @FXML private ImageView consultar1;
 
-    @FXML private TextField consultNumeroOsBuscado;
     @FXML private TextField consultNumeroOs;
 
     @FXML private TableView<Item> consultTableItem;
@@ -39,6 +39,7 @@ public class ConsultarOsController implements Initializable {
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
+    @FXML private AnchorPane consultarOsAnchorPane;
 
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
@@ -76,7 +77,7 @@ public class ConsultarOsController implements Initializable {
             }
         });
         ContextMenu contextMenuItem = new ContextMenu();
-        MenuItem solicitarItem = new MenuItem("Requisitar Item");
+        MenuItem solicitarItem = new MenuItem("Requisitar item");
         contextMenuItem.getItems().addAll(solicitarItem);
 
         solicitarItem.setOnAction(event -> {
@@ -86,7 +87,7 @@ public class ConsultarOsController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Aviso");
                 alert.setHeaderText(null);
-                alert.setContentText("Requisitado a entrega do Item!");
+                alert.setContentText("Requisitado a entrega do item");
                 Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                 stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                 alert.showAndWait();
@@ -114,9 +115,8 @@ public class ConsultarOsController implements Initializable {
     public void consultBuscarOsOnAction(ActionEvent event) {
         if (verificarNumeroOS()) {
             BuscarDB();
+            consultarOsAnchorPane.setVisible(true);
             consultLabelOsBuscada.setVisible(true);
-            consultNumeroOsBuscado.setText(consultNumeroOs.getText());
-            consultNumeroOsBuscado.setVisible(true);
         }
     }
 
@@ -209,7 +209,7 @@ public class ConsultarOsController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("Informe o numero da ordem de servico!");
+            alert.setContentText("Informe o número da ordem de serviço");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -229,7 +229,7 @@ public class ConsultarOsController implements Initializable {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
-                            alert.setContentText("O número da ordem de serviço informada não foi localizada");
+                            alert.setContentText("O número da ordem de serviço informada não foi localizado");
                             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert.showAndWait();

@@ -50,6 +50,23 @@ public class InicioController implements Initializable {
     @FXML private ImageView inicio7;
     @FXML private ImageView inicio8;
     @FXML private ImageView inicio9;
+    @FXML private Stage janelaImportarOs;
+    @FXML private Stage janelaSolcitarItem;
+    @FXML private Stage janelaCadastroUsuario;
+    @FXML private Stage janelaRemoverUsuario;
+    @FXML private Stage janelaLogin;
+    @FXML private Stage janelaFecharOs;
+    @FXML private Stage janelaConsultarOs;
+
+
+
+
+
+
+
+
+
+
     @FXML private TableView<Atualizacao> inicioTableView;
     @FXML private TableColumn<Atualizacao, String> inicioTableData;
     @FXML private TableColumn<Atualizacao, String> inicioTableTipo;
@@ -124,7 +141,7 @@ public class InicioController implements Initializable {
     private void atualizarDashBoard() {
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status = 'aberta'";
+                    "WHERE status = 'Aberta'";
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -137,7 +154,7 @@ public class InicioController implements Initializable {
         }
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status = 'encerrada'";
+                    "WHERE status = 'Encerrada'";
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -150,7 +167,7 @@ public class InicioController implements Initializable {
         }
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String query = "SELECT COUNT(DISTINCT cod_os) FROM operacao " +
-                    "WHERE status = 'item(s) solicitados'";
+                    "WHERE status = 'Item(s) solicitados'";
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -189,7 +206,7 @@ public class InicioController implements Initializable {
 
     private void verificarUsuario() {
 
-        if (Sessao.getCargo().equals("Mecanico")) {
+        if (Sessao.getCargo().equals("Mecânico")) {
             menuEntradaItem.setVisible(false);
             menuEntradaItem.setManaged(false);
 
@@ -236,7 +253,7 @@ public class InicioController implements Initializable {
 
     }
     public void menuSolcitarItemOnAction(ActionEvent event){
-            menuSolcitarItem("solicitar");
+            menuSolcitarItem("Solicitar");
 
     }
 
@@ -246,13 +263,13 @@ public class InicioController implements Initializable {
 
     public void menuEntradaItemOnAction(ActionEvent event){
         try{
-            menuSolcitarItem("entrada");
+            menuSolcitarItem("Entrada");
         }
         catch (Exception e){}
     }
 
     public void menuRetiradaItemOnAction(ActionEvent event) throws Exception {
-        menuSolcitarItem("retirar");
+        menuSolcitarItem("Retirar");
     }
 
 
@@ -262,7 +279,7 @@ public class InicioController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmação");
             alert.setHeaderText(null);
-            alert.setContentText("Encerrar sessao?");
+            alert.setContentText("Encerrar sessão?");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
 
@@ -282,126 +299,131 @@ public class InicioController implements Initializable {
     }
 
     public void menuImportarOsOnAction(ActionEvent event){
-        try {
-            // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/importarOs.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
+        if(janelaImportarOs == null) {
+            janelaImportarOs = new Stage();
 
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+            try {
+                // Carregar FXML
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/importarOs.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
 
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
+
+                // Criar cena
+                Scene scene = new Scene(root);
+
+                // Carregar CSS
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+
+                // 🔹 Adicionar o ícone (logo)
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaImportarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+
+                // Configurar stage
+                janelaImportarOs.setTitle("Importar ordem de serviço");
+                janelaImportarOs.setResizable(false);
+                janelaImportarOs.setScene(scene);
+                janelaImportarOs.setOnHidden(event2-> janelaImportarOs = null);
+                janelaImportarOs.show();
+
+                TextField tf = (TextField) root.lookup("#importNumeroOs"); // seu TextField pelo id
+                tf.requestFocus();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // Criar cena
-            Scene scene = new Scene(root);
-
-            // Carregar CSS
-            URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-            // 🔹 Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-
-
-            // Configurar stage
-            stage.setTitle("Importar Ordem de Servico");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#importNumeroOs"); // seu TextField pelo id
-            tf.requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            // Janela já existe → traz pra frente
+            if (janelaImportarOs.isIconified()) {
+                janelaImportarOs.setIconified(false); // desminimiza
+            }
+            janelaImportarOs.toFront();
         }
 
     }
 
-    public void CadastroUsuario(){
-        try {
-            // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/cadastrarUsuario.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
+    public void CadastroUsuario() {
+        if (janelaCadastroUsuario == null) {
+            janelaCadastroUsuario = new Stage();
+            try {
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/cadastrarUsuario.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
 
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
 
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                Scene scene = new Scene(root);
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaCadastroUsuario.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+                janelaCadastroUsuario.setTitle("Cadastro de usuário");
+                janelaCadastroUsuario.setResizable(false);
+                janelaCadastroUsuario.setScene(scene);
+                janelaCadastroUsuario.setOnHidden(e -> janelaCadastroUsuario = null);
+                janelaCadastroUsuario.show();
+
+                TextField tf = (TextField) root.lookup("#cadastroNome");
+                tf.requestFocus();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // Criar cena
-            Scene scene = new Scene(root);
-
-            // Carregar CSS
-            URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-            // 🔹 Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-
-
-            // Configurar stage
-            stage.setTitle("Cadastro de usuario");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#cadastroNome"); // seu TextField pelo id
-            tf.requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            if (janelaCadastroUsuario.isIconified()) janelaCadastroUsuario.setIconified(false);
+            janelaCadastroUsuario.toFront();
         }
     }
 
-    public void RemoverUsuario()  {
-        try {
-            // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/removerUsuario.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
+    public void RemoverUsuario() {
+        if (janelaRemoverUsuario == null) {
+            janelaRemoverUsuario = new Stage();
+            try {
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/removerUsuario.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
 
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
 
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                Scene scene = new Scene(root);
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaRemoverUsuario.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+                janelaRemoverUsuario.setTitle("Remover usuário");
+                janelaRemoverUsuario.setResizable(false);
+                janelaRemoverUsuario.setScene(scene);
+                janelaRemoverUsuario.setOnHidden(e -> janelaRemoverUsuario = null);
+                janelaRemoverUsuario.show();
+
+                TextField tf = (TextField) root.lookup("#removeMatricula");
+                tf.requestFocus();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // Criar cena
-            Scene scene = new Scene(root);
-
-            // Carregar CSS
-            URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-            // 🔹 Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-            // Configurar stage
-            stage.setTitle("Remover Usuario");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#removeMatricula"); // seu TextField pelo id
-            tf.requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            if (janelaRemoverUsuario.isIconified()) janelaRemoverUsuario.setIconified(false);
+            janelaRemoverUsuario.toFront();
         }
-
     }
 
     public void Login() {
@@ -432,6 +454,7 @@ public class InicioController implements Initializable {
 
             // Configurar stage
             stage.setTitle("Login");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 
@@ -444,85 +467,90 @@ public class InicioController implements Initializable {
 
     }
     public void FecharOs() {
-        try {
-            // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/fecharOs.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
+        if (janelaFecharOs == null) {
+            janelaFecharOs = new Stage();
+            try {
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/fecharOs.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
 
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
 
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                Scene scene = new Scene(root);
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaFecharOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+                janelaFecharOs.setTitle("Fechar ordem de serviço");
+                janelaFecharOs.setResizable(false);
+                janelaFecharOs.setScene(scene);
+                janelaFecharOs.setOnHidden(e -> janelaFecharOs = null);
+                janelaFecharOs.show();
+
+                TextField tf = (TextField) root.lookup("#consultNumeroOs");
+                tf.requestFocus();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // Criar cena
-            Scene scene = new Scene(root);
-
-            // Carregar CSS
-            URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-            // 🔹 Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-            // Configurar stage
-            stage.setTitle("Fechar Ordem de Servico");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#consultNumeroOs"); // seu TextField pelo id
-            tf.requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public void ConsultarOs(){
-        try {
-            // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/consultarOs.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
-
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
-            }
-
-            // Criar cena
-            Scene scene = new Scene(root);
-
-            // Carregar CSS
-            URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-            // 🔹 Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-            // Configurar stage
-            stage.setTitle("Consultar Ordem de Servico");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#consultNumeroOs"); // seu TextField pelo id
-            tf.requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            if (janelaFecharOs.isIconified()) janelaFecharOs.setIconified(false);
+            janelaFecharOs.toFront();
         }
     }
+
+    public void ConsultarOs() {
+        if (janelaConsultarOs == null) {
+            janelaConsultarOs = new Stage();
+            try {
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/consultarOs.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
+
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
+
+                Scene scene = new Scene(root);
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaConsultarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+                janelaConsultarOs.setTitle("Consultar ordem de serviço");
+                janelaConsultarOs.setResizable(false);
+                janelaConsultarOs.setScene(scene);
+                janelaConsultarOs.setOnHidden(e -> janelaConsultarOs = null);
+                janelaConsultarOs.show();
+
+                TextField tf = (TextField) root.lookup("#consultNumeroOs");
+                tf.requestFocus();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (janelaConsultarOs.isIconified()) janelaConsultarOs.setIconified(false);
+            janelaConsultarOs.toFront();
+        }
+    }
+    private Stage janelaSolicitarItem;
+
     public void menuSolcitarItem(String modo){
+        // Se já existir, fecha a janela antes de abrir nova
+        if (janelaSolicitarItem != null) {
+            janelaSolicitarItem.close();
+            janelaSolicitarItem = null;
+        }
+
+        janelaSolicitarItem = new Stage();
         try {
             // Carregar FXML
             URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/consultarItem.fxml");
@@ -530,37 +558,31 @@ public class InicioController implements Initializable {
             Parent root = fxmlLoader.load();
 
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            // Criar cena
             Scene scene = new Scene(root);
 
-            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-
-            // 🔹 Adicionar o ícone (logo)
             URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
+            janelaSolicitarItem.getIcons().add(new Image(logoUrl.toExternalForm()));
 
-            // Obtém o controller e passa o parâmetro
             ConsultarItemController controller = fxmlLoader.getController();
             controller.setModo(modo);
             controller.AtualizarTituloPorModo();
 
+            janelaSolicitarItem.setTitle("Consultar Item");
+            janelaSolicitarItem.setResizable(false);
+            janelaSolicitarItem.setScene(scene);
+            janelaSolicitarItem.show();
 
-            // Configurar stage
-            stage.setTitle("Consultar Item");
-            stage.setScene(scene);
-            stage.show();
-
-            TextField tf = (TextField) root.lookup("#consultNumeroOs"); // seu TextField pelo id
+            TextField tf = (TextField) root.lookup("#consultNumeroOs");
             tf.requestFocus();
+
+            janelaSolicitarItem.setOnHidden(event -> janelaSolicitarItem = null);
 
         } catch (Exception e) {
             e.printStackTrace();

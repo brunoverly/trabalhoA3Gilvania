@@ -18,10 +18,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.net.URL;
 import java.sql.*;
 import java.util.Optional;
@@ -44,6 +46,11 @@ public class ConsultarItemController implements Initializable{
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
     @FXML private ImageView consultarItem1;
+    @FXML private AnchorPane consultarItemAnchorPane;
+
+
+    private Stage janelaEntradaItem;
+    private Stage janelaSaidaItem;
 
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
@@ -134,28 +141,25 @@ public class ConsultarItemController implements Initializable{
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
                     Item selecionado = row.getItem();
-
                     String codItemSelecionado = selecionado.getCodItem();
                     String codOperacaoItemSelecionado = selecionado.getCodOperacao();
                     String codOsItemSelecionado = consultNumeroOs.getText();
-                    String statusItemSelecionado = selecionado.getDescricao();
+                    String descricaoItemSelecionado = selecionado.getDescricao();
                     int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
                     int idItemselecionado = selecionado.getIdItem();
 
                     try {
                         if (modo == null) return;
-
-                        if (modo.equals("solicitar") && selecionado.getStatus().equals("aguardando entrega")) {
+                        if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
                             Alert alert2 = new Alert(Alert.AlertType.WARNING);
                             alert2.setTitle("Aviso");
                             alert2.setHeaderText(null);
-                            alert2.setContentText("O item selecionado ainda consta como 'aguardando entrega', a solicitacao so pode ser realizada quando o item estiver no status 'recebido'.");
-                            Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                            alert2.setContentText("O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'");
                             alert2.showAndWait();
+                            return;
                         }
-                        /// ////////////////////////////////////////////////////////////////////
-                        if(!Sessao.getCargo().equals("Aprovisionador") && modo.equals("solicitar") && selecionado.getStatus().equals("recebido")) {
+
+                        if(!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") && selecionado.getStatus().equals("Recebido")) {
                                 if (selecionado != null) {
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                     alert.setTitle("Confirmação");
@@ -169,15 +173,16 @@ public class ConsultarItemController implements Initializable{
                                         Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                                         alert2.setTitle("Aviso");
                                         alert2.setHeaderText(null);
-                                        alert2.setContentText("Requisitado a entrega do Item: '" + selecionado.getDescricao() + "'.");
+                                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                                        alert2.setContentText("Requisitado a entrega do item: '" + selecionado.getDescricao() + "'");
                                         alert2.showAndWait();
 
 
 
                                         // Atualiza status do item
                                         try (Connection connectDB = new DataBaseConection().getConection()) {
-                                            String querySqlItem = "UPDATE item SET status = 'solicitado na oficina' WHERE id = ?";
-                                            String querySqlOperacao = "UPDATE operacao SET status = 'item(s) solicitados' WHERE id = ?";
+                                            String querySqlItem = "UPDATE item SET status = 'Solicitado na oficina' WHERE id = ?";
+                                            String querySqlOperacao = "UPDATE operacao SET status = 'Item(s) solicitados' WHERE id = ?";
                                             try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
                                                 statement.setInt(1, selecionado.getIdItem());
                                                 statement.executeUpdate();
@@ -191,7 +196,7 @@ public class ConsultarItemController implements Initializable{
                                         }
                                         DataBaseConection registarAtualizacao = new DataBaseConection();
                                         registarAtualizacao.AtualizarBanco(
-                                                "operacao",
+                                                "Operação",
                                                 codOsItemSelecionado,
                                                 "Item solicitado na oficina",
                                                 Sessao.getMatricula()
@@ -215,23 +220,26 @@ public class ConsultarItemController implements Initializable{
                         /// ///////////////////////////////////////////////////
 
 
-                        if(Sessao.getCargo().equals("Administrador") || Sessao.getCargo().equals("Aprovisionador")) {
+                        if ((Sessao.getCargo().equals("Administrador") || Sessao.getCargo().equals("Aprovisionador")) &&
+                                (selecionado.getStatus().equals("Aguardando entrega") || selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina"))) {
+
                             switch (modo) {
-                                case "entrada":
-                                    if(selecionado.getStatus().equals("aguardando entrega")) {
+                                case "Entrada":
+                                    if (selecionado.getStatus().equals("Aguardando entrega")) {
                                         LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado,
-                                                codOsItemSelecionado, statusItemSelecionado,
+                                                codOsItemSelecionado, descricaoItemSelecionado,
                                                 qtdPedidoItemSelecionado, idItemselecionado);
-                                        break;
                                     }
-                                case "retirar":
-                                    if(selecionado.getStatus().equals("aguardando entrega") || selecionado.getStatus().equals("recebido")) {
+                                    break;
+
+                                case "Retirar":
+                                    if (selecionado.getStatus().equals("Solicitado na oficina") || selecionado.getStatus().equals("Recebido")) {
                                         try (Connection connectDB = new DataBaseConection().getConection()) {
                                             String querySqlItem = """
-                                                        SELECT localizacao, status, qtd_recebida
-                                                        FROM item
-                                                        WHERE id = ?
-                                                    """;
+                        SELECT localizacao, status, qtd_recebida
+                        FROM item
+                        WHERE id = ?
+                    """;
                                             try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
                                                 statement.setInt(1, idItemselecionado);
                                                 ResultSet rs = statement.executeQuery();
@@ -245,14 +253,19 @@ public class ConsultarItemController implements Initializable{
                                             throw new RuntimeException(e);
                                         }
 
-                                        LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado,
-                                                codOsItemSelecionado, statusItemSelecionado,
-                                                qtdPedidoItemSelecionado, idItemselecionado,
+                                        LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,
+                                                descricaoItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,
                                                 localizacao, status, qtdRecebida);
-                                        break;
                                     }
+                                    break;
                             }
                         }
+
+
+
+
+
+
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -269,9 +282,8 @@ public class ConsultarItemController implements Initializable{
     @FXML
     public void consultBuscarOsOnAction(ActionEvent event) {
         if (verificarNumeroOS()) {
-            BuscarDB();
-            consultNumeroOs.setText(consultNumeroOs.getText());
-            consultNumeroOs.setVisible(true);
+            BuscarDB(consultNumeroOs.getText());
+            consultarItemAnchorPane.setVisible(true);
         }
     }
 
@@ -281,12 +293,10 @@ public class ConsultarItemController implements Initializable{
         stage.close();
     }
 
-    public void BuscarDB() {
+    public void BuscarDB(String numeroOs) {
 
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
-
-        String numeroOs = consultNumeroOs.getText();
 
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String querySqlItem = """
@@ -364,7 +374,7 @@ public class ConsultarItemController implements Initializable{
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("Informe o numero da ordem de servico!");
+            alert.setContentText("Informe o número da ordem de servico");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -384,7 +394,7 @@ public class ConsultarItemController implements Initializable{
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
-                            alert.setContentText("O número da ordem de serviço informada não foi localizada");
+                            alert.setContentText("O número da ordem de serviço informada não foi localizado");
                             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert.showAndWait();
@@ -553,6 +563,12 @@ public class ConsultarItemController implements Initializable{
 
 
     public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem) throws Exception {
+        // Se já existir, fecha a janela antes de abrir nova
+        if (janelaEntradaItem != null) {
+            janelaEntradaItem.close();
+            janelaEntradaItem = null;
+        }
+
         try {
             // Carregar FXML
             URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/entradaItem.fxml");
@@ -560,51 +576,52 @@ public class ConsultarItemController implements Initializable{
             Parent root = fxmlLoader.load();
 
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            // Criar cena
             Scene scene = new Scene(root);
 
-            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-
-            // 🔹 Adicionar o ícone (logo)
             URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
+            janelaEntradaItem = new Stage();
+            janelaEntradaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
 
-        // Obtém o controller e passa o parâmetro
-        EntradaItemController controller = fxmlLoader.getController();
-        controller.setCodItem(codItem);
-        controller.setCodOperacao(codOperacao);
-        controller.setCodOs(codOs);
-        controller.setDescricaoItem(descricaoItem);
-        controller.setQtdPedido(qtdPedido);
-        controller.setIdItem(idItem);
-        controller.carregaDados();
+            // Obtém o controller e passa o parâmetro
+            EntradaItemController controller = fxmlLoader.getController();
+            controller.setCodItem(codItem);
+            controller.setCodOperacao(codOperacao);
+            controller.setCodOs(codOs);
+            controller.setDescricaoItem(descricaoItem);
+            controller.setQtdPedido(qtdPedido);
+            controller.setIdItem(idItem);
+            controller.carregaDados();
 
+            // Configurar stage
+            janelaEntradaItem.setTitle("Entrada de item");
+            janelaEntradaItem.setResizable(false);
+            janelaEntradaItem.setScene(scene);
+            janelaEntradaItem.show();
 
-        // Configurar stage
-        stage.setTitle("Entrada de item");
-        stage.setScene(scene);
-        stage.show();
-
-            TextField tf = (TextField) root.lookup("#entradaQtdRecebida"); // seu TextField pelo id
+            TextField tf = (TextField) root.lookup("#entradaQtdRecebida");
             tf.requestFocus();
+
+            janelaEntradaItem.setOnHidden(event -> janelaEntradaItem = null);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-
     public void LancaSaidaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, String localizacao, String status, int qtdRecebida) throws Exception {
+        // Se já existir, fecha a janela antes de abrir nova
+        if (janelaSaidaItem != null) {
+            janelaSaidaItem.close();
+            janelaSaidaItem = null;
+        }
+
         try {
             // Carregar FXML
             URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/saidaItem.fxml");
@@ -612,21 +629,18 @@ public class ConsultarItemController implements Initializable{
             Parent root = fxmlLoader.load();
 
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
-            // Criar cena
+
             Scene scene = new Scene(root);
 
-            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-            // 🔹 Adicionar o ícone (logo)
             URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
+            janelaSaidaItem = new Stage();
+            janelaSaidaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
 
             SaidaItemController controller = fxmlLoader.getController();
             controller.setCodItem(codItem);
@@ -638,36 +652,38 @@ public class ConsultarItemController implements Initializable{
             controller.setLocalizacao(localizacao);
             controller.setStatus(status);
             controller.setQtdRecebida(qtdRecebida);
-
             controller.carregaDados();
-            // Configurar stage
-            stage.setTitle("Lancar Entrega de Item");
-            stage.setScene(scene);
-            stage.show();
 
-            TextField tf = (TextField) root.lookup("#retirarMatriculaMecanico"); // seu TextField pelo id
+            // Configurar stage
+            janelaSaidaItem.setTitle("Lançar entrega de item");
+            janelaSaidaItem.setResizable(false);
+            janelaSaidaItem.setScene(scene);
+            janelaSaidaItem.show();
+
+            TextField tf = (TextField) root.lookup("#retirarMatriculaMecanico");
             tf.requestFocus();
+
+            janelaSaidaItem.setOnHidden(event -> janelaSaidaItem = null);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void AtualizarTituloPorModo() {
-        if (Sessao.getCargo().equals("Mecanico")) {
-            consultItemLabel.setText("Solicitar Item");
+        if (Sessao.getCargo().equals("Mecânico")) {
+            consultItemLabel.setText("Solicitar item");
         } else if (modo != null) {
 
             switch (modo) {
-                case "entrada":
+                case "Entrada":
                     consultItemLabel.setText("Lançar entrada de item");
                     break;
-                case "retirar":
+                case "Retirar":
                     consultItemLabel.setText("Lançar retirada de item");
                     break;
                 default:
-                    consultItemLabel.setText("Solicitar Item");
+                    consultItemLabel.setText("Solicitar item");
             }
         }
     }
@@ -680,9 +696,9 @@ public class ConsultarItemController implements Initializable{
         Item selecionado = row.getItem();
         if (selecionado == null) return;
 
-        // 🔹 Caso o usuário seja MECÂNICO e o modo seja "solicitar"
-        if (modo.equals("solicitar") && selecionado.getStatus().equals("recebido") && !Sessao.getCargo().equals("Aprovisionador")) {
-            MenuItem solicitarItem = new MenuItem("Requisitar Item");
+        // 🔹 Caso o usuário nao seja aprovisionador e o modo seja "solicitar"
+        if (modo.equals("Solicitar") && selecionado.getStatus().equals("Recebido") && !Sessao.getCargo().equals("Aprovisionador")) {
+            MenuItem solicitarItem = new MenuItem("Requisitar item");
             contextMenu.getItems().add(solicitarItem);
 
             solicitarItem.setOnAction(event -> {
@@ -699,12 +715,14 @@ public class ConsultarItemController implements Initializable{
                     Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                     alert2.setTitle("Aviso");
                     alert2.setHeaderText(null);
-                    alert2.setContentText("Requisitado a entrega do Item: '" + selecionado.getDescricao() + "'.");
+                    alert2.setContentText("Requisitado a entrega do item: '" + selecionado.getDescricao() + "'.");
+                    Stage stageAlert2 = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                     alert2.showAndWait();
 
                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                        String querySqlItem = "UPDATE item SET status = 'solicitado na oficina' WHERE id = ?";
-                        String querySqlOperacao = "UPDATE operacao SET status = 'item(s) solicitados' WHERE id = ?";
+                        String querySqlItem = "UPDATE item SET status = 'Solicitado na oficina' WHERE id = ?";
+                        String querySqlOperacao = "UPDATE operacao SET status = 'Item(s) solicitados' WHERE id = ?";
                         try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
                             statement.setInt(1, selecionado.getIdItem());
                             statement.executeUpdate();
@@ -720,7 +738,7 @@ public class ConsultarItemController implements Initializable{
                     // Registrar atualização no banco
                     DataBaseConection registarAtualizacao = new DataBaseConection();
                     registarAtualizacao.AtualizarBanco(
-                            "operacao",
+                            "Operação",
                             selecionado.getCodOperacao(),
                             "Item solicitado na oficina",
                             Sessao.getMatricula()
@@ -742,10 +760,8 @@ public class ConsultarItemController implements Initializable{
         }
 
         // 🔹 Caso o usuário seja ADMINISTRADOR ou APROVISIONADOR
-        else if (!Sessao.getCargo().equals("Mecanico")) {
-
-            // 👉 Se o modo for "entrada"
-            if (modo.equals("entrada") && selecionado.getStatus().equals("aguardando entrega")) {
+        else if (!Sessao.getCargo().equals("Mecânico")) {
+            if (modo.equals("Entrada") && selecionado.getStatus().equals("Aguardando entrega")) {
                 MenuItem lancarEntrada = new MenuItem("Lançar entrada");
                 contextMenu.getItems().add(lancarEntrada);
 
@@ -766,7 +782,7 @@ public class ConsultarItemController implements Initializable{
             }
 
             // 👉 Se o modo for "retirar"
-            else if (modo.equals("retirar")) {
+            else if (modo.equals("Retirar") && selecionado.getStatus().equals("Recebido")) {
                 MenuItem lancarSaida = new MenuItem("Lançar retirada");
                 contextMenu.getItems().add(lancarSaida);
 

@@ -12,33 +12,33 @@
    <children>
       <Button fx:id="retirarCancelButton" layoutX="40.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarCancelButtonOnAction" prefHeight="35.0" text="Cancelar" textFill="#14213d">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font></Button>
-      <Button fx:id="retirarConfirmarButton" layoutX="603.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" prefHeight="35.0" style="-fx-base: #EBB672;" text="      Confirmar" textFill="#fefefe">
+      <Button fx:id="retirarConfirmarButton" layoutX="603.0" layoutY="529.0" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" prefHeight="35.0" style="-fx-base: #fca311;" text="     Confirmar" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font></Button>
-      <Label layoutX="40.0" layoutY="100.0" prefHeight="17.0" prefWidth="174.0" text="Ordem de Servico" textFill="#14213d">
+      <Label layoutX="40.0" layoutY="100.0" prefHeight="17.0" prefWidth="174.0" text="Ordem de serviço" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="270.0" layoutY="100.0" text="Operacao" textFill="#14213d">
+      <Label layoutX="270.0" layoutY="100.0" text="Operação" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="501.0" layoutY="98.0" text="Codigo do item" textFill="#14213d">
+      <Label layoutX="501.0" layoutY="98.0" text="Código do item" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="40.0" layoutY="178.0" text="Descicao do item" textFill="#14213d">
+      <Label layoutX="40.0" layoutY="178.0" text="Descrição" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="40.0" layoutY="260.0" text="Qtd. Solicitada" textFill="#14213d">
+      <Label layoutX="40.0" layoutY="260.0" text="Qtd. pedido" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="40.0" layoutY="430.0" text="Matricula do responsavel pela retirada" textFill="#14213d">
+      <Label layoutX="40.0" layoutY="430.0" text="Matrícula do responsavel pela retirada" textFill="#14213d">
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Label>
@@ -74,7 +74,7 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <Label layoutX="270.0" layoutY="340.0" text="Local Armazenado" textFill="#14213d">
+      <Label layoutX="270.0" layoutY="340.0" text="Local armazenado" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -82,7 +82,7 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <Label layoutX="270.0" layoutY="260.0" text="Quantidade Recebida" textFill="#14213d">
+      <Label layoutX="270.0" layoutY="260.0" text="Qtd. recebida" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -90,7 +90,7 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <ImageView fx:id="retirar1" fitHeight="27.0" fitWidth="27.0" layoutX="609.0" layoutY="533.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="retirar1" fitHeight="25.0" fitWidth="23.0" layoutX="609.0" layoutY="535.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/entrega1.png" />
          </image>

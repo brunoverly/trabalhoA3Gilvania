@@ -42,6 +42,7 @@ public class EntradaItemScreen extends Application {
 
             // Configurar stage
             stage.setTitle("Entrada de item");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

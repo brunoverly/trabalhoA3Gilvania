@@ -57,7 +57,8 @@ public class ImportarOsScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Importar Ordem de Servico");
+            stage.setTitle("Importar ordem de serviço");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

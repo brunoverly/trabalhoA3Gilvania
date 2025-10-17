@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="register" prefHeight="670.0" prefWidth="500.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.CadastrarUsuarioController">
    <children>
-      <Label layoutX="40.0" layoutY="90.0" text="Nome Completo" textFill="#14213d">
+      <Label layoutX="40.0" layoutY="90.0" text="Nome completo" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font>
@@ -53,14 +53,14 @@
          <font>
             <Font size="14.0" />
          </font></PasswordField>
-      <Button fx:id="cadastrarButton" layoutX="345.0" layoutY="602.0" mnemonicParsing="false" onAction="#cadastrarButtonOnAction" prefHeight="35.0" prefWidth="115.0" style="-fx-base: #fca311;" text="      Cadastrar" textFill="#fefefe">
+      <Button fx:id="cadastrarButton" layoutX="340.0" layoutY="602.0" mnemonicParsing="false" onAction="#cadastrarButtonOnAction" prefHeight="35.0" prefWidth="127.0" style="-fx-base: #fca311;" text="    Cadastrar" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="cadastrarCancelButton" layoutX="40.0" layoutY="602.0" mnemonicParsing="false" onAction="#cadastrarCancelButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar">
+      <Button fx:id="cadastrarCancelButton" layoutX="40.0" layoutY="602.0" mnemonicParsing="false" onAction="#cadastrarCancelButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
       <Label fx:id="passwordError" contentDisplay="CENTER" layoutX="205.0" layoutY="445.0" prefHeight="19.0" prefWidth="211.0" textFill="#bc5353">
@@ -74,8 +74,8 @@
          </font>
       </Label>
       <Label layoutX="190.0" layoutY="334.0" text="(Deve ser composto de 6 numeros)" textFill="#14213d" />
-      <ComboBox fx:id="cadastroComboBox" layoutX="40.0" layoutY="283.0" prefHeight="35.0" prefWidth="150.0" promptText="Selecione um Cargo" />
-      <ImageView fx:id="registrar1" fitHeight="25.0" fitWidth="26.0" layoutX="350.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true">
+      <ComboBox fx:id="cadastroComboBox" layoutX="40.0" layoutY="283.0" prefHeight="35.0" prefWidth="186.0" promptText="Selecione um Cargo" />
+      <ImageView fx:id="registrar1" fitHeight="25.0" fitWidth="26.0" layoutX="345.0" layoutY="607.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/cadastro1.png" />
          </image>

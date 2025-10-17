@@ -40,7 +40,8 @@ public class CadastrarUsuarioScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Cadastro de usuario");
+            stage.setTitle("Cadastro de usuário");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

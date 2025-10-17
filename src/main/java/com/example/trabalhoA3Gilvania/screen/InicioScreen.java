@@ -40,7 +40,8 @@ public class InicioScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Pagina inicial");
+            stage.setTitle("Página inicial");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

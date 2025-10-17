@@ -13,27 +13,27 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
    <children>
-      <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="638.0" layoutY="104.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="40.0" prefWidth="226.0" style="-fx-base: #df9215;" text="       Selecionar Arquivo" textFill="#fefefe">
+      <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="638.0" layoutY="100.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="48.0" prefWidth="238.0" style="-fx-base: #df9215;" text="     Selecionar arquivo" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="Verdana Bold" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="importFazerImport" layoutX="835.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="115.0" style="-fx-base: #df9215;" text="       Importar" textFill="#fefefe">
+      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-base: #df9215;" text="     Importar" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Label fx:id="importLabelSelecionar" layoutX="50.0" layoutY="163.0" prefHeight="35.0" prefWidth="502.0" text="Selecione a ordem de servico a ser importada" textFill="#14213d" visible="false">
+      <Label fx:id="importLabelSelecionar" layoutX="50.0" layoutY="163.0" prefHeight="35.0" prefWidth="630.0" text="Selecione a ordem de servico a ser importada" textFill="#14213d" visible="false">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <Button fx:id="importVoltar" layoutX="50.0" layoutY="630.0" mnemonicParsing="false" onAction="#importVoltarOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Label layoutX="50.0" layoutY="15.0" text="Importar Ordem de Servico" textFill="#14213d">
+      <Label layoutX="50.0" layoutY="15.0" text="Importar Ordem de Serviço" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
@@ -43,40 +43,40 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <ImageView fx:id="importar1" fitHeight="29.0" fitWidth="31.0" layoutX="652.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="importar1" fitHeight="31.0" fitWidth="32.0" layoutX="648.0" layoutY="108.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/importar1.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="46.0" layoutY="213.0" prefHeight="405.0" prefWidth="907.0" visible="false">
+      <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="46.0" layoutY="213.0" prefHeight="405.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;" visible="false">
          <children>
-            <SplitPane fx:id="imortarSplitPane" dividerPositions="0.15418994413407822, 0.28268156424581004" layoutY="-3.0" prefHeight="405.0" prefWidth="907.0">
+            <SplitPane fx:id="imortarSplitPane" dividerPositions="0.15418994413407822, 0.28268156424581004" layoutY="-3.0" prefHeight="396.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #e5e5e5;">
                      <children>
                         <TableView fx:id="consultTableOrdemServico" prefHeight="307.0" prefWidth="261.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="134.0" text="Ordem" />
+                            <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="136.0" text="Ordem" />
                           </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="189.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="189.0" style="-fx-background-color: #e5e5e5;">
                      <children>
                         <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="307.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="constulTabelCodOperacao" prefWidth="108.0" text="Operacao" />
+                            <TableColumn fx:id="constulTabelCodOperacao" prefWidth="109.0" text="Operacao" />
                           </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="631.0">
+                  <AnchorPane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="631.0" style="-fx-background-color: #e5e5e5;">
                      <children>
                         <TableView fx:id="consultTableItem" prefHeight="307.0" prefWidth="585.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="consultTableCodItem" prefWidth="126.0" text="Cod. Item" />
-                            <TableColumn fx:id="consultTablePedidoItem" prefWidth="71.0" text="Qtd. Item" />
-                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="441.0" text="Descricao" />
+                            <TableColumn fx:id="consultTableCodItem" prefWidth="142.0" text="Cod. Item" />
+                            <TableColumn fx:id="consultTablePedidoItem" prefWidth="74.0" text="Qtd. Item" />
+                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="429.0" text="Descricao" />
                           </columns>
                         </TableView>
                      </children>
@@ -85,7 +85,7 @@
             </SplitPane>
          </children>
       </AnchorPane>
-      <ImageView fx:id="importar3" fitHeight="31.0" fitWidth="37.0" layoutX="841.0" layoutY="632.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="importar3" fitHeight="26.0" fitWidth="24.0" layoutX="828.0" layoutY="636.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/importar3.png" />
          </image>

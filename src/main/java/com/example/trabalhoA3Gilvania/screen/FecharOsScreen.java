@@ -41,7 +41,8 @@ public class FecharOsScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Fechar Ordem de Servico");
+            stage.setTitle("Fechar ordem de serviço");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

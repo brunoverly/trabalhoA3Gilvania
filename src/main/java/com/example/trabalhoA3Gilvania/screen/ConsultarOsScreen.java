@@ -41,7 +41,8 @@ public class ConsultarOsScreen extends Application {
 
 
             // Configurar stage
-            stage.setTitle("Consultar Ordem de Servico");
+            stage.setTitle("Consultar ordem de serviço");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 

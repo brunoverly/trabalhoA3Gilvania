@@ -2,6 +2,7 @@ package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.controller.SaidaItemController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -94,7 +95,7 @@ public class EntradaItemController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Quantidade recebida e invalida ou maior que a quantidade informada na ordem de servico.");
+            alert.setContentText("Valor informado é inválida ou maior que a quantidade informada na ordem de serviço");
             Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
             alert.showAndWait();
@@ -111,7 +112,7 @@ public class EntradaItemController implements Initializable {
                     Timestamp ts = Timestamp.valueOf(agora);
 
                     try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                        statement.setString(1, "recebido");
+                        statement.setString(1, "Recebido");
                         statement.setString(2, entradaLocalArmazenado.getText());
                         statement.setInt(3,Integer.parseInt(entradaQtdRecebida.getText()));
                         statement.setTimestamp(4, ts);
@@ -122,7 +123,7 @@ public class EntradaItemController implements Initializable {
                             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                             alert2.setTitle("Aviso");
                             alert2.setHeaderText(null);
-                            alert2.setContentText("Item atualizado com sucesso!");
+                            alert2.setContentText("Item atualizado com sucesso");
                             Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert2.showAndWait();
@@ -132,11 +133,12 @@ public class EntradaItemController implements Initializable {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+
                 DataBaseConection registarAtualizacao = new DataBaseConection();
                 registarAtualizacao.AtualizarBanco(
-                        "item",
+                        "Item",
                          codOs,
-                        "item recebido na base",
+                        "Item recebido na base",
                         Sessao.getMatricula()
                 );
 

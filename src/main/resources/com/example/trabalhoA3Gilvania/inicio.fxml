@@ -24,7 +24,7 @@
                   </ImageView>
                   <Button fx:id="menuImportarOs" blendMode="SRC_ATOP" mnemonicParsing="false" onAction="#menuImportarOsOnAction" prefHeight="44.0" prefWidth="217.0" style="-fx-background-color: #264653;" text="Importar OS" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio1" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -36,7 +36,7 @@
                   </Button>
                   <Button fx:id="menuConsultOs" layoutX="10.0" layoutY="49.0" mnemonicParsing="false" onAction="#menuConsultOsOnAction" prefHeight="45.0" prefWidth="221.0" style="-fx-background-color: #264653;" text="Consultar OS" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio2" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -48,7 +48,7 @@
                   </Button>
                   <Button fx:id="menuCloseOs" layoutX="10.0" layoutY="95.0" mnemonicParsing="false" onAction="#menuCloseOsOnAction" prefHeight="45.0" prefWidth="224.0" style="-fx-background-color: #264653;" text="Fechar OS" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio3" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -60,7 +60,7 @@
                   </Button>
                   <Button fx:id="menuSolcitarItem" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#menuSolcitarItemOnAction" prefHeight="45.0" prefWidth="224.0" style="-fx-background-color: #264653;" text="Solicitar Item" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio9" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -72,7 +72,7 @@
                   </Button>
                   <Button fx:id="menuEntradaItem" layoutX="10.0" layoutY="141.0" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" prefHeight="45.0" prefWidth="222.0" style="-fx-background-color: #264653;" text="Entrada Item" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio4" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -84,7 +84,7 @@
                   </Button>
                   <Button fx:id="menuRetiradaItem" layoutX="10.0" layoutY="187.0" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" prefHeight="45.0" prefWidth="226.0" style="-fx-background-color: #264653;" text="Retirada de Item" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio5" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -96,7 +96,7 @@
                   </Button>
                   <Button fx:id="menuAddUser" layoutX="10.0" layoutY="233.0" mnemonicParsing="false" onAction="#menuAddUserOnAction" prefHeight="45.0" prefWidth="220.0" style="-fx-background-color: #264653;" text="Criar Usuario" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio6" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -108,7 +108,7 @@
                   </Button>
                   <Button fx:id="menuRemoveUser" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" onAction="#menuRemoveUserOnAction" prefHeight="45.0" prefWidth="225.0" style="-fx-background-color: #264653;" text="Remover Usuario" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio7" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -120,7 +120,7 @@
                   </Button>
                   <Button fx:id="menuSair" layoutX="10.0" layoutY="319.0" mnemonicParsing="false" onAction="#menuSairOnAction" prefHeight="45.0" prefWidth="222.0" style="-fx-background-color: #264653;" text="Sair" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Verdana Bold" size="16.0" />
                      </font>
                      <graphic>
                         <ImageView fx:id="inicio8" fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -156,19 +156,19 @@
                   </AnchorPane>
                   <TableView fx:id="inicioTableView" layoutX="28.0" layoutY="293.0" prefHeight="304.0" prefWidth="794.0">
                     <columns>
-                        <TableColumn fx:id="inicioTableData" prefWidth="153.0" text="Data hora" />
-                      <TableColumn fx:id="inicioTableTipo" prefWidth="130.0" text="Tipo" />
-                      <TableColumn fx:id="inicioTableOs" minWidth="0.0" prefWidth="156.0" text="OS" />
-                        <TableColumn fx:id="inicioTableDescricao" prefWidth="192.0" text="Descricao" />
-                        <TableColumn fx:id="inicioTableUsuario" prefWidth="171.0" text="Usuario" />
+                        <TableColumn fx:id="inicioTableData" prefWidth="173.66668701171875" text="Data hora" />
+                      <TableColumn fx:id="inicioTableTipo" prefWidth="158.0" text="Tipo" />
+                      <TableColumn fx:id="inicioTableOs" minWidth="0.0" prefWidth="111.6666259765625" text="OS" />
+                        <TableColumn fx:id="inicioTableDescricao" prefWidth="255.3333740234375" text="Descrição" />
+                        <TableColumn fx:id="inicioTableUsuario" prefWidth="93.0" text="Úsuario" />
                     </columns>
                   </TableView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="7.0" prefHeight="53.0" prefWidth="580.0" text="Overview Ordems de Servico" textFill="#14213d">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="7.0" prefHeight="53.0" prefWidth="580.0" text="Overview Ordens de Serviço" textFill="#14213d">
                      <font>
                         <Font name="System Bold" size="40.0" />
                      </font>
                   </Label>
-                  <Label contentDisplay="CENTER" layoutX="31.0" layoutY="264.0" prefHeight="29.0" prefWidth="798.0" text="Ultimas atualizacoes" textFill="#14213d">
+                  <Label contentDisplay="CENTER" layoutX="29.0" layoutY="252.0" prefHeight="29.0" prefWidth="798.0" text="Últimas atualizaçãoes" textFill="#14213d">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

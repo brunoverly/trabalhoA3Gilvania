@@ -32,7 +32,7 @@ public class GerenciadorOperacao {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);
-            alert.setContentText("Nenhum arquivo selecionado.");
+            alert.setContentText("Nenhum arquivo selecionado");
             alert.showAndWait();
         }
 
@@ -111,6 +111,7 @@ public class GerenciadorOperacao {
 
                     if (osCadastrada) {
                         try {
+                            // 🔹 Inserir operação e recuperar idOperacao corretamente
                             String sqlOperacao = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
                             try (PreparedStatement ps = connetDB.prepareStatement(sqlOperacao, Statement.RETURN_GENERATED_KEYS)) {
                                 ps.setString(1, operacaoString);
@@ -118,24 +119,25 @@ public class GerenciadorOperacao {
                                 ps.setString(3, row.getCell(4).getStringCellValue());
                                 ps.executeUpdate();
 
-                                // Recupera o ID gerado automaticamente
+                                // Recupera o ID gerado automaticamente apenas da operação
                                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                                     if (generatedKeys.next()) {
-                                        idOperacao = generatedKeys.getInt(1); // aqui temos o id correto da operação
+                                        idOperacao = generatedKeys.getInt(1); // ID correto da operação
                                     } else {
-                                        throw new SQLException("Falha ao obter id da operação.");
+                                        throw new SQLException("Falha ao obter id da operação");
                                     }
                                 }
                             }
 
-                            // Agora insere o item vinculado ao idOperacao correto
+                            // 🔹 Inserir item vinculado ao idOperacao correto
                             String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
                             try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
-                                psItem.setInt(1, idOperacao);
+                                psItem.setInt(1, idOperacao); // usa o id correto da operação
                                 psItem.setString(2, row.getCell(4).getStringCellValue());
                                 psItem.setString(3, row.getCell(5).getStringCellValue());
                                 psItem.setInt(4, (int) row.getCell(6).getNumericCellValue());
                                 psItem.executeUpdate();
+
                             }
 
                         } catch (Exception e) {
@@ -143,7 +145,8 @@ public class GerenciadorOperacao {
                             e.getCause();
                         }
                     }
-                    } catch (SQLException e) {
+
+                } catch (SQLException e) {
                     e.printStackTrace();
                     e.getCause();
                 }
@@ -168,14 +171,14 @@ public class GerenciadorOperacao {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Ordem cadastrada com sucesso!");
+            alert.setContentText("Ordem cadastrada com sucesso");
             alert.showAndWait();
         }
         else if (osExistente) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Ordem de servico ja esta cadastrada!");
+            alert.setContentText("Ordem de serviço já cadastrada");
             alert.showAndWait();
         }
     }

@@ -1,6 +1,18 @@
 /* ========================
    Painéis com borda arredondada
    ======================== */
+.root-pane,
+.text-field,
+.vbox,
+.label,
+.check-box,
+.radio-button,
+.combo-box,
+.list-view,
+.table-view {
+    -fx-font-family: "Poppins"; /* aplica Poppins em todos os componentes */
+}
+
 .root-pane {
     -fx-border-color: #3498db;
     -fx-border-width: 4;
@@ -88,7 +100,8 @@
     -fx-border-width: 0 0 2 0;  /* altura da linha inferior */
     -fx-font-size: 1.5em;       /* aumenta levemente a fonte apenas no hover */
     -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
-    -fx-font-weight: bold;       /* deixa o texto em negrito no hover */
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins"; /* aplica Poppins em todos os componentes *//* deixa o texto em negrito no hover */
 }
 .text-field:disabled {
     -fx-opacity: 1;                 /* mantém aparência normal */
@@ -102,4 +115,132 @@
 .text-field:disabled:focused {
     -fx-border-color: #cccccc;      /* remove borda azul quando focado */
     -fx-background-color: white;    /* mantém fundo */
+}
+/* ===========================
+   ESTILO GERAL DA TABLEVIEW
+   =========================== */
+.table-view {
+    -fx-background-color: transparent; /* TableView transparente para arredondamento do wrapper */
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Wrapper interno que segura as linhas */
+.table-view > .virtual-flow > .clipped-container > .sheet {
+    -fx-background-color: #d6d6d6;  /* cinza claro para evitar vazamento nas bordas */
+    -fx-background-radius: 8;       /* arredonda todas as bordas */
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+/* ===========================
+   CABEÇALHO DAS COLUNAS
+   =========================== */
+.table-view .column-header-background {
+    -fx-background-color: #264653;
+    -fx-background-radius: 8 8 0 0; /* cantos superiores arredondados */
+    -fx-padding: 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-font-family: "Poppins";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER;
+}
+
+/* ===========================
+   CÉLULAS DA TABELA
+   =========================== */
+.table-cell {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: regular;
+    -fx-padding: 6px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-font-size: 14px;
+    -fx-text-fill: #14213d;
+}
+
+/* ===========================
+   LINHAS ALTERNADAS
+   =========================== */
+.table-row-cell:odd .table-cell {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:even .table-cell {
+    -fx-background-color: #E3E3E3
+}
+
+/* ===========================
+   HOVER (MOUSE SOBRE LINHA)
+   =========================== */
+.table-row-cell:hover .table-cell {
+    -fx-background-color: rgba(38,70,83,0.2);
+    -fx-text-fill: #000;
+}
+
+/* ===========================
+   LINHA SELECIONADA (FUNDO)
+   =========================== */
+.table-cell:selected {
+    -fx-background-color: #FFFFFF !important;
+    -fx-text-fill: white !important;
+}
+.split-pane {
+    -fx-background-color:  #e5e5e5; /* cor desejada */
+}
+
+/* Fundo das divisórias (opcional) */
+.split-pane .split-pane-divider {
+    -fx-background-color: #e5e5e5; /* mesma cor ou outra de sua preferência */
+}
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent; /* fundo da faixa da scrollbar */
+    -fx-padding: 0;
+    -fx-pref-width: 6px;   /* largura da barra de rolagem */
+    -fx-min-width: 6px;
+    -fx-max-width: 6px;
+}
+
+/* Thumb da scrollbar (a "peça" que se move) */
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #264653; /* cor da barra de rolagem */
+    -fx-background-insets: 0;
+    -fx-background-radius: 3; /* bordas arredondadas do thumb */
+}
+.split-pane {
+    -fx-padding: 0;             /* remove padding interno */
+    -fx-background-insets: 0;   /* remove inset interno */
+    -fx-background-color: #d6d6d6; /* cor de fundo */
+}
+
+.split-pane .split-pane-divider {
+    -fx-padding: 0;
+    -fx-background-color: #d6d6d6; /* combina com o fundo */
+    -fx-pref-width: 2px; /* ou 0 se quiser quase invisível */
+}
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;       /* invisível */
+    -fx-max-height: 0;    /* remove espaço vertical */
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+}
+#consultTableOrdemServico .table-row-cell:selected {
+    -fx-background-color: #3498db; /* cor do fundo da linha */
+}
+
+/* Texto da célula da linha selecionada */
+#consultTableOrdemServico .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #3498db;/* cor do texto da linha selecionada */
 }

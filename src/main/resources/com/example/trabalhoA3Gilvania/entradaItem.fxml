@@ -10,13 +10,13 @@
 
 <AnchorPane prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
     <children>
-        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="35.0" prefWidth="85.0" text="Cancelar" textFill="#14213d">
+        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="35.0" prefWidth="96.0" text="Cancelar" textFill="#14213d">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font></Button>
-        <Button fx:id="entradaItemConfirmar" layoutX="601.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefHeight="35.0" prefWidth="119.0" style="-fx-base: #fca311;" text="      Confirmar" textFill="#fefefe">
+        <Button fx:id="entradaItemConfirmar" layoutX="601.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefHeight="35.0" prefWidth="136.0" style="-fx-base: #fca311;" text="     Confirmar" textFill="#fefefe">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="Verdana Bold" size="15.0" />
          </font></Button>
         <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="42.0" layoutY="286.0" prefHeight="35.0">
          <font>
@@ -30,11 +30,11 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="42.0" layoutY="256.0" text="Quatidade pedido" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="256.0" text="Qtd. pedido" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="42.0" layoutY="334.0" text="Quantidade recebida" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="334.0" text="Qtd. recebida" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -42,7 +42,7 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="502.0" layoutY="80.0" text="Codigo do Item" textFill="#14213d">
+        <Label layoutX="502.0" layoutY="80.0" text="Código do Item" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -54,7 +54,7 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="40.0" layoutY="80.0" text="Ordem de Servico" textFill="#14213d">
+        <Label layoutX="40.0" layoutY="80.0" text="Ordem de serviço" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -62,11 +62,11 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="42.0" layoutY="167.0" text="Descricao" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="167.0" text="Descrição" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="288.0" layoutY="78.0" text="Operacao" textFill="#14213d">
+        <Label layoutX="288.0" layoutY="78.0" text="Operação" textFill="#14213d">
          <font>
             <Font size="16.0" />
          </font></Label>
