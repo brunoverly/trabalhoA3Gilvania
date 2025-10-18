@@ -13,6 +13,11 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarOsController">
    <children>
+      <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
       <Label layoutX="53.0" layoutY="107.0" text="Digite o numero da OS a ser consultada" textFill="#14213d">
          <font>
             <Font size="24.0" />
@@ -54,10 +59,6 @@
             </SplitPane>
          </children>
       </AnchorPane>
-      <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
       <Button fx:id="consultVoltarButton" layoutX="29.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar">
          <font>
             <Font name="System Bold" size="15.0" />

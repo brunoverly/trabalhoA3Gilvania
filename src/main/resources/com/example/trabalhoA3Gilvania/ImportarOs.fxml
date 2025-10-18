@@ -18,22 +18,22 @@
             <Font name="Verdana Bold" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-base: #df9215;" text="     Importar" textFill="#fefefe">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-      </Button>
-      <Label fx:id="importLabelSelecionar" layoutX="50.0" layoutY="163.0" prefHeight="35.0" prefWidth="630.0" text="Selecione a ordem de servico a ser importada" textFill="#14213d" visible="false">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
       <Button fx:id="importVoltar" layoutX="50.0" layoutY="630.0" mnemonicParsing="false" onAction="#importVoltarOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
          <font>
             <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Label layoutX="50.0" layoutY="15.0" text="Importar Ordem de Serviço" textFill="#14213d">
+      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-base: #df9215;" text="     Importar" textFill="#fefefe">
+         <font>
+            <Font name="Verdana Bold" size="15.0" />
+         </font>
+      </Button>
+      <Label fx:id="importLabelSelecionar" focusTraversable="false" layoutX="50.0" layoutY="163.0" prefHeight="35.0" prefWidth="630.0" text="Selecione a ordem de servico a ser importada" textFill="#14213d" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="50.0" layoutY="15.0" text="Importar Ordem de Serviço" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>

@@ -133,6 +133,8 @@ public class EntradaItemController implements Initializable {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                DataBaseConection atualizarStatusOperacao = new DataBaseConection();
+                atualizarStatusOperacao.AtualizarStatusPorSolicitacao( 1);
 
                 DataBaseConection registarAtualizacao = new DataBaseConection();
                 registarAtualizacao.AtualizarBanco(

@@ -44,8 +44,9 @@ public class GerenciadorOperacao {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connetDB = connectNow.getConection();
 
-        List<Operacao> operacoes = new ArrayList<>();
+        List<String> operacoes = new ArrayList<>();
 
+        operacoes.clear();
 
         //Acessando o arquivo
         @Cleanup FileInputStream file = new FileInputStream(fileSelected);
@@ -70,7 +71,7 @@ public class GerenciadorOperacao {
 
             String osString = formatter.formatCellValue(row.getCell(1));
             String operacaoString = formatter.formatCellValue(row.getCell(2));
-            int idOperacao;
+            int idOperacao = 0;
 
             if (osString.equals(numeroOs)) {
                 osExistOnExcel = true;
@@ -111,40 +112,52 @@ public class GerenciadorOperacao {
 
                     if (osCadastrada) {
                         try {
-                            // 🔹 Inserir operação e recuperar idOperacao corretamente
-                            String sqlOperacao = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
-                            try (PreparedStatement ps = connetDB.prepareStatement(sqlOperacao, Statement.RETURN_GENERATED_KEYS)) {
-                                ps.setString(1, operacaoString);
-                                ps.setString(2, osString);
-                                ps.setString(3, row.getCell(4).getStringCellValue());
-                                ps.executeUpdate();
+                            if (!operacoes.contains(operacaoString)) {
+                                // 🔹 Inserir operação e recuperar idOperacao corretamente
+                                String sqlOperacao = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
+                                try (PreparedStatement ps = connetDB.prepareStatement(sqlOperacao, Statement.RETURN_GENERATED_KEYS)) {
+                                    ps.setString(1, operacaoString);
+                                    ps.setString(2, osString);
+                                    ps.setString(3, row.getCell(4).getStringCellValue());
+                                    ps.executeUpdate();
 
-                                // Recupera o ID gerado automaticamente apenas da operação
-                                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                                    if (generatedKeys.next()) {
-                                        idOperacao = generatedKeys.getInt(1); // ID correto da operação
-                                    } else {
-                                        throw new SQLException("Falha ao obter id da operação");
+                                    try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                                        if (generatedKeys.next()) {
+                                            idOperacao = generatedKeys.getInt(1);
+                                        }
+                                    }
+                                }
+                                operacoes.add(operacaoString);
+                            } else {
+                                // 🔹 Buscar o idOperacao existente no banco
+                                String sqlBuscaOperacao = "SELECT id FROM operacao WHERE cod_operacao = ? AND cod_os = ?";
+                                try (PreparedStatement psBusca = connetDB.prepareStatement(sqlBuscaOperacao)) {
+                                    psBusca.setString(1, operacaoString);
+                                    psBusca.setString(2, osString);
+                                    ResultSet rs = psBusca.executeQuery();
+                                    if (rs.next()) {
+                                        idOperacao = rs.getInt("id");
                                     }
                                 }
                             }
 
-                            // 🔹 Inserir item vinculado ao idOperacao correto
-                            String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
-                            try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
-                                psItem.setInt(1, idOperacao); // usa o id correto da operação
-                                psItem.setString(2, row.getCell(4).getStringCellValue());
-                                psItem.setString(3, row.getCell(5).getStringCellValue());
-                                psItem.setInt(4, (int) row.getCell(6).getNumericCellValue());
-                                psItem.executeUpdate();
-
+                            // 🔹 Agora SEMPRE teremos um idOperacao válido aqui
+                            if (idOperacao != 0) {
+                                String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
+                                try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
+                                    psItem.setInt(1, idOperacao);
+                                    psItem.setString(2, row.getCell(4).getStringCellValue());
+                                    psItem.setString(3, row.getCell(5).getStringCellValue());
+                                    psItem.setInt(4, (int) row.getCell(6).getNumericCellValue());
+                                    psItem.executeUpdate();
+                                }
                             }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            e.getCause();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
                         }
                     }
+
 
                 } catch (SQLException e) {
                     e.printStackTrace();

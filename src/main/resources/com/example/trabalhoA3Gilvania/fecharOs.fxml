@@ -13,18 +13,21 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.FecharOsController">
     <children>
+        <TextField fx:id="consultNumeroOs" layoutX="55.0" layoutY="129.0" prefHeight="35.0" prefWidth="241.0" promptText="Ex: 765234">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
         <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS a ser encerrada">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <TextField fx:id="consultNumeroOsBuscado" editable="false" layoutX="57.0" layoutY="232.0" prefHeight="25.0" prefWidth="153.0" visible="false" />
         <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="129.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="132.0" style="-fx-base: #fca311;" text="     Consultar" textFill="#fefefe">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
         </Button>
-        <Label fx:id="consultLabelOsBuscada" layoutX="63.0" layoutY="201.0" prefHeight="17.0" prefWidth="118.0" text="Ordem de Servico" visible="false">
+        <Label fx:id="consultLabelOsBuscada" focusTraversable="false" layoutX="63.0" layoutY="201.0" prefHeight="17.0" prefWidth="118.0" text="Ordem de Servico" visible="false">
             <font>
                 <Font size="13.0" />
             </font>
@@ -60,10 +63,6 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <TextField fx:id="consultNumeroOs" layoutX="55.0" layoutY="129.0" prefHeight="35.0" prefWidth="241.0" promptText="Ex: 765234">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
         <Button fx:id="consultVoltarButton" layoutX="48.0" layoutY="630.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="107.0" text="Voltar" textFill="#14213d">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
@@ -74,7 +73,7 @@
             <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Label layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Serviço" textFill="#14213d">
+      <Label focusTraversable="false" layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Serviço" textFill="#14213d">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
