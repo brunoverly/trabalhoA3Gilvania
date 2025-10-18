@@ -40,6 +40,10 @@ public class ConsultarOsController implements Initializable {
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
     @FXML private AnchorPane consultarOsAnchorPane;
+    @FXML private SplitPane consultarOsSplitPane;
+    @FXML private AnchorPane consultarOsTableViewOperacao;
+    @FXML private AnchorPane consultarOsTableViewItens;
+
 
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
@@ -69,45 +73,15 @@ public class ConsultarOsController implements Initializable {
         consultTableItem.setItems(itensFiltrados); // tabela de itens
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                consultarOsTableViewItens.setVisible(true);
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
+
             } else {
                 itensFiltrados.setPredicate(item -> false);
             }
         });
-        ContextMenu contextMenuItem = new ContextMenu();
-        MenuItem solicitarItem = new MenuItem("Requisitar item");
-        contextMenuItem.getItems().addAll(solicitarItem);
-
-        solicitarItem.setOnAction(event -> {
-            Item selecionado = consultTableItem.getSelectionModel().getSelectedItem();
-            if (selecionado != null) {
-                // Abre tela de solicitação
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText(null);
-                alert.setContentText("Requisitado a entrega do item");
-                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                alert.showAndWait();
-
-            }
-        });
-
-        consultTableItem.setRowFactory(table -> {
-            TableRow<Item> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.SECONDARY) {
-                    contextMenuItem.show(row, event.getScreenX(), event.getScreenY());
-                } else {
-                    contextMenuItem.hide();
-                }
-            });
-            return row;
-        });
-
-
     }
 
 
@@ -115,8 +89,8 @@ public class ConsultarOsController implements Initializable {
     public void consultBuscarOsOnAction(ActionEvent event) {
         if (verificarNumeroOS()) {
             BuscarDB();
-            consultarOsAnchorPane.setVisible(true);
-            consultLabelOsBuscada.setVisible(true);
+            consultarOsSplitPane.setVisible(true);
+            consultarOsTableViewOperacao.setVisible(true);
         }
     }
 
@@ -127,6 +101,7 @@ public class ConsultarOsController implements Initializable {
     }
 
     public void BuscarDB() {
+        consultarOsTableViewItens.setVisible(false);
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 

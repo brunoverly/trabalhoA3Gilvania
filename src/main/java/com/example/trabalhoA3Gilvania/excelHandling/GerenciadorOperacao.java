@@ -142,7 +142,7 @@ public class GerenciadorOperacao {
                             }
 
                             // 🔹 Agora SEMPRE teremos um idOperacao válido aqui
-                            if (idOperacao != 0) {
+                            if (idOperacao != 0 && (int) row.getCell(6).getNumericCellValue() != 0) {
                                 String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
                                 try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
                                     psItem.setInt(1, idOperacao);

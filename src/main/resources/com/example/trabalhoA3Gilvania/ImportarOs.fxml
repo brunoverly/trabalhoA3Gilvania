@@ -48,11 +48,11 @@
             <Image url="@../../../imagens/importar1.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="46.0" layoutY="213.0" prefHeight="405.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;" visible="false">
+      <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="46.0" layoutY="213.0" prefHeight="405.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;">
          <children>
-            <SplitPane fx:id="imortarSplitPane" dividerPositions="0.15418994413407822, 0.28268156424581004" layoutY="-3.0" prefHeight="396.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;">
+            <SplitPane fx:id="imortarSplitPane" dividerPositions="0.15418994413407822, 0.28268156424581004" layoutY="-3.0" prefHeight="396.0" prefWidth="907.0" style="-fx-background-color: #e5e5e5;" visible="false">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #e5e5e5;">
+                <AnchorPane fx:id="importarOsTableViewOrdem" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #e5e5e5;" visible="false">
                      <children>
                         <TableView fx:id="consultTableOrdemServico" prefHeight="307.0" prefWidth="261.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
@@ -61,7 +61,7 @@
                         </TableView>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="189.0" style="-fx-background-color: #e5e5e5;">
+                <AnchorPane fx:id="importarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="189.0" style="-fx-background-color: #e5e5e5;" visible="false">
                      <children>
                         <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="307.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
@@ -70,7 +70,7 @@
                         </TableView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="631.0" style="-fx-background-color: #e5e5e5;">
+                  <AnchorPane fx:id="importarOsTableViewItens" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="631.0" style="-fx-background-color: #e5e5e5;" visible="false">
                      <children>
                         <TableView fx:id="consultTableItem" prefHeight="307.0" prefWidth="585.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>

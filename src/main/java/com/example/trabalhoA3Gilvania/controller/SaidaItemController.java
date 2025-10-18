@@ -1,8 +1,11 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +21,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SaidaItemController {
+public class SaidaItemController implements Initializable {
         @FXML private Button retirarConfirmarButton;
         @FXML private Button retirarCancelButton;
 
@@ -44,6 +47,13 @@ public class SaidaItemController {
         private String localizacao;
         private String status;
         private int qtdRecebida;
+        private int idOperacao;
+
+        private OnFecharJanela listener;
+
+        public void setOnFecharJanela(OnFecharJanela listener) {
+            this.listener = listener;
+        }
 
 
         public void setCodItem(String codItem) {
@@ -67,11 +77,24 @@ public class SaidaItemController {
         public void setLocalizacao(String localizacao){this.localizacao = localizacao;}
         public void setStatus(String status){this.status = status;}
         public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
+        public void setIdOperacao(int idOperacao){this.idOperacao = idOperacao;}
 
         public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL retitar1ImageURL = getClass().getResource("/imagens/retirar1.png");
+        URL retitar1ImageURL = getClass().getResource("/imagens/entrega1.png");
         Image retirar1Image = new Image(retitar1ImageURL.toExternalForm());
         retirar1.setImage(retirar1Image);
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) retiraraCodOs.getScene().getWindow();
+
+            // Quando a janela for fechada (X ou voltar)
+            stage.setOnHidden(event -> {
+                if (listener != null) {
+                    listener.aoFecharJanela(); // 🔔 chama o método da interface
+                }
+            });
+        });
+
     }
 
         public void carregaDados(){
@@ -100,71 +123,112 @@ public class SaidaItemController {
                 stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                 alert.showAndWait();
             }
-            else{
-                try (Connection connectDB = new DataBaseConection().getConection()) {
-                    String querySqlRetirada = """
-                                INSERT INTO controle_retirada_itens
-                                    (id_item, entregue_para, data_retirada, cod_os, cod_operacao, entregue_por)
-                                VALUES (?, ?, ?, ?, ?, ?)
+
+            try{
+                int converNumero = Integer.parseInt(retirarMatriculaMecanico.getText().trim());
+            }
+            catch (Exception e){
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Aviso");
+                alert.setHeaderText(null); // opcional, sem cabeçalho
+                alert.setContentText("Informe a matrícula uma matrícula válida");
+                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                alert.showAndWait();
+                return;
+            }
+
+            try (Connection connectDB = new DataBaseConection().getConection()) {
+                String querySqlRetirada = """
+                            INSERT INTO controle_retirada_itens
+                                (id_item, entregue_para, data_retirada, cod_os, cod_operacao, entregue_por)
+                            VALUES (?, ?, ?, ?, ?, ?)
+                        """;
+                LocalDateTime agora = LocalDateTime.now();
+                Timestamp ts = Timestamp.valueOf(agora);
+
+                try (PreparedStatement statement = connectDB.prepareStatement(querySqlRetirada)) {
+                    statement.setInt(1, idItem);
+                    statement.setString(2, retirarMatriculaMecanico.getText());
+                    statement.setTimestamp(3, ts);
+                    statement.setString(4, codOs);
+                    statement.setString(5, codOperacao);
+                    statement.setInt(6, Sessao.getMatricula());
+
+                    int linhasAfetadas = statement.executeUpdate();
+                    if(linhasAfetadas > 0){
+                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                        alert2.setTitle("Aviso");
+                        alert2.setHeaderText(null);
+                        alert2.setContentText("Registro cadastrado com sucesso");
+                        Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
+                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                        alert2.showAndWait();
+
+                        System.out.println("Id do item" + idItem);
+                        System.out.println(descricaoItem);
+                        System.out.println("Id da operacao"+ idOperacao);
+                    }
+                    statement.close();
+                    connectDB.close();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            /// //////////////////////////////////////
+            try (Connection connectDB = new DataBaseConection().getConection()) {
+                String querySqlItem = """
+                                UPDATE item
+                                SET status = 'Entregue a oficina'
+                                WHERE id = ?
                             """;
-                    LocalDateTime agora = LocalDateTime.now();
-                    Timestamp ts = Timestamp.valueOf(agora);
-
-                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlRetirada)) {
-                        statement.setInt(1, idItem);
-                        statement.setString(2, retirarMatriculaMecanico.getText());
-                        statement.setTimestamp(3, ts);
-                        statement.setString(4, codOs);
-                        statement.setString(5, codOperacao);
-                        statement.setInt(6, Sessao.getMatricula());
-
-                        int linhasAfetadas = statement.executeUpdate();
-                        if(linhasAfetadas > 0){
-                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                            alert2.setTitle("Aviso");
-                            alert2.setHeaderText(null);
-                            alert2.setContentText("Registro cadastrado com sucesso");
-                            Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert2.showAndWait();
-                        }
-                        statement.close();
-                        connectDB.close();
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
+                    statement.setInt(1, idItem);
+                    statement.executeUpdate();
                 }
-                /// //////////////////////////////////////
-                try (Connection connectDB = new DataBaseConection().getConection()) {
-                    String querySqlItem = """
-                                    UPDATE item
-                                    SET status = 'Entregue a oficina'
-                                    WHERE id = ?
-                                """;
-                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                        statement.setInt(1, idItem);
-                        statement.executeUpdate();
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            try (Connection connectDB = new DataBaseConection().getConection()) {
+                String querySqlOs = """
+                                UPDATE ordem_servico
+                                SET status = 'Em andamento'
+                                WHERE cod_os = ?
+                            """;
+                try (PreparedStatement statement = connectDB.prepareStatement(querySqlOs)) {
+                    statement.setString(1, codOs);
+                    statement.executeUpdate();
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
-                DataBaseConection registarAtualizacao = new DataBaseConection();
-                registarAtualizacao.AtualizarBanco(
-                        "Item",
-                         codOs,
-                        "Item entregue na oficina",
-                        Sessao.getMatricula()
-                );
+            DataBaseConection registarAtualizacao = new DataBaseConection();
+            registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
+
+            registarAtualizacao.AtualizarBanco(
+                    "Item",
+                     codOs,
+                    "Item entregue na oficina",
+                    Sessao.getMatricula()
+            );
 
 
 /// ///////////////////////////////////////////////
-                Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
-                stage.close();
+            Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
+
+// 🔔 chama o callback antes de fechar
+            if (listener != null) {
+                listener.aoFecharJanela();
             }
+
+// fecha a janela
+            stage.close();
         }
-
-
 }
+
+
+
 
 

@@ -127,8 +127,15 @@ public class LoginController {
                 }
             }
             catch (NumberFormatException e){
-                e.printStackTrace();
-                e.getCause();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Aviso");
+                alert.setHeaderText(null); // opcional, sem cabeçalho
+                alert.setContentText("Insira valores númericos para matrícula e PIN");
+                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
+                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                alert.showAndWait();
+
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();

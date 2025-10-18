@@ -1,8 +1,10 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.controller.SaidaItemController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -35,6 +37,13 @@ public class EntradaItemController implements Initializable {
     private String codOs;
     private String descricaoItem;
     private String qtdPedido;
+    private int idOperacao;
+
+    private OnFecharJanela listener;
+
+    public void setOnFecharJanela(OnFecharJanela listener) {
+        this.listener = listener;
+    }
 
 
     public void setCodItem(String codItem) {
@@ -55,6 +64,9 @@ public class EntradaItemController implements Initializable {
     public void setIdItem(int idItem) {
         this.idItem = idItem;
     }
+    public void setIdOperacao(int idOperacao){
+        this.idOperacao = idOperacao;
+    }
 
 
     public void carregaDados(){
@@ -71,6 +83,16 @@ public class EntradaItemController implements Initializable {
         Image entrada1Image = new Image(entrada1ImageURL.toExternalForm());
         entrada1.setImage(entrada1Image);
 
+        Platform.runLater(() -> {
+            Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
+
+            // Quando a janela for fechada (X ou voltar)
+            stage.setOnHidden(event -> {
+                if (listener != null) {
+                    listener.aoFecharJanela(); // 🔔 chama o método da interface
+                }
+            });
+        });
     }
 
 
@@ -127,16 +149,20 @@ public class EntradaItemController implements Initializable {
                             Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
                             stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
                             alert2.showAndWait();
+
+                            System.out.println(" Id do item" + idItem);
+                            System.out.println(descricaoItem);
+                            System.out.println(" Id da operacao" + idOperacao);
+
                         }
 
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                DataBaseConection atualizarStatusOperacao = new DataBaseConection();
-                atualizarStatusOperacao.AtualizarStatusPorSolicitacao( 1);
 
                 DataBaseConection registarAtualizacao = new DataBaseConection();
+                registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
                 registarAtualizacao.AtualizarBanco(
                         "Item",
                          codOs,

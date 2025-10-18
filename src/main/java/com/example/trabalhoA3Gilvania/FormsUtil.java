@@ -2,7 +2,9 @@ package com.example.trabalhoA3Gilvania;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class FormsUtil {
 

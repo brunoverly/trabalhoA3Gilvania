@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.screen.*;
 import javafx.application.Platform;
@@ -73,6 +74,8 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<Atualizacao, String> inicioTableOs;
     @FXML private TableColumn<Atualizacao, String> inicioTableDescricao;
     @FXML private TableColumn<Atualizacao, String> inicioTableUsuario;
+
+
     private ObservableList<Atualizacao> listaAtualizacoes = FXCollections.observableArrayList();
 
 
@@ -141,7 +144,7 @@ public class InicioController implements Initializable {
     private void atualizarDashBoard() {
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status = 'Aberta'";
+                    "WHERE status != 'Encerrada'";
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -159,20 +162,20 @@ public class InicioController implements Initializable {
                  ResultSet rs = stmt.executeQuery()) {
 
                 if (rs.next()) {
-                    inicioLabelOsEmAndamento.setText(String.valueOf(rs.getInt(1)));
+                    inicioLabelOsEncerrada.setText(String.valueOf(rs.getInt(1)));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            String query = "SELECT COUNT(DISTINCT cod_os) FROM operacao " +
-                    "WHERE status = 'Item(s) solicitados'";
+            String query = "SELECT COUNT(*) FROM ordem_servico " +
+                    "WHERE status = 'Em andamento'";
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
 
                 if (rs.next()) {
-                    inicioLabelOsEncerrada.setText(String.valueOf(rs.getInt(1)));
+                    inicioLabelOsEmAndamento.setText(String.valueOf(rs.getInt(1)));
                 }
             }
         } catch (SQLException e) {
@@ -188,7 +191,7 @@ public class InicioController implements Initializable {
             try (PreparedStatement stmt = connectDB.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
                 int contador = 1;
-                while (rs.next() && contador <= 20) {
+                while (rs.next() && contador <= 30) {
                         Timestamp datahora = rs.getTimestamp("datahora");
                         String tipo = rs.getString("tipo");
                         String os = rs.getString("cod_os");
@@ -298,57 +301,63 @@ public class InicioController implements Initializable {
         }
     }
 
-    public void menuImportarOsOnAction(ActionEvent event){
-        if(janelaImportarOs == null) {
-            janelaImportarOs = new Stage();
-
-            try {
-                // Carregar FXML
-                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/importarOs.fxml");
-                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                Parent root = fxmlLoader.load();
-
-                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
-                for (String fontFile : fonts) {
-                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+    public void menuImportarOsOnAction(ActionEvent event) {
+        try {
+            // Se a janela já estiver aberta e visível, apenas traz para frente
+            if (janelaImportarOs != null && janelaImportarOs.isShowing()) {
+                janelaImportarOs.toFront();
+                if (janelaImportarOs.isIconified()) {
+                    janelaImportarOs.setIconified(false);
                 }
-
-                // Criar cena
-                Scene scene = new Scene(root);
-
-                // Carregar CSS
-                URL cssUrl = getClass().getResource("/css/style.css");
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-
-
-                // 🔹 Adicionar o ícone (logo)
-                URL logoUrl = getClass().getResource("/imagens/logo.png");
-                janelaImportarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-
-                // Configurar stage
-                janelaImportarOs.setTitle("Importar ordem de serviço");
-                janelaImportarOs.setResizable(false);
-                janelaImportarOs.setScene(scene);
-                janelaImportarOs.setOnHidden(event2-> janelaImportarOs = null);
-                janelaImportarOs.show();
-
-                TextField tf = (TextField) root.lookup("#importNumeroOs"); // seu TextField pelo id
-                tf.requestFocus();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                return;
             }
-        } else {
-            // Janela já existe → traz pra frente
-            if (janelaImportarOs.isIconified()) {
-                janelaImportarOs.setIconified(false); // desminimiza
+
+            // Criar nova janela
+            janelaImportarOs = new Stage();
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/importarOs.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+            Parent root = fxmlLoader.load();
+
+            // Carregar fontes personalizadas
+            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+            for (String fontFile : fonts) {
+                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
-            janelaImportarOs.toFront();
+
+            // Configurar controller e callback
+            ImportarOsController controller = fxmlLoader.getController();
+            controller.setOnFecharJanela(() -> {
+                carregarAtualizacoes();
+                atualizarDashBoard();
+            });
+
+            // Criar cena e aplicar CSS
+            Scene scene = new Scene(root);
+            URL cssUrl = getClass().getResource("/css/style.css");
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+
+            // Ícone da janela
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaImportarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Configurações do stage
+            janelaImportarOs.setTitle("Importar ordem de serviço");
+            janelaImportarOs.setResizable(false);
+            janelaImportarOs.setScene(scene);
+            janelaImportarOs.setOnHidden(e -> janelaImportarOs = null);
+
+            // Exibir janela
+            janelaImportarOs.show();
+
+            // Foco no TextField principal
+            TextField tf = (TextField) root.lookup("#importNumeroOs");
+            if (tf != null) tf.requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
+
 
     public void CadastroUsuario() {
         if (janelaCadastroUsuario == null) {
@@ -467,42 +476,66 @@ public class InicioController implements Initializable {
 
     }
     public void FecharOs() {
-        if (janelaFecharOs == null) {
-            janelaFecharOs = new Stage();
-            try {
-                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/fecharOs.fxml");
-                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                Parent root = fxmlLoader.load();
-
-                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-                for (String fontFile : fonts) {
-                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
-                }
-
-                Scene scene = new Scene(root);
-                URL cssUrl = getClass().getResource("/css/style.css");
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-
-                URL logoUrl = getClass().getResource("/imagens/logo.png");
-                janelaFecharOs.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-                janelaFecharOs.setTitle("Fechar ordem de serviço");
-                janelaFecharOs.setResizable(false);
-                janelaFecharOs.setScene(scene);
-                janelaFecharOs.setOnHidden(e -> janelaFecharOs = null);
-                janelaFecharOs.show();
-
-                TextField tf = (TextField) root.lookup("#consultNumeroOs");
-                tf.requestFocus();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            // Se a janela já estiver aberta, traz para frente
+            if (janelaFecharOs != null && janelaFecharOs.isShowing()) {
+                janelaFecharOs.toFront();
+                return;
             }
-        } else {
-            if (janelaFecharOs.isIconified()) janelaFecharOs.setIconified(false);
-            janelaFecharOs.toFront();
+
+            // Cria uma nova janela
+            janelaFecharOs = new Stage();
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/fecharOs.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+            Parent root = fxmlLoader.load();
+
+            // Carregar fontes personalizadas
+            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+            for (String fontFile : fonts) {
+                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+            }
+
+            // Configurar cena e CSS
+            Scene scene = new Scene(root);
+            URL cssUrl = getClass().getResource("/css/style.css");
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+
+            // Ícone da janela
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaFecharOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Configurações gerais
+            janelaFecharOs.setTitle("Fechar ordem de serviço");
+            janelaFecharOs.setResizable(false);
+            janelaFecharOs.setScene(scene);
+
+            // Obtém o controller do FXML
+            FecharOsController controller = fxmlLoader.getController();
+
+            // Define o callback que será chamado ao fechar a janela
+            controller.setOnFecharJanela(() -> {
+                carregarAtualizacoes();
+                atualizarDashBoard();
+            });
+
+            // Define o que acontece ao fechar a janela
+            janelaFecharOs.setOnHidden(e -> {
+                janelaFecharOs = null;
+                System.out.println("Janela Fechar OS fechada.");
+            });
+
+            // Exibe a janela
+            janelaFecharOs.show();
+
+            // Dá foco ao campo principal
+            TextField tf = (TextField) root.lookup("#consultNumeroOs");
+            if (tf != null) tf.requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 
     public void ConsultarOs() {
         if (janelaConsultarOs == null) {
@@ -573,6 +606,13 @@ public class InicioController implements Initializable {
             ConsultarItemController controller = fxmlLoader.getController();
             controller.setModo(modo);
             controller.AtualizarTituloPorModo();
+            controller.setOnFecharJanela(new OnFecharJanela() {
+                @Override
+                public void aoFecharJanela() {
+                    carregarAtualizacoes();
+                    atualizarDashBoard();
+                }
+            });
 
             janelaSolicitarItem.setTitle("Consultar Item");
             janelaSolicitarItem.setResizable(false);

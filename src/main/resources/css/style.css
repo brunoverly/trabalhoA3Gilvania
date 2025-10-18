@@ -76,7 +76,6 @@
     -fx-content-display: LEFT;
     -fx-graphic-text-gap: 10;
     -fx-padding: 5 10 5 10;
-
     -fx-border-width: 0;
     -fx-border-color: transparent;
     -fx-transition: all 0.2s ease-in-out;
@@ -101,8 +100,9 @@
     -fx-font-size: 1.5em;       /* aumenta levemente a fonte apenas no hover */
     -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
     -fx-font-weight: bold;
-    -fx-font-family: "Poppins"; /* aplica Poppins em todos os componentes *//* deixa o texto em negrito no hover */
+    -fx-font-family: "Poppins"; /* deixa o texto em negrito no hover */
 }
+
 .text-field:disabled {
     -fx-opacity: 1;                 /* mantém aparência normal */
     -fx-text-fill: #888888;         /* cinza claro */
@@ -116,22 +116,22 @@
     -fx-border-color: #cccccc;      /* remove borda azul quando focado */
     -fx-background-color: white;    /* mantém fundo */
 }
+
 /* ===========================
    ESTILO GERAL DA TABLEVIEW
    =========================== */
 .table-view {
-    -fx-background-color: transparent; /* TableView transparente para arredondamento do wrapper */
-    -fx-table-cell-border-color: transparent;
-    -fx-padding: 0;
+    -fx-background-color: white;           /* fundo da TableView */
+    -fx-background-radius: 8 8 0 0;        /* cantos superiores arredondados */
+    -fx-border-color: #b0b0b0;             /* cinza mais forte, visível */
+    -fx-border-width: 1 1 0 1;             /* sem borda inferior */
+    -fx-border-radius: 8 8 0 0;
+    -fx-padding: 0;                         /* remove padding interno que corta a borda */
 }
 
-/* Wrapper interno que segura as linhas */
 .table-view > .virtual-flow > .clipped-container > .sheet {
-    -fx-background-color: #d6d6d6;  /* cinza claro para evitar vazamento nas bordas */
-    -fx-background-radius: 8;       /* arredonda todas as bordas */
-    -fx-border-color: #cccccc;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-background-color: transparent;     /* mantém fundo transparente para a borda */
+    -fx-background-insets: 0;              /* garante que a borda externa apareça */
 }
 
 /* ===========================
@@ -174,11 +174,11 @@
    LINHAS ALTERNADAS
    =========================== */
 .table-row-cell:odd .table-cell {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #E3E3E3;
 }
 
 .table-row-cell:even .table-cell {
-    -fx-background-color: #E3E3E3
+    -fx-background-color: #ffffff;
 }
 
 /* ===========================
@@ -190,57 +190,59 @@
 }
 
 /* ===========================
-   LINHA SELECIONADA (FUNDO)
+   LINHA SELECIONADA (AZUL CLÁSSICO WINDOWS)
    =========================== */
-.table-cell:selected {
-    -fx-background-color: #FFFFFF !important;
-    -fx-text-fill: white !important;
-}
-.split-pane {
-    -fx-background-color:  #e5e5e5; /* cor desejada */
+.table-row-cell:selected {
+    -fx-background-color: #0a64ad !important;
 }
 
-/* Fundo das divisórias (opcional) */
-.split-pane .split-pane-divider {
-    -fx-background-color: #e5e5e5; /* mesma cor ou outra de sua preferência */
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #0a64ad !important;
+    -fx-text-fill: white !important;
 }
-.table-view .scroll-bar:vertical {
-    -fx-background-color: transparent; /* fundo da faixa da scrollbar */
+
+.table-row-cell:selected:focused {
+    -fx-background-color: #0a64ad !important;
+}
+
+.table-row-cell:selected:armed {
+    -fx-background-color: #0a64ad !important;
+}
+
+/* ===========================
+   SPLIT PANE
+   =========================== */
+.split-pane {
+    -fx-background-color:  #e5e5e5; /* cor de fundo */
     -fx-padding: 0;
-    -fx-pref-width: 6px;   /* largura da barra de rolagem */
+    -fx-background-insets: 0;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: #e5e5e5; /* invisível, mesmo tom do fundo */
+    -fx-pref-width: 2px;
+}
+
+/* ===========================
+   SCROLLBARS
+   =========================== */
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-width: 6px;
     -fx-min-width: 6px;
     -fx-max-width: 6px;
 }
 
-/* Thumb da scrollbar (a "peça" que se move) */
 .table-view .scroll-bar:vertical .thumb {
-    -fx-background-color: #264653; /* cor da barra de rolagem */
+    -fx-background-color: #264653;
     -fx-background-insets: 0;
-    -fx-background-radius: 3; /* bordas arredondadas do thumb */
-}
-.split-pane {
-    -fx-padding: 0;             /* remove padding interno */
-    -fx-background-insets: 0;   /* remove inset interno */
-    -fx-background-color: #d6d6d6; /* cor de fundo */
+    -fx-background-radius: 3;
 }
 
-.split-pane .split-pane-divider {
-    -fx-padding: 0;
-    -fx-background-color: #d6d6d6; /* combina com o fundo */
-    -fx-pref-width: 2px; /* ou 0 se quiser quase invisível */
-}
 .table-view .scroll-bar:horizontal {
-    -fx-opacity: 0;       /* invisível */
-    -fx-max-height: 0;    /* remove espaço vertical */
+    -fx-opacity: 0;
+    -fx-max-height: 0;
     -fx-min-height: 0;
     -fx-pref-height: 0;
-}
-#consultTableOrdemServico .table-row-cell:selected {
-    -fx-background-color: #3498db; /* cor do fundo da linha */
-}
-
-/* Texto da célula da linha selecionada */
-#consultTableOrdemServico .table-row-cell:selected .table-cell {
-    -fx-text-fill: white;
-    -fx-background-color: #3498db;/* cor do texto da linha selecionada */
 }

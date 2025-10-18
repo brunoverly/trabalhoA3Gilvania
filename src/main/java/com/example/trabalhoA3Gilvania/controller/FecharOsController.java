@@ -1,7 +1,9 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -49,6 +51,14 @@ public class FecharOsController implements Initializable {
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
 
+    private OnFecharJanela listener;
+
+    public void setOnFecharJanela(OnFecharJanela listener) {
+        this.listener = listener;
+    }
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         URL fechar1ImageURL = getClass().getResource("/imagens/remover1.png");
@@ -77,6 +87,17 @@ public class FecharOsController implements Initializable {
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
+        Platform.runLater(() -> {
+            Stage stage = (Stage) fecharAnchorPane.getScene().getWindow();
+
+            // Quando a janela for fechada (X ou voltar)
+            stage.setOnHidden(event -> {
+                if (listener != null) {
+                    listener.aoFecharJanela(); // 🔔 chama o método da interface
+                }
+            });
+        });
+
     }
 
 
@@ -85,8 +106,6 @@ public class FecharOsController implements Initializable {
         if (verificarNumeroOS()) {
             BuscarDB();
             consultLabelOsBuscada.setVisible(true);
-            consultNumeroOsBuscado.setText(consultNumeroOs.getText());
-            consultNumeroOsBuscado.setVisible(true);
             fecharAnchorPane.setVisible(true);
         }
     }

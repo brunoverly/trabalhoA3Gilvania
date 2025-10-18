@@ -2,6 +2,8 @@ package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
+import com.example.trabalhoA3Gilvania.OnFecharJanela;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -39,6 +41,7 @@ public class CadastrarUsuarioController implements Initializable {
         Image registarImagem1 = new Image(registrarImagem1URL.toExternalForm());
         registrar1.setImage(registarImagem1);
         cadastroComboBox.getItems().addAll("Administrador", "Aprovisionador", "Mecânico");
+
     }
 
     public void cadastrarCancelButtonOnAction(ActionEvent event) {

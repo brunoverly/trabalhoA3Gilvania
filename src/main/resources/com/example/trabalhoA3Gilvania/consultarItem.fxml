@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
+<AnchorPane fx:id="consultItemSplitPane" prefHeight="700.0" prefWidth="1145.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
     <children>
         <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234">
          <font>
@@ -27,29 +27,29 @@
                 <Font name="Verdana Bold" size="15.0" />
             </font>
         </Button>
-        <AnchorPane fx:id="consultarItemAnchorPane" layoutX="121.0" layoutY="232.0" prefHeight="339.0" prefWidth="782.0" visible="false">
+        <AnchorPane fx:id="consultarItemAnchorPane" layoutX="139.0" layoutY="233.0" prefHeight="339.0" prefWidth="767.0" style="-fx-background-color: #e5e5e5;">
             <children>
-                <SplitPane dividerPositions="0.24335812964930925" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="943.0" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-66.0" AnchorPane.topAnchor="0.0">
+                <SplitPane fx:id="consultarItemSplitPane" dividerPositions="0.295668549905838" layoutX="-95.0" layoutY="52.0" prefHeight="420.0" prefWidth="1064.0" style="-fx-background-color: #e5e5e5;" visible="false" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-187.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="295.0">
+                        <AnchorPane fx:id="consultItenTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="321.0" style="-fx-background-color: #e5e5e5;" visible="false">
                             <children>
-                                <TableView fx:id="consultTableOperacao" layoutX="-163.0" layoutY="-146.0" prefHeight="396.0" prefWidth="217.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableOperacao" layoutX="-163.0" layoutY="-146.0" prefHeight="396.0" prefWidth="307.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="91.0" text="Operação" />
-                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="134.0" text="Status" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="113.0" text="Operação" />
+                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="201.0" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
                         </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="392.0" prefWidth="338.0">
+                        <AnchorPane fx:id="consultItemTableViewItem" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="716.0" style="-fx-background-color: #e5e5e5;" visible="false">
                             <children>
-                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="396.0" prefWidth="672.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableItem" layoutY="-151.0" prefHeight="396.0" prefWidth="734.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="113.0" text="Código do item" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="174.0" text="Descrição" />
-                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="91.0" text="Qtd. pedido" />
-                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="99.0" text="Qtd. recebida" />
-                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="231.0" text="Status" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="128.0" text="Código do item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="203.0" text="Descrição" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="97.0" text="Qtd. pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="97.0" text="Qtd. recebida" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="208.0" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -58,7 +58,7 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <Button fx:id="consultVoltarButton" layoutX="26.0" layoutY="643.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
+        <Button fx:id="consultVoltarButton" layoutX="46.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
