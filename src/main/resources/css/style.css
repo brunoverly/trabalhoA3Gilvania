@@ -15,7 +15,7 @@
 .combo-box,
 .list-view,
 .table-view {
--fx-font-family: "Poppins";
+    -fx-font-family: "Poppins";
 }
 
 .root-pane {
@@ -27,9 +27,12 @@
 }
 
 .button {
-     -fx-background-radius: 6;
-     -fx-border-radius: 6;
-     -fx-padding: 2 8 2 8;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 2 8 2 8;
+    -fx-font-family: "Poppins";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
 }
 
 .text-field {
@@ -51,6 +54,9 @@
     -fx-alignment: center-left;
     -fx-content-display: left;
     -fx-graphic-text-gap: 10px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-font-size: 16px;
 }
 
 #menuAddUser,
@@ -63,6 +69,8 @@
 #menuSolcitarItem,
 #menuRetiradaItem,
 #menuEntradaItem {
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -88,8 +96,8 @@
 #menuEntradaItem:hover {
     -fx-border-color: transparent transparent #fca311 transparent;
     -fx-border-width: 0 0 1 0;
-    -fx-font-size: 1.3em;
-    -fx-text-fill: #fca311;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
 }
@@ -124,9 +132,10 @@
 
 .table-view .column-header-background {
     -fx-background-color: #434A50;
-    -fx-background-radius: 40 40 0 0;
+    -fx-background-radius: 10 10 0 0;
     -fx-padding: 0;
 }
+
 .table-view .column-header {
     -fx-pref-height: 30px;
 }
@@ -235,11 +244,6 @@
     -fx-font-family: "Poppins";
 }
 
-.button {
-    -fx-background-radius: 6;
-    -fx-border-radius: 6; -fx-padding: 2 8 2 8;
- }
-
 .text-field {
     -fx-background-radius: 7;
     -fx-border-radius: 7;
@@ -279,7 +283,23 @@
 #loginButton:hover {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
+    -fx-font-family: "Poppins";
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
     -fx-cursor: hand;
+}
+
+#inicioPaneDash:hover {
+    -fx-scale-x: 1.015;
+    -fx-scale-y: 1.015;
+}
+
+#inicioPaneTableView:hover {
+    -fx-scale-x: 1.015;
+    -fx-scale-y: 1.015;
+}
+
+#inicioPaneMenu:hover {
+    -fx-scale-x: 1.015;
+    -fx-scale-y: 1.015;
 }

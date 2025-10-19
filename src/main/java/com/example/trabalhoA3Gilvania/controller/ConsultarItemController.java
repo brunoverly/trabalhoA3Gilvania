@@ -112,7 +112,7 @@ public class ConsultarItemController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        URL solicitarItemVoltarIImageURL = getClass().getResource("/imagens/voltar.png");
+        URL solicitarItemVoltarIImageURL = getClass().getResource("/imagens/close.png");
         Image solicitarItemVoltarIImagem = new Image(solicitarItemVoltarIImageURL.toExternalForm());
         solicitarItemVoltarIImage.setImage(solicitarItemVoltarIImagem);
 
@@ -134,8 +134,8 @@ public class ConsultarItemController implements Initializable{
 
         // Hover (mouse entrou)
         consultVoltarButton.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             consultVoltarButton.setCursor(Cursor.HAND); // cursor muda para mão
         });
 

@@ -14,15 +14,21 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.stage.StageStyle;
+
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -56,6 +62,7 @@ public class InicioController implements Initializable {
     @FXML private ImageView inicio7;
     @FXML private ImageView inicio8;
     @FXML private ImageView inicio9;
+    @FXML private Pane inicioPanelInvisivel;
     @FXML private Stage janelaImportarOs;
     @FXML private Stage janelaCadastroUsuario;
     @FXML private Stage janelaRemoverUsuario;
@@ -145,8 +152,8 @@ public class InicioController implements Initializable {
         //Aumentar o icone de sair ao passar o mouse
         ImageView fecharImagem = (ImageView) inicioButtonFecharJanela.getGraphic();
         inicioButtonFecharJanela.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             inicioButtonFecharJanela.setCursor(Cursor.HAND); // cursor muda para mão
         });
         inicioButtonFecharJanela.setOnMouseExited(e -> {
@@ -154,6 +161,8 @@ public class InicioController implements Initializable {
             fecharImagem.setScaleY(1.0);
             inicioButtonFecharJanela.setCursor(Cursor.DEFAULT);
         });
+
+        inicioPanelInvisivel.setMouseTransparent(true);
 
 
     }

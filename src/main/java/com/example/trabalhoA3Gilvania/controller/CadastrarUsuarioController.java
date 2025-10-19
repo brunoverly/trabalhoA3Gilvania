@@ -38,7 +38,7 @@ public class CadastrarUsuarioController implements Initializable {
 
     //Carregar imagens
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL cadastrarVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        URL cadastrarVoltarButtonImageURL = getClass().getResource("/imagens/close.png");
         Image cadastrarVoltarButtonImageImagem = new Image(cadastrarVoltarButtonImageURL.toExternalForm());
         cadastrarVoltarButtonImage.setImage(cadastrarVoltarButtonImageImagem);
 
@@ -49,8 +49,8 @@ public class CadastrarUsuarioController implements Initializable {
 
         // Hover (mouse entrou)
         cadastrarCancelButton.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             cadastrarCancelButton.setCursor(Cursor.HAND); // cursor muda para mão
         });
 

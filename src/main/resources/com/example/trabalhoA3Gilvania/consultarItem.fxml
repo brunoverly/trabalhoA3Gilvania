@@ -22,7 +22,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="104.0" style="-fx-background-color: FCB944;" text="Consultar" textFill="#434a50">
+        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="104.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>

@@ -29,7 +29,7 @@
             </font>
         </TextField>
 
-        <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944;" text="Consultar" textFill="#434a50">
+        <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -68,7 +68,7 @@
             </font>
         </TextField>
 
-        <Button fx:id="removeConfirmarButton" layoutX="342.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944;" text="Remover" textFill="#434a50">
+        <Button fx:id="removeConfirmarButton" layoutX="342.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Remover" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>

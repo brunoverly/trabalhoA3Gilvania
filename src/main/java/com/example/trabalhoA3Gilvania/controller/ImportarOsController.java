@@ -71,7 +71,7 @@ public class ImportarOsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Configura imagens
-        URL importarOsVoltarImageURL = getClass().getResource("/imagens/voltar.png");
+        URL importarOsVoltarImageURL = getClass().getResource("/imagens/close.png");
         Image importarOsVoltarImageImagem = new Image(importarOsVoltarImageURL.toExternalForm());
         importarOsVoltarImage.setImage(importarOsVoltarImageImagem);
 
@@ -158,8 +158,8 @@ public class ImportarOsController implements Initializable {
 
         // Hover (mouse entrou)
         importVoltar.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             importVoltar.setCursor(Cursor.HAND); // cursor muda para mão
         });
 

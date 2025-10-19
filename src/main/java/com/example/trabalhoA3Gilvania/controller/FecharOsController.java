@@ -60,7 +60,7 @@ public class FecharOsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL fecharOsVoltarURL = getClass().getResource("/imagens/voltar.png");
+        URL fecharOsVoltarURL = getClass().getResource("/imagens/close.png");
         Image fecharOsVoltarImage = new Image(fecharOsVoltarURL.toExternalForm());
         fecharOsVoltar.setImage(fecharOsVoltarImage);
 
@@ -101,8 +101,8 @@ public class FecharOsController implements Initializable {
 
         // Hover (mouse entrou)
         consultVoltarButton.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             consultVoltarButton.setCursor(Cursor.HAND); // cursor muda para mão
         });
 

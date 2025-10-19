@@ -13,7 +13,7 @@
 
 <AnchorPane fx:id="ImportarOsAcnhorPane" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
    <children>
-      <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="638.0" layoutY="100.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="48.0" prefWidth="204.0" style="-fx-background-color: FCB944;" text="Selecionar arquivo" textFill="#434a50">
+      <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="638.0" layoutY="100.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="48.0" prefWidth="204.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Selecionar arquivo" textFill="#434a50">
          <font>
             <Font name="Verdana Bold" size="17.0" />
          </font>
@@ -30,7 +30,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-background-color: FCB944;" text="Importar" textFill="#434a50">
+      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Importar" textFill="#434a50">
          <font>
             <Font name="Verdana Bold" size="15.0" />
          </font>
@@ -67,7 +67,7 @@
                      <children>
                         <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="307.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="constulTabelCodOperacao" prefWidth="109.0" text="Operacao" />
+                            <TableColumn fx:id="constulTabelCodOperacao" prefWidth="109.0" text="Operação" />
                           </columns>
                         </TableView>
                      </children>
@@ -78,7 +78,7 @@
                           <columns>
                             <TableColumn fx:id="consultTableCodItem" prefWidth="142.0" text="Cod. Item" />
                             <TableColumn fx:id="consultTablePedidoItem" prefWidth="74.0" text="Qtd. Item" />
-                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="429.0" text="Descricao" />
+                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="429.0" text="Descrição" />
                           </columns>
                         </TableView>
                      </children>

@@ -79,7 +79,7 @@ public class EntradaItemController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL entradaItemVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        URL entradaItemVoltarButtonImageURL = getClass().getResource("/imagens/close.png");
         Image entradaItemVoltarButtonImageImage = new Image(entradaItemVoltarButtonImageURL.toExternalForm());
         entradaItemVoltarButtonImage.setImage(entradaItemVoltarButtonImageImage);
 
@@ -98,8 +98,8 @@ public class EntradaItemController implements Initializable {
 
         // Hover (mouse entrou)
         entradaItemCancelar.setOnMouseEntered(e -> {
-            fecharImagem.setScaleX(1.1);
-            fecharImagem.setScaleY(1.1);
+            fecharImagem.setScaleX(1.2);
+            fecharImagem.setScaleY(1.2);
             entradaItemCancelar.setCursor(Cursor.HAND); // cursor muda para mão
         });
 

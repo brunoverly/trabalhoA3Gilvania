@@ -83,7 +83,7 @@ public class SaidaItemController implements Initializable {
         public void setIdOperacao(int idOperacao){this.idOperacao = idOperacao;}
 
         public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL retiradaVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        URL retiradaVoltarButtonImageURL = getClass().getResource("/imagens/close.png");
         Image retiradaVoltarButtonImageImagem = new Image(retiradaVoltarButtonImageURL.toExternalForm());
             retiradaVoltarButtonImage.setImage(retiradaVoltarButtonImageImagem);
 
@@ -102,8 +102,8 @@ public class SaidaItemController implements Initializable {
 
             // Hover (mouse entrou)
             retirarCancelButton.setOnMouseEntered(e -> {
-                fecharImagem.setScaleX(1.1);
-                fecharImagem.setScaleY(1.1);
+                fecharImagem.setScaleX(1.2);
+                fecharImagem.setScaleY(1.2);
                 retirarCancelButton.setCursor(Cursor.HAND); // cursor muda para mão
             });
 
