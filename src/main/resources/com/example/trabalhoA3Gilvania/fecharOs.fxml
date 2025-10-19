@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.FecharOsController">
+<AnchorPane fx:id="fecharOsAnchorPane" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.FecharOsController">
     <children>
-        <TextField fx:id="consultNumeroOs" layoutX="55.0" layoutY="129.0" prefHeight="35.0" prefWidth="241.0" promptText="Ex: 765234">
+        <TextField fx:id="consultNumeroOs" layoutX="55.0" layoutY="129.0" prefHeight="35.0" prefWidth="241.0" promptText="Ex: 765234" style="-fx-background-color: transparent; -fx-border-color: #434a50; -fx-border-width: 0 0 2 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS a ser encerrada">
+        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS a ser encerrada" textFill="#434a50">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="129.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="132.0" style="-fx-base: #fca311;" text="     Consultar" textFill="#fefefe">
+        <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="129.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="104.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
@@ -32,11 +32,11 @@
                 <Font size="13.0" />
             </font>
         </Label>
-        <AnchorPane fx:id="fecharAnchorPane" layoutX="45.0" layoutY="186.0" prefHeight="427.0" prefWidth="924.0" style="-fx-background-color: #e5e5e5;" visible="false">
+        <AnchorPane fx:id="fecharAnchorPane" layoutX="45.0" layoutY="186.0" prefHeight="427.0" prefWidth="924.0" style="-fx-background-color: white;" visible="false">
             <children>
-                <SplitPane dividerPositions="0.28900949796472186" layoutX="-4.0" layoutY="52.0" prefHeight="412.0" prefWidth="909.0" style="-fx-background-color: #e5e5e5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.28900949796472186" layoutX="-4.0" layoutY="52.0" prefHeight="412.0" prefWidth="909.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="100.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="100.0" style="-fx-background-color: white;">
                             <children>
                                 <TableView fx:id="consultTableOperacao" layoutX="1.0" layoutY="-146.0" prefHeight="396.0" prefWidth="268.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
@@ -46,7 +46,7 @@
                                 </TableView>
                             </children>
                         </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="658.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="658.0" style="-fx-background-color: white;">
                             <children>
                                 <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="410.0" prefWidth="638.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
                                     <columns>
@@ -63,30 +63,27 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <Button fx:id="consultVoltarButton" layoutX="48.0" layoutY="630.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="107.0" text="Voltar" textFill="#14213d">
+        <Button fx:id="consultVoltarButton" layoutX="48.0" layoutY="623.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="47.0" prefWidth="85.0" style="-fx-background-color: transparent;" textFill="#14213d">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
+         <graphic>
+            <ImageView fx:id="fecharOsVoltar" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/voltar.png" />
+               </image>
+            </ImageView>
+         </graphic>
         </Button>
-      <Button fx:id="confirmCloseOsButton" layoutX="814.0" layoutY="630.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="35.0" prefWidth="146.0" style="-fx-base: #fca311;" text="     Encerrar Os" textFill="#fefefe">
+      <Button fx:id="confirmCloseOsButton" layoutX="814.0" layoutY="630.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="35.0" prefWidth="132.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Encerrar Os" textFill="#434a50">
          <font>
             <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <Label focusTraversable="false" layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Serviço" textFill="#14213d">
+      <Label focusTraversable="false" layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Serviço" textFill="#434a50">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fx:id="fechar1" fitHeight="24.0" fitWidth="33.0" layoutX="310.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../imagens/remover1.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="fechar2" fitHeight="29.0" fitWidth="27.0" layoutX="819.0" layoutY="635.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../imagens/fechar1.png" />
-         </image>
-      </ImageView>
     </children>
 </AnchorPane>

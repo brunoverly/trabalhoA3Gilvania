@@ -7,6 +7,8 @@ import com.example.trabalhoA3Gilvania.screen.InicioScreen;
 import com.example.trabalhoA3Gilvania.Sessao;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -22,7 +24,7 @@ import java.sql.*;
 import java.util.ResourceBundle;
 
 
-public class LoginController {
+public class LoginController implements Initializable {
     @FXML
     private Button loginButton;
     @FXML
@@ -39,13 +41,15 @@ public class LoginController {
     private TextField enterUserNameField;
     @FXML
     private TextField enterPasswordField;
+    @FXML private Button loginButtonFechar;
+    @FXML private ImageView loginImagemFechar;
 
 
     //Conexao com banco de dados
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Image test = new Image(getClass().getResourceAsStream("/imagens/brand.png"));
 
-        URL imagemPrincipalURL = getClass().getResource("/imagens/login1.png");
+        URL imagemPrincipalURL = getClass().getResource("/imagens/login1.jpg");
         Image imagemPrincipal = new Image(imagemPrincipalURL.toExternalForm());
         login1.setImage(imagemPrincipal);
 
@@ -62,6 +66,26 @@ public class LoginController {
         Image imagemBrand = new Image(imagemBrandURL.toExternalForm());
         brand.setImage(imagemBrand);
 
+        URL loginImagemFecharURL = getClass().getResource("/imagens/close.png");
+        Image loginImagemFecharImagem = new Image(loginImagemFecharURL.toExternalForm());
+        loginImagemFechar.setImage(loginImagemFecharImagem);
+
+        ImageView fecharImagem = (ImageView) loginButtonFechar.getGraphic();
+
+        // Hover (mouse entrou)
+        loginButtonFechar.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            loginButtonFechar.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        loginButtonFechar.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            loginButtonFechar.setCursor(Cursor.DEFAULT);
+        });
+
     }
 
 
@@ -73,6 +97,15 @@ public class LoginController {
     }
 
     //Acao do botao fazer login
+
+
+    public void loginButtonFecharOnAction(ActionEvent event){
+    Stage stage = (Stage) loginButton.getScene().getWindow();
+        stage.close();
+    }
+
+
+
     public void LoginButtonOnAction(ActionEvent event) {
         if ((enterUserNameField.getText().isBlank() == false) && (enterPasswordField.getText().isBlank() == false)) {
             validateLogin();

@@ -5,6 +5,7 @@ import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class CadastrarUsuarioController implements Initializable {
 
-    @FXML private ImageView registrar1;
+    @FXML private ImageView cadastrarVoltarButtonImage;
     @FXML private AnchorPane register;
     @FXML private Button cadastrarCancelButton;
     @FXML private Button cadastrarButton;
@@ -37,10 +38,28 @@ public class CadastrarUsuarioController implements Initializable {
 
     //Carregar imagens
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL registrarImagem1URL = getClass().getResource("/imagens/cadastro1.png");
-        Image registarImagem1 = new Image(registrarImagem1URL.toExternalForm());
-        registrar1.setImage(registarImagem1);
+        URL cadastrarVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        Image cadastrarVoltarButtonImageImagem = new Image(cadastrarVoltarButtonImageURL.toExternalForm());
+        cadastrarVoltarButtonImage.setImage(cadastrarVoltarButtonImageImagem);
+
+
         cadastroComboBox.getItems().addAll("Administrador", "Aprovisionador", "Mecânico");
+
+        ImageView fecharImagem = (ImageView) cadastrarCancelButton.getGraphic();
+
+        // Hover (mouse entrou)
+        cadastrarCancelButton.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            cadastrarCancelButton.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        cadastrarCancelButton.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            cadastrarCancelButton.setCursor(Cursor.DEFAULT);
+        });
 
     }
 

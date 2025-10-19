@@ -6,8 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.net.URL;
 
@@ -37,11 +39,16 @@ public class LoginScreen extends Application {
             URL logoUrl = getClass().getResource("/imagens/logo.png");
             stage.getIcons().add(new Image(logoUrl.toExternalForm()));
 
-            // Configurar stage
-            stage.setTitle("Login");
-            stage.setResizable(false);
+            // Remover bordas e botões do Windows
+            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
+
+// Configurar cena
+            stage.initStyle(StageStyle.TRANSPARENT);
+            scene.setFill(Color.TRANSPARENT);
+
             stage.setScene(scene);
             stage.show();
+
 
 
         } catch (Exception e) {

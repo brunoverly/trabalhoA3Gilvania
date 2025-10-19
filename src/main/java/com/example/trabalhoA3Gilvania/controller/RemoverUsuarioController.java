@@ -2,6 +2,7 @@ package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import javafx.event.ActionEvent;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 public class RemoverUsuarioController implements Initializable {
 
     @FXML
-    private ImageView remover1;
+    private ImageView removerUserVoltarButtonImage;
     @FXML
     private ImageView remover2;
     @FXML
@@ -59,17 +60,31 @@ public class RemoverUsuarioController implements Initializable {
 
     // Carregar imagens
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL remover1ImageURL = getClass().getResource("/imagens/remover1.png");
-        Image remover1Image = new Image(remover1ImageURL.toExternalForm());
-        remover1.setImage(remover1Image);
+        URL removerUserVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        Image removerUserVoltarButtonImageImagem = new Image(removerUserVoltarButtonImageURL.toExternalForm());
+        removerUserVoltarButtonImage.setImage(removerUserVoltarButtonImageImagem);
 
-        URL remover2ImageURL = getClass().getResource("/imagens/remover2.png");
+        URL remover2ImageURL = getClass().getResource("/imagens/user5.png");
         Image remover2Image = new Image(remover2ImageURL.toExternalForm());
         remover2.setImage(remover2Image);
 
-        URL remover3ImageUrl = getClass().getResource("/imagens/remover3.png");
-        Image remover3Image = new Image(remover3ImageUrl.toExternalForm());
-        remover3.setImage(remover3Image);
+        ImageView fecharImagem = (ImageView) removeCancelarButton.getGraphic();
+
+        // Hover (mouse entrou)
+        removeCancelarButton.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            removeCancelarButton.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        removeCancelarButton.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            removeCancelarButton.setCursor(Cursor.DEFAULT);
+        });
+
+
     }
 
     public void removeCancelarButtonOnAction(ActionEvent event) {

@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -51,6 +52,7 @@ public class ConsultarItemController implements Initializable{
     @FXML private AnchorPane consultItenTableViewOperacao;
     @FXML private AnchorPane consultItemTableViewItem;
     @FXML private SplitPane consultarItemSplitPane;
+    @FXML private ImageView solicitarItemVoltarIImage;
 
 
     private Stage janelaEntradaItem;
@@ -73,6 +75,8 @@ public class ConsultarItemController implements Initializable{
     private int idOperacao;
 
     private OnFecharJanela onFecharJanela;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     public void setOnFecharJanela(OnFecharJanela onFecharJanela) {
         this.onFecharJanela = onFecharJanela;
@@ -105,9 +109,9 @@ public class ConsultarItemController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        URL consultarItem1URL = getClass().getResource("/imagens/remover1.png");
-        Image consultar1Image = new Image(consultarItem1URL.toExternalForm());
-        consultarItem1.setImage(consultar1Image);
+        URL solicitarItemVoltarIImageURL = getClass().getResource("/imagens/voltar.png");
+        Image solicitarItemVoltarIImagem = new Image(solicitarItemVoltarIImageURL.toExternalForm());
+        solicitarItemVoltarIImage.setImage(solicitarItemVoltarIImagem);
 
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -122,6 +126,24 @@ public class ConsultarItemController implements Initializable{
         consultTableOperacao.setItems(todasOperacoes); // tabela de operações
         itensFiltrados = new FilteredList<>(todosItens, item -> false);
         consultTableItem.setItems(itensFiltrados); // tabela de itens
+
+        ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
+
+        // Hover (mouse entrou)
+        consultVoltarButton.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            consultVoltarButton.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        consultVoltarButton.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            consultVoltarButton.setCursor(Cursor.DEFAULT);
+        });
+
+
 
         // Filtrar itens de acordo com a operação selecionada
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -302,6 +324,7 @@ public class ConsultarItemController implements Initializable{
 
             return row;
         });
+
     }
 
 

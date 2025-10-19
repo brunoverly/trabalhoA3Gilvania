@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,12 +19,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import javafx.stage.StageStyle;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -41,7 +51,7 @@ public class InicioController implements Initializable {
     @FXML private Label inicioLabelOsAbertas;
     @FXML private Label inicioLabelOsEncerrada;
     @FXML private Label inicioLabelOsEmAndamento;
-    @FXML private ImageView iniciologo;
+    @FXML private ImageView inicioLogo;
     @FXML private ImageView inicio1;
     @FXML private ImageView inicio2;
     @FXML private ImageView inicio3;
@@ -58,15 +68,8 @@ public class InicioController implements Initializable {
     @FXML private Stage janelaLogin;
     @FXML private Stage janelaFecharOs;
     @FXML private Stage janelaConsultarOs;
-
-
-
-
-
-
-
-
-
+    @FXML private Button inicioButtonFecharJanela;
+    @FXML private ImageView inicioImagemFechar;
 
     @FXML private TableView<Atualizacao> inicioTableView;
     @FXML private TableColumn<Atualizacao, String> inicioTableData;
@@ -74,17 +77,16 @@ public class InicioController implements Initializable {
     @FXML private TableColumn<Atualizacao, String> inicioTableOs;
     @FXML private TableColumn<Atualizacao, String> inicioTableDescricao;
     @FXML private TableColumn<Atualizacao, String> inicioTableUsuario;
+    @FXML private Label inicioLabelBemVindo;
+    @FXML private Label inicioLabelData;
 
-
+    private double xOffset = 0;
+    private double yOffset = 0;
     private ObservableList<Atualizacao> listaAtualizacoes = FXCollections.observableArrayList();
 
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        URL inicioLogoURL = getClass().getResource("/imagens/brand.png");
-        Image inicioLogo = new Image(inicioLogoURL.toExternalForm());
-        iniciologo.setImage(inicioLogo);
 
         URL inicio1URL = getClass().getResource("/imagens/inicio1.png");
         Image inicio1Img = new Image(inicio1URL.toExternalForm());
@@ -122,6 +124,17 @@ public class InicioController implements Initializable {
         Image inicio9Img = new Image(inicio9URL.toExternalForm());
         inicio9.setImage(inicio9Img);
 
+        URL inicioImagemFecharURL = getClass().getResource("/imagens/close.png");
+        Image inicioImagemFecharImage = new Image(inicioImagemFecharURL.toExternalForm());
+        inicioImagemFechar.setImage(inicioImagemFecharImage);
+
+        URL inicioLogoURL = getClass().getResource("/imagens/brand.png");
+        Image inicioLogoImagem = new Image(inicioLogoURL.toExternalForm());
+        inicioLogo.setImage(inicioLogoImagem);
+
+
+
+
         Platform.runLater(() -> {
             inicioPane.requestFocus(); // força o foco para o pane após a tela ser exibida
         });
@@ -135,8 +148,31 @@ public class InicioController implements Initializable {
 
             inicioTableView.setItems(listaAtualizacoes);
             inicioTableView.setSelectionModel(null);
-            carregarAtualizacoes();
             atualizarDashBoard();
+            carregarAtualizacoes();
+
+            LocalDate hoje = LocalDate.now();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
+            String dataPorExtenso = hoje.format(formatter);
+        inicioLabelBemVindo.setText("Bem vindo de volta "+ Sessao.getNome());
+        inicioLabelData.setText(dataPorExtenso);
+
+        ImageView fecharImagem = (ImageView) inicioButtonFecharJanela.getGraphic();
+
+// Hover (mouse entrou)
+        inicioButtonFecharJanela.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            inicioButtonFecharJanela.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+// Hover (mouse saiu)
+        inicioButtonFecharJanela.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            inicioButtonFecharJanela.setCursor(Cursor.DEFAULT);
+        });
 
 
     }
@@ -181,6 +217,11 @@ public class InicioController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void inicioButtonFecharJanelaOnAction(ActionEvent event){
+        Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
+        stage.close();
     }
 
     public void carregarAtualizacoes() {
@@ -331,14 +372,37 @@ public class InicioController implements Initializable {
                 atualizarDashBoard();
             });
 
-            // Criar cena e aplicar CSS
+            // Criar cena transparente
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+
+            // Configurar Stage sem borda do Windows
+            janelaImportarOs.initStyle(StageStyle.TRANSPARENT);
+            janelaImportarOs.setScene(scene);
+
+            // Adicionar ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaImportarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Permitir mover a janela clicando e arrastando
+            root.setOnMousePressed(event2 -> {
+                xOffset = event2.getSceneX();
+                yOffset = event2.getSceneY();
+            });
+
+            root.setOnMouseDragged(event2 -> {
+                janelaImportarOs.setX(event2.getScreenX() - xOffset);
+                janelaImportarOs.setY(event2.getScreenY() - yOffset);
+            });
+
+            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-            // Ícone da janela
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            janelaImportarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+            // Configurar stage
+            janelaImportarOs.setTitle("Importar ordem de serviço");
+            janelaImportarOs.setResizable(false);
+            janelaImportarOs.show();
 
             // Configurações do stage
             janelaImportarOs.setTitle("Importar ordem de serviço");
@@ -372,16 +436,35 @@ public class InicioController implements Initializable {
                     Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
                 }
 
+
+                // Criar cena transparente
                 Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
+
                 URL cssUrl = getClass().getResource("/css/style.css");
                 scene.getStylesheets().add(cssUrl.toExternalForm());
 
+                // Configurar Stage sem borda do Windows
+                janelaCadastroUsuario.initStyle(StageStyle.TRANSPARENT);
+                janelaCadastroUsuario.setScene(scene);
+
+                // Adicionar ícone
                 URL logoUrl = getClass().getResource("/imagens/logo.png");
                 janelaCadastroUsuario.getIcons().add(new Image(logoUrl.toExternalForm()));
 
+                // Permitir mover a janela clicando e arrastando
+                root.setOnMousePressed(event2 -> {
+                    xOffset = event2.getSceneX();
+                    yOffset = event2.getSceneY();
+                });
+
+                root.setOnMouseDragged(event2 -> {
+                    janelaCadastroUsuario.setX(event2.getScreenX() - xOffset);
+                    janelaCadastroUsuario.setY(event2.getScreenY() - yOffset);
+                });
+
                 janelaCadastroUsuario.setTitle("Cadastro de usuário");
                 janelaCadastroUsuario.setResizable(false);
-                janelaCadastroUsuario.setScene(scene);
                 janelaCadastroUsuario.setOnHidden(e -> janelaCadastroUsuario = null);
                 janelaCadastroUsuario.show();
 
@@ -410,16 +493,35 @@ public class InicioController implements Initializable {
                     Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
                 }
 
+                // Criar cena transparente
                 Scene scene = new Scene(root);
-                URL cssUrl = getClass().getResource("/css/style.css");
-                scene.getStylesheets().add(cssUrl.toExternalForm());
+                scene.setFill(Color.TRANSPARENT);
 
+                // Configurar Stage sem borda do Windows
+                janelaRemoverUsuario.initStyle(StageStyle.TRANSPARENT);
+                janelaRemoverUsuario.setScene(scene);
+
+                // Adicionar ícone
                 URL logoUrl = getClass().getResource("/imagens/logo.png");
                 janelaRemoverUsuario.getIcons().add(new Image(logoUrl.toExternalForm()));
 
+                // Permitir mover a janela clicando e arrastando
+                root.setOnMousePressed(event2 -> {
+                    xOffset = event2.getSceneX();
+                    yOffset = event2.getSceneY();
+                });
+
+                root.setOnMouseDragged(event2 -> {
+                    janelaRemoverUsuario.setX(event2.getScreenX() - xOffset);
+                    janelaRemoverUsuario.setY(event2.getScreenY() - yOffset);
+                });
+
+                // Carregar CSS
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
                 janelaRemoverUsuario.setTitle("Remover usuário");
                 janelaRemoverUsuario.setResizable(false);
-                janelaRemoverUsuario.setScene(scene);
                 janelaRemoverUsuario.setOnHidden(e -> janelaRemoverUsuario = null);
                 janelaRemoverUsuario.show();
 
@@ -442,6 +544,8 @@ public class InicioController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
+            Stage stage = new Stage();
+            // Carregar fontes
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
@@ -450,31 +554,29 @@ public class InicioController implements Initializable {
             // Criar cena
             Scene scene = new Scene(root);
 
-            // Carregar CSS
+            // Carregar CSS com teste de retorno
             URL cssUrl = getClass().getResource("/css/style.css");
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-
-            // 🔹 Adicionar o ícone (logo)
+            // Adicionar o ícone (logo)
             URL logoUrl = getClass().getResource("/imagens/logo.png");
-            Stage stage = new Stage();
             stage.getIcons().add(new Image(logoUrl.toExternalForm()));
 
+            // Remover bordas e botões do Windows
+            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
 
+// Configurar cena
+            stage.initStyle(StageStyle.TRANSPARENT);
+            scene.setFill(Color.TRANSPARENT);
 
-            // Configurar stage
-            stage.setTitle("Login");
-            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 
-            TextField tf = (TextField) root.lookup("#enterUserNameField"); // seu TextField pelo id
-            tf.requestFocus();
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
     public void FecharOs() {
         try {
             // Se a janela já estiver aberta, traz para frente
@@ -495,19 +597,38 @@ public class InicioController implements Initializable {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            // Configurar cena e CSS
+            // Criar cena transparente
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+
+            // Aplicar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-            // Ícone da janela
+
+
+            // Configurar Stage sem borda do Windows
+            janelaFecharOs.initStyle(StageStyle.TRANSPARENT);
+            janelaFecharOs.setScene(scene);
+
+            // Adicionar ícone
             URL logoUrl = getClass().getResource("/imagens/logo.png");
             janelaFecharOs.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Permitir mover a janela clicando e arrastando
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                janelaFecharOs.setX(event.getScreenX() - xOffset);
+                janelaFecharOs.setY(event.getScreenY() - yOffset);
+            });
 
             // Configurações gerais
             janelaFecharOs.setTitle("Fechar ordem de serviço");
             janelaFecharOs.setResizable(false);
-            janelaFecharOs.setScene(scene);
 
             // Obtém o controller do FXML
             FecharOsController controller = fxmlLoader.getController();
@@ -537,6 +658,7 @@ public class InicioController implements Initializable {
     }
 
 
+
     public void ConsultarOs() {
         if (janelaConsultarOs == null) {
             janelaConsultarOs = new Stage();
@@ -549,17 +671,32 @@ public class InicioController implements Initializable {
                 for (String fontFile : fonts) {
                     Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
                 }
-
                 Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
                 URL cssUrl = getClass().getResource("/css/style.css");
                 scene.getStylesheets().add(cssUrl.toExternalForm());
 
+                // Configurar Stage sem borda do Windows
+                janelaConsultarOs.initStyle(StageStyle.TRANSPARENT);
+                janelaConsultarOs.setScene(scene);
+
+                // Adicionar ícone
                 URL logoUrl = getClass().getResource("/imagens/logo.png");
                 janelaConsultarOs.getIcons().add(new Image(logoUrl.toExternalForm()));
 
+                // Permitir mover a janela clicando e arrastando
+                root.setOnMousePressed(event -> {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                });
+
+                root.setOnMouseDragged(event -> {
+                    janelaConsultarOs.setX(event.getScreenX() - xOffset);
+                    janelaConsultarOs.setY(event.getScreenY() - yOffset);
+                });
+
                 janelaConsultarOs.setTitle("Consultar ordem de serviço");
                 janelaConsultarOs.setResizable(false);
-                janelaConsultarOs.setScene(scene);
                 janelaConsultarOs.setOnHidden(e -> janelaConsultarOs = null);
                 janelaConsultarOs.show();
 
@@ -569,9 +706,6 @@ public class InicioController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            if (janelaConsultarOs.isIconified()) janelaConsultarOs.setIconified(false);
-            janelaConsultarOs.toFront();
         }
     }
     private Stage janelaSolicitarItem;
@@ -596,12 +730,29 @@ public class InicioController implements Initializable {
             }
 
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
 
+            // Configurar Stage sem borda do Windows
+            janelaSolicitarItem.initStyle(StageStyle.TRANSPARENT);
+            janelaSolicitarItem.setScene(scene);
+            // Aplicar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
+            // Adicionar ícone
             URL logoUrl = getClass().getResource("/imagens/logo.png");
             janelaSolicitarItem.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Permitir mover a janela clicando e arrastando
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                janelaSolicitarItem.setX(event.getScreenX() - xOffset);
+                janelaSolicitarItem.setY(event.getScreenY() - yOffset);
+            });
 
             ConsultarItemController controller = fxmlLoader.getController();
             controller.setModo(modo);
@@ -616,7 +767,6 @@ public class InicioController implements Initializable {
 
             janelaSolicitarItem.setTitle("Consultar Item");
             janelaSolicitarItem.setResizable(false);
-            janelaSolicitarItem.setScene(scene);
             janelaSolicitarItem.show();
 
             TextField tf = (TextField) root.lookup("#consultNumeroOs");

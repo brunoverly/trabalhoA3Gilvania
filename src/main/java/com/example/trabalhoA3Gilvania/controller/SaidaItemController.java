@@ -6,6 +6,7 @@ import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,7 +37,7 @@ public class SaidaItemController implements Initializable {
         @FXML private TextField retirarStatusItem;
         @FXML private TextField retirarLocalItem;
         @FXML private TextField retirarMatriculaMecanico;
-        @FXML private ImageView retirar1;
+        @FXML private ImageView retiradaVoltarButtonImage;
 
         private int idItem;
         private String codItem;
@@ -80,9 +81,9 @@ public class SaidaItemController implements Initializable {
         public void setIdOperacao(int idOperacao){this.idOperacao = idOperacao;}
 
         public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL retitar1ImageURL = getClass().getResource("/imagens/entrega1.png");
-        Image retirar1Image = new Image(retitar1ImageURL.toExternalForm());
-        retirar1.setImage(retirar1Image);
+        URL retiradaVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        Image retiradaVoltarButtonImageImagem = new Image(retiradaVoltarButtonImageURL.toExternalForm());
+            retiradaVoltarButtonImage.setImage(retiradaVoltarButtonImageImagem);
 
         Platform.runLater(() -> {
             Stage stage = (Stage) retiraraCodOs.getScene().getWindow();
@@ -94,6 +95,26 @@ public class SaidaItemController implements Initializable {
                 }
             });
         });
+
+            ImageView fecharImagem = (ImageView) retirarCancelButton.getGraphic();
+
+            // Hover (mouse entrou)
+            retirarCancelButton.setOnMouseEntered(e -> {
+                fecharImagem.setScaleX(1.1);
+                fecharImagem.setScaleY(1.1);
+                retirarCancelButton.setCursor(Cursor.HAND); // cursor muda para mão
+            });
+
+            // Hover (mouse saiu)
+            retirarCancelButton.setOnMouseExited(e -> {
+                fecharImagem.setScaleX(1.0);
+                fecharImagem.setScaleY(1.0);
+                retirarCancelButton.setCursor(Cursor.DEFAULT);
+            });
+
+
+
+
 
     }
 

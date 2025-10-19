@@ -11,27 +11,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="consultItemSplitPane" prefHeight="700.0" prefWidth="1145.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
+<AnchorPane fx:id="consultItemSplitPane" prefHeight="700.0" prefWidth="1145.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
     <children>
-        <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234">
+        <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 2 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="53.0" layoutY="107.0" text="Digite o número da OS e selecione um item" textFill="#14213d">
+        <Label layoutX="53.0" layoutY="107.0" text="Digite o número da OS e selecione um item" textFill="#434a50">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="122.0" style="-fx-base: #fca311;" text="    Consultar" textFill="#fefefe">
+        <Button fx:id="consultBuscarOs" layoutX="384.0" layoutY="150.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="104.0" style="-fx-background-color: FCB944;" text="Consultar" textFill="#434a50">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
         </Button>
-        <AnchorPane fx:id="consultarItemAnchorPane" layoutX="139.0" layoutY="233.0" prefHeight="339.0" prefWidth="767.0" style="-fx-background-color: #e5e5e5;">
+        <AnchorPane fx:id="consultarItemAnchorPane" layoutX="139.0" layoutY="233.0" prefHeight="339.0" prefWidth="767.0" style="-fx-background-color: white;">
             <children>
-                <SplitPane fx:id="consultarItemSplitPane" dividerPositions="0.295668549905838" layoutX="-95.0" layoutY="52.0" prefHeight="420.0" prefWidth="1064.0" style="-fx-background-color: #e5e5e5;" visible="false" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-187.0" AnchorPane.topAnchor="0.0">
+                <SplitPane fx:id="consultarItemSplitPane" dividerPositions="0.295668549905838" layoutX="-95.0" layoutY="52.0" prefHeight="420.0" prefWidth="1064.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-187.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <AnchorPane fx:id="consultItenTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="321.0" style="-fx-background-color: #e5e5e5;" visible="false">
+                        <AnchorPane fx:id="consultItenTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="321.0" style="-fx-background-color: white;" visible="false">
                             <children>
                                 <TableView fx:id="consultTableOperacao" layoutX="-163.0" layoutY="-146.0" prefHeight="396.0" prefWidth="307.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
@@ -41,7 +41,7 @@
                                 </TableView>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="consultItemTableViewItem" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="716.0" style="-fx-background-color: #e5e5e5;" visible="false">
+                        <AnchorPane fx:id="consultItemTableViewItem" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="716.0" style="-fx-background-color: white;" visible="false">
                             <children>
                                 <TableView fx:id="consultTableItem" layoutY="-151.0" prefHeight="396.0" prefWidth="734.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
@@ -58,20 +58,22 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <Button fx:id="consultVoltarButton" layoutX="46.0" layoutY="645.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
+        <Button fx:id="consultVoltarButton" layoutX="53.0" layoutY="618.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="35.0" prefWidth="85.0" style="-fx-background-color: transparent; -fx-background-radius: 0;" textFill="#14213d">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
+         <graphic>
+            <ImageView fx:id="solicitarItemVoltarIImage" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/voltar.png" />
+               </image>
+            </ImageView>
+         </graphic>
         </Button>
-      <Label fx:id="consultItemLabel" layoutX="53.0" layoutY="30.0" text="Solicitar Item" textFill="#14213d">
+      <Label fx:id="consultItemLabel" layoutX="53.0" layoutY="30.0" text="Solicitar Item" textFill="#434a50">
          <font>
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <ImageView fx:id="consultarItem1" fitHeight="24.0" fitWidth="25.0" layoutX="389.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../imagens/remover1.png" />
-         </image>
-      </ImageView>
     </children>
 </AnchorPane>

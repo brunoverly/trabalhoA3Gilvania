@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -30,8 +31,7 @@ public class FecharOsController implements Initializable {
     @FXML private Button confirmCloseOsButton;
 
     @FXML private Label consultLabelOsBuscada;
-    @FXML private ImageView fechar1;
-    @FXML private ImageView fechar2;
+    @FXML private ImageView fecharOsVoltar;
 
 
     @FXML private TextField consultNumeroOsBuscado;
@@ -61,13 +61,13 @@ public class FecharOsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL fechar1ImageURL = getClass().getResource("/imagens/remover1.png");
-        Image fechar1Image = new Image(fechar1ImageURL.toExternalForm());
-        fechar2.setImage(fechar1Image);
+        URL fecharOsVoltarURL = getClass().getResource("/imagens/voltar.png");
+        Image fecharOsVoltarImage = new Image(fecharOsVoltarURL.toExternalForm());
+        fecharOsVoltar.setImage(fecharOsVoltarImage);
 
-        URL fechar2ImageURL = getClass().getResource("/imagens/fechar1.png");
-        Image fechar2Image = new Image(fechar2ImageURL.toExternalForm());
-        fechar2.setImage(fechar2Image);
+       // URL fechar2ImageURL = getClass().getResource("/imagens/close.png");
+        //Image fechar2Image = new Image(fechar2ImageURL.toExternalForm());
+        //fechar2.setImage(fechar2Image);
 
 
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
@@ -97,6 +97,23 @@ public class FecharOsController implements Initializable {
                 }
             });
         });
+
+        ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
+
+        // Hover (mouse entrou)
+        consultVoltarButton.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            consultVoltarButton.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        consultVoltarButton.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            consultVoltarButton.setCursor(Cursor.DEFAULT);
+        });
+
 
     }
 

@@ -8,81 +8,83 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
+<AnchorPane fx:id="entradaItenAnchorPane" prefHeight="605.0" prefWidth="782.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
     <children>
-        <TextField fx:id="entradaQtdRecebida" layoutX="42.0" layoutY="364.0" prefHeight="35.0" promptText="Ex: 25">
+        <TextField fx:id="entradaQtdRecebida" layoutX="42.0" layoutY="364.0" prefHeight="35.0" promptText="Ex: 25" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 0; -fx-border-width: 0 0 2 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <TextField fx:id="entradaLocalArmazenado" layoutX="42.0" layoutY="458.0" prefHeight="35.0" prefWidth="271.0" promptText="Ex: Prateleira A1">
+        <TextField fx:id="entradaLocalArmazenado" layoutX="42.0" layoutY="458.0" prefHeight="35.0" prefWidth="271.0" promptText="Ex: Prateleira A1" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-border-width: 0 0 2 0; -fx-border-color: black;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="35.0" prefWidth="96.0" text="Cancelar" textFill="#14213d">
+        <Button fx:id="entradaItemCancelar" layoutX="42.0" layoutY="532.0" mnemonicParsing="false" onAction="#entradaItemCancelarOnAction" prefHeight="35.0" prefWidth="69.0" style="-fx-background-color: transparent;" textFill="#14213d">
+         <font>
+            <Font name="Verdana Bold" size="15.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="entradaItemVoltarButtonImage" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/voltar.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+        <Button fx:id="entradaItemConfirmar" layoutX="603.0" layoutY="542.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefHeight="35.0" prefWidth="118.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Confirmar" textFill="#434a50">
          <font>
             <Font name="Verdana Bold" size="15.0" />
          </font></Button>
-        <Button fx:id="entradaItemConfirmar" layoutX="601.0" layoutY="524.0" mnemonicParsing="false" onAction="#entradaItemConfirmarOnAction" prefHeight="35.0" prefWidth="136.0" style="-fx-base: #fca311;" text="     Confirmar" textFill="#fefefe">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font></Button>
-        <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="42.0" layoutY="286.0" prefHeight="35.0">
+        <TextField fx:id="entrdadaQtdPedido" disable="true" layoutX="42.0" layoutY="286.0" prefHeight="35.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="42.0" layoutY="256.0" text="Qtd. pedido" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="256.0" text="Qtd. pedido" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="42.0" layoutY="334.0" text="Qtd. recebida" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="334.0" text="Qtd. recebida" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="42.0" layoutY="413.0" text="Local armazenado" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="413.0" text="Local armazenado" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="502.0" layoutY="80.0" text="Código do Item" textFill="#14213d">
+        <Label layoutX="502.0" layoutY="80.0" text="Código do Item" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <TextField fx:id="entradadCodItem" disable="true" layoutX="502.0" layoutY="110.0" prefHeight="35.0" prefWidth="233.0">
+        <TextField fx:id="entradadCodItem" disable="true" layoutX="502.0" layoutY="110.0" prefHeight="35.0" prefWidth="233.0" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-border-color: black; -fx-border-width: 0 0 2 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <TextField fx:id="entradaOrdemServico" disable="true" layoutX="40.0" layoutY="110.0" prefHeight="35.0" prefWidth="204.0">
+        <TextField fx:id="entradaOrdemServico" disable="true" layoutX="40.0" layoutY="110.0" prefHeight="35.0" prefWidth="204.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="40.0" layoutY="80.0" text="Ordem de serviço" textFill="#14213d">
+        <Label layoutX="40.0" layoutY="80.0" text="Ordem de serviço" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <TextField fx:id="entradaItemDescricao" disable="true" layoutX="42.0" layoutY="197.0" prefHeight="35.0" prefWidth="507.0">
+        <TextField fx:id="entradaItemDescricao" disable="true" layoutX="42.0" layoutY="197.0" prefHeight="35.0" prefWidth="507.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-        <Label layoutX="42.0" layoutY="167.0" text="Descrição" textFill="#14213d">
+        <Label layoutX="42.0" layoutY="167.0" text="Descrição" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <Label layoutX="288.0" layoutY="78.0" text="Operação" textFill="#14213d">
+        <Label layoutX="288.0" layoutY="78.0" text="Operação" textFill="#434a50">
          <font>
             <Font size="16.0" />
          </font></Label>
-        <TextField fx:id="entradaCodOperacao" disable="true" layoutX="288.0" layoutY="110.0" prefHeight="35.0" prefWidth="174.0">
+        <TextField fx:id="entradaCodOperacao" disable="true" layoutX="288.0" layoutY="110.0" prefHeight="35.0" prefWidth="174.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
          <font>
             <Font size="14.0" />
          </font></TextField>
-          <Label alignment="CENTER" layoutX="23.0" layoutY="14.0" prefHeight="47.0" prefWidth="246.0" text="Entrada Item" textFill="#14213d">
+          <Label alignment="CENTER" layoutX="23.0" layoutY="14.0" prefHeight="47.0" prefWidth="246.0" text="Entrada Item" textFill="#434a50">
               <font>
                   <Font name="System Bold" size="36.0" />
               </font>
           </Label>
-      <ImageView fx:id="entrada1" fitHeight="28.0" fitWidth="34.0" layoutX="605.0" layoutY="528.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../imagens/entrada1.png" />
-         </image>
-      </ImageView>
     </children>
 </AnchorPane>

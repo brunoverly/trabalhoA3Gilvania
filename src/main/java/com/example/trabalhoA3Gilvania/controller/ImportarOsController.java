@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -57,8 +58,7 @@ public class ImportarOsController implements Initializable {
     @FXML private AnchorPane importarOsTableViewOperacao;
     @FXML private AnchorPane importarOsTableViewItens;
 
-    @FXML private ImageView importar1;
-    @FXML private ImageView importar3;
+    @FXML private ImageView importarOsVoltarImage;
 
     private OnFecharJanela listener;
 
@@ -76,13 +76,10 @@ public class ImportarOsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Configura imagens
-        URL importar1ImageURL = getClass().getResource("/imagens/importar1.png");
-        Image importar1Image = new Image(importar1ImageURL.toExternalForm());
-        importar1.setImage(importar1Image);
+        URL importarOsVoltarImageURL = getClass().getResource("/imagens/voltar.png");
+        Image importarOsVoltarImageImagem = new Image(importarOsVoltarImageURL.toExternalForm());
+        importarOsVoltarImage.setImage(importarOsVoltarImageImagem);
 
-        URL importar3ImageURL = getClass().getResource("/imagens/importar3.png");
-        Image importar3Image = new Image(importar3ImageURL.toExternalForm());
-        importar3.setImage(importar3Image);
 
         // Campo de caminho desabilitado
         importOsPathField.setDisable(true);
@@ -166,6 +163,24 @@ public class ImportarOsController implements Initializable {
                 }
             });
         });
+
+        ImageView fecharImagem = (ImageView) importVoltar.getGraphic();
+
+        // Hover (mouse entrou)
+        importVoltar.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            importVoltar.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        importVoltar.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            importVoltar.setCursor(Cursor.DEFAULT);
+        });
+
+
     }
 
 

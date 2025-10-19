@@ -5,12 +5,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.net.URL;
 
 public class InicioScreen extends Application {
 
+    // Variáveis para arrastar a janela
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    @Override
     public void start(Stage stage) {
 
         try {
@@ -19,31 +28,39 @@ public class InicioScreen extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
+            // Carregar fontes
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            // Criar cena
+            // Criar cena transparente
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
 
             // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-
-            // 🔹 Adicionar o ícone (logo)
+            // Adicionar ícone
             URL logoUrl = getClass().getResource("/imagens/logo.png");
             stage.getIcons().add(new Image(logoUrl.toExternalForm()));
 
-
-
-            // Configurar stage
-            stage.setTitle("Página inicial");
-            stage.setResizable(false);
+            // Configurar Stage sem borda
+            stage.initStyle(StageStyle.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
+
+            // Permitir arrastar a janela
+            root.setOnMousePressed((MouseEvent event) -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged((MouseEvent event) -> {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,4 +68,7 @@ public class InicioScreen extends Application {
 
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

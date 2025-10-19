@@ -1,6 +1,15 @@
-/* ========================
-   Painéis com borda arredondada
-   ======================== */
+
+.root {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);
+}
+
+
+
 .root-pane,
 .text-field,
 .vbox,
@@ -70,7 +79,9 @@
 #menuSolcitarItem,
 #menuRetiradaItem,
 #menuEntradaItem {
-    -fx-background-color: transparent;  /* mantém cor do VBox */
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
     -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: LEFT;
@@ -96,8 +107,8 @@
 #menuRetiradaItem:hover,
 #menuEntradaItem:hover {
     -fx-border-color: transparent transparent #fca311 transparent; /* linha inferior laranja */
-    -fx-border-width: 0 0 2 0;  /* altura da linha inferior */
-    -fx-font-size: 1.5em;       /* aumenta levemente a fonte apenas no hover */
+    -fx-border-width: 0 0 1 0;  /* altura da linha inferior */
+    -fx-font-size: 1.3em;       /* aumenta levemente a fonte apenas no hover */
     -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
     -fx-font-weight: bold;
     -fx-font-family: "Poppins"; /* deixa o texto em negrito no hover */
@@ -122,10 +133,10 @@
    =========================== */
 .table-view {
     -fx-background-color: white;           /* fundo da TableView */
-    -fx-background-radius: 8 8 0 0;        /* cantos superiores arredondados */
+    -fx-background-radius: 40 40 40 40;        /* cantos superiores arredondados */
     -fx-border-color: #b0b0b0;             /* cinza mais forte, visível */
     -fx-border-width: 1 1 0 1;             /* sem borda inferior */
-    -fx-border-radius: 8 8 0 0;
+    -fx-border-radius: 40 40 0 0;
     -fx-padding: 0;                         /* remove padding interno que corta a borda */
 }
 
@@ -138,9 +149,12 @@
    CABEÇALHO DAS COLUNAS
    =========================== */
 .table-view .column-header-background {
-    -fx-background-color: #264653;
-    -fx-background-radius: 8 8 0 0; /* cantos superiores arredondados */
+    -fx-background-color: #434A50;
+    -fx-background-radius: 40 40 0 0; /* cantos superiores arredondados */
     -fx-padding: 0;
+}
+.table-view .column-header {
+    -fx-pref-height: 30px; /* aumenta a altura do cabeçalho */
 }
 
 .table-view .column-header,
@@ -219,7 +233,7 @@
 }
 
 .split-pane .split-pane-divider {
-    -fx-background-color: #e5e5e5; /* invisível, mesmo tom do fundo */
+    -fx-background-color: white; /* invisível, mesmo tom do fundo */
     -fx-pref-width: 2px;
 }
 
@@ -245,4 +259,71 @@
     -fx-max-height: 0;
     -fx-min-height: 0;
     -fx-pref-height: 0;
+}
+
+/* usar id do root: #rootPane */
+#rootPane {
+    -fx-background-color: white; /* cor do fundo da "janela" */
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 10; /* mantém conteúdo longe da borda */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 16, 0, 0, 6);
+}
+
+/* Se quiser uma borda mais grossa diferente do corpo: */
+#rootPane.outer-border {
+    -fx-border-color: #3498db;
+    -fx-border-width: 4;
+}
+
+/* Fonte Poppins aplicada globalmente */
+.root, .text-field, .vbox, .label, .check-box, .radio-button, .combo-box, .list-view, .table-view {
+    -fx-font-family: "Poppins";
+}
+
+/* ajustes de botões / campos - sua versão já ok */
+.button { -fx-background-radius: 6; -fx-border-radius: 6; -fx-padding: 2 8 2 8; }
+.text-field { -fx-background-radius: 7; -fx-border-radius: 7; -fx-border-color: #cccccc; -fx-border-width: 1; }
+
+#enterUserNameField,
+#enterPasswordField {
+    -fx-text-fill: white;         /* cor do texto */
+    -fx-prompt-text-fill: rgba(255,255,255,0.6); /* cor do placeholder */
+}
+
+
+
+#removeUser,
+#register,
+#saidaItemAnchorPane,
+#entradaItenAnchorPane,
+#ImportarOsAcnhorPane,
+#consultItemSplitPane,
+#fecharOsAnchorPane,
+#consultarOsPane,
+#inicioPane{
+    -fx-background-color: white;
+    -fx-background-radius: 40; /* define cantos arredondados */
+    -fx-border-radius: 40;     /* garante que a borda siga o arredondamento */
+}
+
+
+
+#importSelecionarExcel:hover,
+#importFazerImport:hover,
+#consultBuscarOs:hover,
+#confirmCloseOsButton:hover,
+#entradaItemConfirmar:hover,
+#retirarConfirmarButton:hover,
+#cadastrarButton:hover,
+#removeConfirmarButton:hover,
+#removeBuscarMatricula:hover,
+#loginButton:hover {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-scale-x: 1.1;          /* aumenta 10% horizontalmente */
+    -fx-scale-y: 1.1;
+   -fx-cursor: hand; /* aumenta 10% verticalmente */
 }

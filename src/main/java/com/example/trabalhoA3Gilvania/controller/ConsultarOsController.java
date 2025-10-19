@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -26,8 +27,7 @@ public class ConsultarOsController implements Initializable {
     @FXML private Button consultBuscarOs;
 
     @FXML private Label consultLabelOsBuscada;
-    @FXML private ImageView consultar1;
-
+    @FXML private ImageView consultarBackImage;
     @FXML private TextField consultNumeroOs;
 
     @FXML private TableView<Item> consultTableItem;
@@ -52,9 +52,10 @@ public class ConsultarOsController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        URL consultar1ImageURL = getClass().getResource("/imagens/remover1.png");
-        Image consultar1Image = new Image(consultar1ImageURL.toExternalForm());
-        consultar1.setImage(consultar1Image);
+        URL consultarBackImageURL = getClass().getResource("/imagens/voltar.png");
+        Image consultarBack = new Image(consultarBackImageURL.toExternalForm());
+        consultarBackImage.setImage(consultarBack);
+
 
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -82,6 +83,24 @@ public class ConsultarOsController implements Initializable {
                 itensFiltrados.setPredicate(item -> false);
             }
         });
+        ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
+
+        // Hover (mouse entrou)
+        consultVoltarButton.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            consultVoltarButton.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        consultVoltarButton.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            consultVoltarButton.setCursor(Cursor.DEFAULT);
+        });
+
+
+
     }
 
 

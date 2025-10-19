@@ -7,6 +7,7 @@ import com.example.trabalhoA3Gilvania.controller.SaidaItemController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,7 +30,7 @@ public class EntradaItemController implements Initializable {
     @FXML private TextField entradaCodOperacao;
     @FXML private TextField entradaItemDescricao;
     @FXML private TextField entradaQtdRecebida;
-    @FXML private ImageView entrada1;
+    @FXML private ImageView entradaItemVoltarButtonImage;
 
     private int idItem;
     private String codItem;
@@ -79,9 +80,9 @@ public class EntradaItemController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        URL entrada1ImageURL = getClass().getResource("/imagens/entrada1.png");
-        Image entrada1Image = new Image(entrada1ImageURL.toExternalForm());
-        entrada1.setImage(entrada1Image);
+        URL entradaItemVoltarButtonImageURL = getClass().getResource("/imagens/voltar.png");
+        Image entradaItemVoltarButtonImageImage = new Image(entradaItemVoltarButtonImageURL.toExternalForm());
+        entradaItemVoltarButtonImage.setImage(entradaItemVoltarButtonImageImage);
 
         Platform.runLater(() -> {
             Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
@@ -93,6 +94,26 @@ public class EntradaItemController implements Initializable {
                 }
             });
         });
+
+        ImageView fecharImagem = (ImageView) entradaItemCancelar.getGraphic();
+
+        // Hover (mouse entrou)
+        entradaItemCancelar.setOnMouseEntered(e -> {
+            fecharImagem.setScaleX(1.1);
+            fecharImagem.setScaleY(1.1);
+            entradaItemCancelar.setCursor(Cursor.HAND); // cursor muda para mão
+        });
+
+        // Hover (mouse saiu)
+        entradaItemCancelar.setOnMouseExited(e -> {
+            fecharImagem.setScaleX(1.0);
+            fecharImagem.setScaleY(1.0);
+            entradaItemCancelar.setCursor(Cursor.DEFAULT);
+        });
+
+
+
+
     }
 
 

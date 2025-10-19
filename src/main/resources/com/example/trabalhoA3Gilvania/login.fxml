@@ -7,65 +7,63 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="850.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.LoginController">
-   <left>
-      <AnchorPane prefHeight="501.0" prefWidth="423.0" style="-fx-background-color: ffffff;" BorderPane.alignment="CENTER">
+<AnchorPane fx:id="rootPane" prefHeight="555.0" prefWidth="1030.0" style="-fx-background-color: white;" styleClass="telaLogin" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.LoginController">
+   <children>
+      <AnchorPane prefHeight="555.0" prefWidth="414.0" style="-fx-background-color: #434A50;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="616.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane layoutX="-2.0" layoutY="24.0" prefHeight="500.0" prefWidth="415.0" style="-fx-background-color: #264653;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <TextField fx:id="enterUserNameField" layoutX="100.0" layoutY="210.0" prefHeight="32.0" prefWidth="233.0" promptText="Matrícula">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-                  <PasswordField fx:id="enterPasswordField" layoutX="100.0" layoutY="260.0" prefHeight="30.0" prefWidth="232.0" promptText="PIN">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </PasswordField>
-                  <Label fx:id="loginTitle" layoutX="108.0" layoutY="102.0" stylesheets="@../../../css/style.css" text="BEM VINDO" textFill="#14213d" visible="false">
-                     <font>
-                        <Font name="System Bold" size="36.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="loginButton" layoutX="167.0" layoutY="314.0" mnemonicParsing="false" onAction="#LoginButtonOnAction" prefHeight="31.0" prefWidth="89.0" style="-fx-base: #fca311;" text="Entrar" textFill="#fefefe">
-                     <font>
-                        <Font name="Verdana Bold" size="14.0" />
-                     </font>
-                  </Button>
-                  <ImageView fx:id="login2" fitHeight="25.0" fitWidth="29.0" layoutX="70.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../imagens/login2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="login3" fitHeight="27.0" fitWidth="27.0" layoutX="70.0" layoutY="263.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../imagens/login3.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="119.0" layoutY="163.0" text="Entre com matricula e PIN" textFill="WHITE">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <ImageView fx:id="brand" fitHeight="106.0" fitWidth="296.0" layoutX="63.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../imagens/brand.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
+            <TextField fx:id="enterUserNameField" layoutX="88.0" layoutY="237.0" prefHeight="32.0" prefWidth="233.0" promptText="Matrícula" style="-fx-background-color: #434A50; -fx-border-width: 0px 0px 2px 0px; -fx-border-radius: 0; -fx-border-color: #ffffff;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="enterPasswordField" layoutX="88.0" layoutY="287.0" prefHeight="30.0" prefWidth="232.0" promptText="PIN" style="-fx-background-color: #434A50; -fx-border-color: #ffffff; -fx-border-width: 0px 0px 2px 0px; -fx-border-radius: 0;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </PasswordField>
+            <Button fx:id="loginButton" layoutX="146.0" layoutY="359.0" mnemonicParsing="false" onAction="#LoginButtonOnAction" prefHeight="31.0" prefWidth="89.0" style="-fx-background-color: FCB944; -fx-background-radius: 0px 0px 0px 0px;" text="Entrar" textFill="#434a50">
+               <font>
+                  <Font name="Tahoma Bold" size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="login2" fitHeight="25.0" fitWidth="29.0" layoutX="58.0" layoutY="240.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/login2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="login3" fitHeight="27.0" fitWidth="27.0" layoutX="58.0" layoutY="290.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/login3.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="98.0" layoutY="187.0" text="Entre com matricula e PIN" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="brand" fitHeight="106.0" fitWidth="296.0" layoutX="42.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/brand.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-   </left>
-   <center>
-      <ImageView fx:id="login1" fitHeight="414.0" fitWidth="414.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <AnchorPane layoutX="393.0" prefHeight="555.0" prefWidth="501.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" />
+      <ImageView fx:id="login1" fitHeight="414.0" fitWidth="414.0" layoutX="509.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../imagens/login1.jpg" />
          </image>
       </ImageView>
-   </center>
-</BorderPane>
+      <Button fx:id="loginButtonFechar" layoutX="948.0" layoutY="14.0" mnemonicParsing="false" onAction="#loginButtonFecharOnAction" prefHeight="50.0" prefWidth="68.0" style="-fx-background-color: #ffffff; -fx-background-radius: 100;">
+         <graphic>
+            <ImageView fx:id="loginImagemFechar" fitHeight="44.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagens/close.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

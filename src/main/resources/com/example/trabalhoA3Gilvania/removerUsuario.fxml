@@ -8,91 +8,101 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="removeUser" prefHeight="677.0" prefWidth="519.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RemoverUsuarioController">
+<AnchorPane fx:id="removeUser" prefHeight="677.0" prefWidth="519.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.RemoverUsuarioController">
     <children>
-      <TextField fx:id="removeMatricula" layoutX="40.0" layoutY="124.0" prefHeight="35.0" prefWidth="155.0" promptText="Ex: 5675341">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
-      <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="35.0" prefWidth="125.0" style="-fx-base: #fca311;" text="        Consultar" textFill="#fefefe">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Button>
-        <Label layoutX="40.0" layoutY="248.0" text="Nome" textFill="#14213d">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="removeDadosNome" disable="true" layoutX="40.0" layoutY="278.0" prefHeight="35.0" prefWidth="356.0">
-            <font>
-                <Font size="14.0" />
-            </font></TextField>
-        <Label layoutX="40.0" layoutY="328.0" text="Matrícula" textFill="#14213d">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="removeDadosMatricula" disable="true" layoutX="40.0" layoutY="358.0" prefHeight="35.0" prefWidth="155.0">
-            <font>
-                <Font size="14.0" />
-            </font></TextField>
-        <Label layoutX="40.0" layoutY="413.0" text="Cargo">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <TextField fx:id="removeDadosCargo" disable="true" layoutX="40.0" layoutY="443.0" prefHeight="35.0" prefWidth="271.0">
-            <font>
-                <Font size="14.0" />
-            </font></TextField>
-        <Button fx:id="removeCancelarButton" layoutX="40.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="35.0" prefWidth="85.0" text="Voltar" textFill="#14213d">
+        <Button fx:id="removeCancelarButton" layoutX="41.0" layoutY="592.0" mnemonicParsing="false" onAction="#removeCancelarButtonOnAction" prefHeight="53.0" prefWidth="57.0" style="-fx-background-color: transparent;" textFill="#14213d">
             <font>
                 <Font name="Verdana Bold" size="15.0" />
             </font>
+            <graphic>
+                <ImageView fx:id="removerUserVoltarButtonImage" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/voltar.png" />
+                    </image>
+                </ImageView>
+            </graphic>
         </Button>
-        <Button fx:id="removeConfirmarButton" layoutX="348.0" layoutY="599.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="35.0" prefWidth="125.0" style="-fx-base: #fca311;" text="        Remover" textFill="#fefefe">
+
+        <TextField fx:id="removeMatricula" layoutX="40.0" layoutY="124.0" prefHeight="35.0" prefWidth="155.0" promptText="Ex: 5675341" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+
+        <Button fx:id="removeBuscarMatricula" layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onAction="#removeBuscarMatriculaOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944;" text="Consultar" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
         </Button>
+
+        <Label layoutX="40.0" layoutY="248.0" text="Nome" textFill="#434a50">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <TextField fx:id="removeDadosNome" disable="true" layoutX="40.0" layoutY="278.0" prefHeight="35.0" prefWidth="356.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+
+        <Label layoutX="40.0" layoutY="328.0" text="Matrícula" textFill="#434a50">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <TextField fx:id="removeDadosMatricula" disable="true" layoutX="40.0" layoutY="358.0" prefHeight="35.0" prefWidth="155.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+
+        <Label layoutX="40.0" layoutY="413.0" text="Cargo" textFill="#434a50">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <TextField fx:id="removeDadosCargo" disable="true" layoutX="40.0" layoutY="443.0" prefHeight="35.0" prefWidth="271.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+
+        <Button fx:id="removeConfirmarButton" layoutX="342.0" layoutY="602.0" mnemonicParsing="false" onAction="#removeConfirmarButtonOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: FCB944;" text="Remover" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Button>
+
         <Label fx:id="passwordError" contentDisplay="CENTER" layoutX="205.0" layoutY="445.0" prefHeight="19.0" prefWidth="211.0" textFill="#bc5353">
             <font>
                 <Font size="13.0" />
             </font>
         </Label>
-        <Label layoutX="40.0" layoutY="25.0" text="Remover usuario" textFill="#14213d">
+
+        <Label layoutX="40.0" layoutY="25.0" text="Remover usuario" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="36.0" />
             </font>
         </Label>
-      <Label layoutX="40.0" layoutY="90.0" text="Digite a matrícula do usuario" textFill="#14213d">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="41.0" layoutY="196.0" prefHeight="40.0" prefWidth="211.0" style="-fx-background-color: #e5e5e5;" text="Usuário selecionado" textFill="#14213d">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-         <graphic>
-            <ImageView fx:id="remover2" fitHeight="29.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../imagens/remover2.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Label>
-          <ImageView fx:id="remover3" fitHeight="30.0" fitWidth="30.0" layoutX="360.0" layoutY="602.0" pickOnBounds="true" preserveRatio="true">
-              <image>
-                  <Image url="@../../../imagens/remover3.png" />
-              </image>
-          </ImageView>
-      <ImageView fx:id="remover1" fitHeight="29.0" fitWidth="28.0" layoutX="214.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../imagens/remover1.png" />
-         </image>
-      </ImageView>
+
+        <Label layoutX="40.0" layoutY="90.0" text="Digite a matrícula do usuario" textFill="#434a50">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="41.0" layoutY="196.0" prefHeight="40.0" prefWidth="211.0" style="-fx-background-color: transparent;" text="Usuário selecionado" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+            <graphic>
+                <ImageView fx:id="remover2" fitHeight="29.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/user5.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Label>
     </children>
 </AnchorPane>
