@@ -28,9 +28,9 @@
             <Font name="Verdana Bold" size="15.0" />
          </font>
       </Button>
-      <AnchorPane fx:id="consultarOsAnchorPane" layoutX="137.0" layoutY="233.0" prefHeight="339.0" prefWidth="895.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="consultarOsAnchorPane" layoutX="137.0" layoutY="220.0" prefHeight="352.0" prefWidth="895.0" style="-fx-background-color: white;">
          <children>
-            <SplitPane fx:id="consultarOsSplitPane" dividerPositions="0.2777777777777778" layoutX="-95.0" layoutY="52.0" prefHeight="398.0" prefWidth="739.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="-59.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="0.0">
+            <SplitPane fx:id="consultarOsSplitPane" dividerPositions="0.2777777777777778" layoutX="-95.0" layoutY="-8.0" prefHeight="409.0" prefWidth="1064.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="-49.0" AnchorPane.leftAnchor="-95.0" AnchorPane.rightAnchor="-74.0" AnchorPane.topAnchor="-8.0">
               <items>
                 <AnchorPane fx:id="consultarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="300.0" style="-fx-background-color: transparent;" visible="false">
                      <children>

@@ -22,9 +22,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import javafx.stage.StageStyle;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.net.URL;
@@ -617,19 +619,38 @@ public class ConsultarItemController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
+            janelaEntradaItem = new Stage();
+
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
 
+            // Configurar Stage sem borda do Windows
+            janelaEntradaItem.initStyle(StageStyle.TRANSPARENT);
+            janelaEntradaItem.setScene(scene);
+
+            // Adicionar ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaEntradaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Permitir mover a janela clicando e arrastando
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                janelaEntradaItem.setX(event.getScreenX() - xOffset);
+                janelaEntradaItem.setY(event.getScreenY() - yOffset);
+            });
+
+            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
-
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            janelaEntradaItem = new Stage();
-            janelaEntradaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
 
             // Obtém o controller e passa o parâmetro
             EntradaItemController controller = fxmlLoader.getController();
@@ -653,7 +674,6 @@ public class ConsultarItemController implements Initializable{
             // Configurar stage
             janelaEntradaItem.setTitle("Entrada de item");
             janelaEntradaItem.setResizable(false);
-            janelaEntradaItem.setScene(scene);
             janelaEntradaItem.show();
 
             TextField tf = (TextField) root.lookup("#entradaQtdRecebida");
@@ -679,19 +699,40 @@ public class ConsultarItemController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
+            janelaSaidaItem = new Stage();
+
             String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
             for (String fontFile : fonts) {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            Scene scene = new Scene(root);
 
+            // Criar cena transparente
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+
+            // Configurar Stage sem borda do Windows
+            janelaSaidaItem.initStyle(StageStyle.TRANSPARENT);
+            janelaSaidaItem.setScene(scene);
+
+            // Adicionar ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaSaidaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Permitir mover a janela clicando e arrastando
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                janelaSaidaItem.setX(event.getScreenX() - xOffset);
+                janelaSaidaItem.setY(event.getScreenY() - yOffset);
+            });
+
+            // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
-
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            janelaSaidaItem = new Stage();
-            janelaSaidaItem.getIcons().add(new Image(logoUrl.toExternalForm()));
 
             SaidaItemController controller = fxmlLoader.getController();
             controller.setCodItem(codItem);
