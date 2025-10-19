@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="inicioPane" prefHeight="909.0" prefWidth="1270.0" style="-fx-background-color: #f1f1f1; -fx-background-radius: 40;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
+<AnchorPane fx:id="inicioPane" prefHeight="864.0" prefWidth="1281.0" style="-fx-background-color: #f1f1f1; -fx-background-radius: 40;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
    <children>
-      <AnchorPane layoutX="2.0" prefHeight="909.0" prefWidth="1279.0">
+      <AnchorPane layoutX="2.0" prefHeight="867.0" prefWidth="1279.0">
          <children>
             <Pane fx:id="inicioPaneMenu" layoutX="23.0" layoutY="141.0" prefHeight="519.0" prefWidth="180.0" style="-fx-background-color: #434A50; -fx-background-radius: 30 30 30 30;">
                <children>
@@ -131,9 +131,9 @@
                   </VBox>
                </children>
             </Pane>
-            <Pane fx:id="inicioPaneTableView" layoutX="235.0" layoutY="416.0" prefHeight="488.0" prefWidth="1018.0" style="-fx-background-color: white; -fx-background-radius: 30 30 30 30;">
+            <Pane fx:id="inicioPaneTableView" layoutX="235.0" layoutY="416.0" prefHeight="435.0" prefWidth="1018.0" style="-fx-background-color: white; -fx-background-radius: 30 30 30 30;">
                <children>
-                  <TableView fx:id="inicioTableView" layoutX="14.0" layoutY="44.0" prefHeight="414.0" prefWidth="990.0" stylesheets="@../../../css/style.css">
+                  <TableView fx:id="inicioTableView" layoutX="14.0" layoutY="38.0" prefHeight="383.0" prefWidth="990.0" stylesheets="@../../../css/style.css">
                     <columns>
                         <TableColumn fx:id="inicioTableData" prefWidth="173.66668701171875" text="Data hora" />
                       <TableColumn fx:id="inicioTableTipo" prefWidth="198.0" text="Tipo" />
