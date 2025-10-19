@@ -267,8 +267,8 @@
 #consultarOsPane,
 #inicioPane{
     -fx-background-color: white;
-    -fx-background-radius: 40;
-    -fx-border-radius: 40;
+    -fx-background-radius: 25;
+    -fx-border-radius:25;
 }
 
 #importSelecionarExcel:hover,
