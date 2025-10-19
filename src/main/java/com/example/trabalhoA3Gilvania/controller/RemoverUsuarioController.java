@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import javafx.event.ActionEvent;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -10,53 +11,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RemoverUsuarioController implements Initializable {
 
-    @FXML
-    private ImageView removerUserVoltarButtonImage;
-    @FXML
-    private ImageView remover2;
-    @FXML
-    private ImageView remover3;
+    @FXML private ImageView removerUserVoltarButtonImage;
+    @FXML private ImageView remover2;
+    @FXML private Button removeCancelarButton;
+    @FXML private TextField removeMatricula;
+    @FXML private TextField removeDadosNome;
+    @FXML private TextField removeDadosCargo;
+    @FXML private TextField removeDadosMatricula;
 
-    @FXML
-    private Button removeBuscarMatricula;
-    @FXML
-    private Button removeCancelarButton;
-    @FXML
-    private Button removeConfirmarButton;
-
-    @FXML
-    private AnchorPane removeUser;
-
-    @FXML
-    private TextField removeMatricula;
-    @FXML
-    private TextField removeDadosNome;
-    @FXML
-    private TextField removeDadosCargo;
-    @FXML
-    private TextField removeDadosMatricula;
-
-    @FXML
-    private Label removeMotrarDadosUser;
-    @FXML
-    private Label removeNomeBuscado;
-    @FXML
-    private Label removeCodCargoBuscado;
-    @FXML
-    private Label removeMatriculaBuscado;
-    @FXML
-    private Label removeEmailBuscado;
+    FormsUtil alerta = new FormsUtil();
 
     // Carregar imagens
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,8 +57,6 @@ public class RemoverUsuarioController implements Initializable {
             fecharImagem.setScaleY(1.0);
             removeCancelarButton.setCursor(Cursor.DEFAULT);
         });
-
-
     }
 
     public void removeCancelarButtonOnAction(ActionEvent event) {
@@ -112,36 +84,23 @@ public class RemoverUsuarioController implements Initializable {
                         removeDadosCargo.setText("");
                         removeDadosMatricula.setText("");
 
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Aviso");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Matricula informada não localizada");
-                        Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                        alert.showAndWait();
+                        alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Matrícula informada não localizada")
+                                .showAndWait();
                     }
                 }
-
             }
-
         } catch (NumberFormatException e) {
-            removeMotrarDadosUser.setText("Matrícula inválida!");
+            e.printStackTrace();
+            e.getCause();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            e.getCause();
         }
     }
 
     public void removeConfirmarButtonOnAction (ActionEvent event){
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmação");
-            alert.setHeaderText(null);
-            alert.setContentText("Tem certeza que deseja remover este usuário?");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-
-            Optional<ButtonType> resultado = alert.showAndWait();
-
-            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja remover este usuário?");
+            if (confirmar) {
                 DataBaseConection connectNow = new DataBaseConection();
                 try (Connection connectDB = connectNow.getConection()) {
 
@@ -153,20 +112,13 @@ public class RemoverUsuarioController implements Initializable {
                         int linhasAfetadas = ps.executeUpdate();
 
                         if (linhasAfetadas > 0) {
-                            Alert usuarioRemovido = new Alert(Alert.AlertType.INFORMATION);
-                            usuarioRemovido.setTitle("Alerta");
-                            usuarioRemovido.setHeaderText(null);
-                            usuarioRemovido.setContentText("Usuário removido");
-                            stageAlert = (Stage) usuarioRemovido.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            usuarioRemovido.show();
-
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Usuário removido")
+                                            .showAndWait();
 
                             removeMatricula.setText("");
                             removeDadosNome.setText("");
                             removeDadosMatricula.setText("");
                             removeDadosCargo.setText("");
-
                         }
 
                     } catch (Exception e) {

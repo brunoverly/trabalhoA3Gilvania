@@ -151,8 +151,6 @@ public class CadastrarUsuarioController implements Initializable {
         try {
             Statement statement = connetDB.createStatement();
             statement.executeUpdate(insertToRegister);
-            FormsUtil.limparCampos(register);
-
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Aviso");
             alert.setHeaderText(null);

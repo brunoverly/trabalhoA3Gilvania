@@ -1,6 +1,6 @@
 package com.example.trabalhoA3Gilvania.excelHandling;
-
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -8,7 +8,6 @@ import lombok.Cleanup;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import java.util.List;
 
 public class GerenciadorOperacao {
 
+    FormsUtil alerta = new FormsUtil();
 
     public File selecionarArquivo(Stage stage) {
         FileChooser fileChooser = new FileChooser();
@@ -29,11 +29,8 @@ public class GerenciadorOperacao {
         File fileSelected = fileChooser.showOpenDialog(stage);
 
         if (fileSelected == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Nenhum arquivo selecionado");
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Nenhum arquivo foi selecionado")
+                            .showAndWait();
         }
 
         return fileSelected;
@@ -172,27 +169,13 @@ public class GerenciadorOperacao {
             e.printStackTrace();
             e.getCause();
         }
-
-        if(!osExistOnExcel){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("O número da ordem de serviço informada não foi localizado na planilha");
-            alert.showAndWait();
-        }
-        else if (osCadastrada) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Ordem cadastrada com sucesso");
-            alert.showAndWait();
+        if (osCadastrada) {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço cadastrada com sucesso")
+                    .showAndWait();
         }
         else if (osExistente) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Ordem de serviço já cadastrada");
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço já cadastrada")
+                    .showAndWait();
         }
     }
 }

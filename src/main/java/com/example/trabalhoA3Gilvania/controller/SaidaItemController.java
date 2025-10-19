@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.application.Platform;
@@ -50,12 +51,13 @@ public class SaidaItemController implements Initializable {
         private int qtdRecebida;
         private int idOperacao;
 
+
+        FormsUtil alerta = new FormsUtil();
         private OnFecharJanela listener;
 
         public void setOnFecharJanela(OnFecharJanela listener) {
             this.listener = listener;
         }
-
 
         public void setCodItem(String codItem) {
             this.codItem = codItem;
@@ -136,27 +138,16 @@ public class SaidaItemController implements Initializable {
 
         public void retirarConfirmarButtonOnAction(){
             if((retirarMatriculaMecanico.getText().isBlank())){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Aviso");
-                alert.setHeaderText(null); // opcional, sem cabeçalho
-                alert.setContentText("Informe a matrícula a quem foi entregue");
-                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                alert.showAndWait();
+                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Informe a matrícula a quem foi entregue")
+                        .showAndWait();
             }
 
             try{
                 int converNumero = Integer.parseInt(retirarMatriculaMecanico.getText().trim());
             }
             catch (Exception e){
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Aviso");
-                alert.setHeaderText(null); // opcional, sem cabeçalho
-                alert.setContentText("Informe a matrícula uma matrícula válida");
-                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                alert.showAndWait();
+                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe a matrícula uma matrícula válida")
+                        .showAndWait();
                 return;
             }
 
@@ -179,17 +170,8 @@ public class SaidaItemController implements Initializable {
 
                     int linhasAfetadas = statement.executeUpdate();
                     if(linhasAfetadas > 0){
-                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                        alert2.setTitle("Aviso");
-                        alert2.setHeaderText(null);
-                        alert2.setContentText("Registro cadastrado com sucesso");
-                        Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                        alert2.showAndWait();
-
-                        System.out.println("Id do item" + idItem);
-                        System.out.println(descricaoItem);
-                        System.out.println("Id da operacao"+ idOperacao);
+                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Registro cadastrado com sucesso")
+                            .showAndWait();
                     }
                     statement.close();
                     connectDB.close();
@@ -197,7 +179,6 @@ public class SaidaItemController implements Initializable {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            /// //////////////////////////////////////
             try (Connection connectDB = new DataBaseConection().getConection()) {
                 String querySqlItem = """
                                 UPDATE item
@@ -235,8 +216,6 @@ public class SaidaItemController implements Initializable {
                     Sessao.getMatricula()
             );
 
-
-/// ///////////////////////////////////////////////
             Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
 
 // 🔔 chama o callback antes de fechar

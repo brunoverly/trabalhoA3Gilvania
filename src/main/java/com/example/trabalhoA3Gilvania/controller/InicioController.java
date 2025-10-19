@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,16 +23,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.stage.StageStyle;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -42,7 +36,6 @@ public class InicioController implements Initializable {
     @FXML private Button menuRemoveUser;
     @FXML private Button menuSair;
     @FXML private Button menuImportarOs;
-    @FXML private Button menuConsultOs;
     @FXML private Button menuCloseOs;
     @FXML private Button menuRetiradaItem;
     @FXML private Button menuEntradaItem;
@@ -51,6 +44,8 @@ public class InicioController implements Initializable {
     @FXML private Label inicioLabelOsAbertas;
     @FXML private Label inicioLabelOsEncerrada;
     @FXML private Label inicioLabelOsEmAndamento;
+    @FXML private Label inicioLabelBemVindo;
+    @FXML private Label inicioLabelData;
     @FXML private ImageView inicioLogo;
     @FXML private ImageView inicio1;
     @FXML private ImageView inicio2;
@@ -62,32 +57,27 @@ public class InicioController implements Initializable {
     @FXML private ImageView inicio8;
     @FXML private ImageView inicio9;
     @FXML private Stage janelaImportarOs;
-    @FXML private Stage janelaSolcitarItem;
     @FXML private Stage janelaCadastroUsuario;
     @FXML private Stage janelaRemoverUsuario;
-    @FXML private Stage janelaLogin;
     @FXML private Stage janelaFecharOs;
     @FXML private Stage janelaConsultarOs;
     @FXML private Button inicioButtonFecharJanela;
     @FXML private ImageView inicioImagemFechar;
-
     @FXML private TableView<Atualizacao> inicioTableView;
     @FXML private TableColumn<Atualizacao, String> inicioTableData;
     @FXML private TableColumn<Atualizacao, String> inicioTableTipo;
     @FXML private TableColumn<Atualizacao, String> inicioTableOs;
     @FXML private TableColumn<Atualizacao, String> inicioTableDescricao;
     @FXML private TableColumn<Atualizacao, String> inicioTableUsuario;
-    @FXML private Label inicioLabelBemVindo;
-    @FXML private Label inicioLabelData;
+
 
     private double xOffset = 0;
     private double yOffset = 0;
     private ObservableList<Atualizacao> listaAtualizacoes = FXCollections.observableArrayList();
 
 
-
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        //Carrega as imagens da tela
         URL inicio1URL = getClass().getResource("/imagens/inicio1.png");
         Image inicio1Img = new Image(inicio1URL.toExternalForm());
         inicio1.setImage(inicio1Img);
@@ -132,42 +122,33 @@ public class InicioController implements Initializable {
         Image inicioLogoImagem = new Image(inicioLogoURL.toExternalForm());
         inicioLogo.setImage(inicioLogoImagem);
 
-
-
-
-        Platform.runLater(() -> {
-            inicioPane.requestFocus(); // força o foco para o pane após a tela ser exibida
-        });
-
         verificarUsuario();
-            inicioTableData.setCellValueFactory(new PropertyValueFactory<>("datahora"));
-            inicioTableTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-            inicioTableOs.setCellValueFactory(new PropertyValueFactory<>("os"));
-            inicioTableDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-            inicioTableUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
 
-            inicioTableView.setItems(listaAtualizacoes);
-            inicioTableView.setSelectionModel(null);
-            atualizarDashBoard();
-            carregarAtualizacoes();
+        inicioTableData.setCellValueFactory(new PropertyValueFactory<>("datahora"));
+        inicioTableTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        inicioTableOs.setCellValueFactory(new PropertyValueFactory<>("os"));
+        inicioTableDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        inicioTableUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        inicioTableView.setItems(listaAtualizacoes);
+        inicioTableView.setSelectionModel(null);
 
-            LocalDate hoje = LocalDate.now();
+        atualizarDashBoard();
+        carregarAtualizacoes();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
-            String dataPorExtenso = hoje.format(formatter);
+        LocalDate hoje = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
+        String dataPorExtenso = hoje.format(formatter);
+
         inicioLabelBemVindo.setText("Bem vindo de volta "+ Sessao.getNome());
         inicioLabelData.setText(dataPorExtenso);
 
+        //Aumentar o icone de sair ao passar o mouse
         ImageView fecharImagem = (ImageView) inicioButtonFecharJanela.getGraphic();
-
-// Hover (mouse entrou)
         inicioButtonFecharJanela.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.1);
             fecharImagem.setScaleY(1.1);
             inicioButtonFecharJanela.setCursor(Cursor.HAND); // cursor muda para mão
         });
-
-// Hover (mouse saiu)
         inicioButtonFecharJanela.setOnMouseExited(e -> {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
@@ -176,7 +157,7 @@ public class InicioController implements Initializable {
 
 
     }
-
+    //Atuailizar o dashboard da pagina inicial
     private void atualizarDashBoard() {
         try (Connection connectDB = new DataBaseConection().getConection()) {
             String query = "SELECT COUNT(*) FROM ordem_servico " +
@@ -218,13 +199,14 @@ public class InicioController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+    //Acao ao clicar em fechar janela
     public void inicioButtonFecharJanelaOnAction(ActionEvent event){
         Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
         stage.close();
     }
-
+    //Carrega a tabela da pagina inicial
     public void carregarAtualizacoes() {
+
         listaAtualizacoes.clear();
 
         try (Connection connectDB = new DataBaseConection().getConection()) {
@@ -247,51 +229,42 @@ public class InicioController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+    //Define o que fica visivel e o que fica escondido dependendo do usuario
     private void verificarUsuario() {
 
         if (Sessao.getCargo().equals("Mecânico")) {
             menuEntradaItem.setVisible(false);
             menuEntradaItem.setManaged(false);
-
             menuImportarOs.setVisible(false);
             menuImportarOs.setManaged(false);
-
             menuRetiradaItem.setVisible(false);
             menuRetiradaItem.setManaged(false);
-
             menuRemoveUser.setVisible(false);
             menuRemoveUser.setManaged(false);
-
             menuAddUser.setVisible(false);
             menuAddUser.setManaged(false);
-
             menuCloseOs.setVisible(false);
             menuCloseOs.setManaged(false);
         }
         if (Sessao.getCargo().equals("Aprovisionador")) {
             menuRemoveUser.setVisible(false);
             menuRemoveUser.setManaged(false);
-
             menuAddUser.setVisible(false);
             menuAddUser.setManaged(false);
-
             menuSolcitarItem.setVisible(false);
             menuSolcitarItem.setManaged(false);
         }
 
     }
 
+    //Chama as telas de acordo com o menu
     public void menuRemoveUserOnAction(ActionEvent event){
             RemoverUsuario();
     }
-
-
     public void menuCloseOsOnAction(ActionEvent event){
             FecharOs();
 
     }
-
     public void menuConsultOsOnAction(ActionEvent event){
             ConsultarOs();
 
@@ -317,7 +290,7 @@ public class InicioController implements Initializable {
     }
 
 
-
+    //Acao ao clicar em log off
     public void menuSairOnAction (ActionEvent event){
         try{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -341,7 +314,7 @@ public class InicioController implements Initializable {
             e.getCause();
         }
     }
-
+    //Carrega a janela de
     public void menuImportarOsOnAction(ActionEvent event) {
         try {
             // Se a janela já estiver aberta e visível, apenas traz para frente

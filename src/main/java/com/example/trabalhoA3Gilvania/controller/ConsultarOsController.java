@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -49,6 +50,7 @@ public class ConsultarOsController implements Initializable {
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
     private FilteredList<Item> itensFiltrados;
 
+    FormsUtil alerta = new FormsUtil();
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -200,13 +202,8 @@ public class ConsultarOsController implements Initializable {
     public boolean verificarNumeroOS() {
         boolean retorno = true;
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Informe o número da ordem de serviço");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+                    .showAndWait();
             retorno = false;
         }
         else{
@@ -220,13 +217,8 @@ public class ConsultarOsController implements Initializable {
                     if (resultadoBuscaOs.next()) {
                         int count = resultadoBuscaOs.getInt(1);
                         if (count == 0) {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Aviso");
-                            alert.setHeaderText(null);
-                            alert.setContentText("O número da ordem de serviço informada não foi localizado");
-                            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert.showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "O número da ordem de serviço informada não foi localizado")
+                                    .showAndWait();
                             retorno =  false;
                         }
                     }

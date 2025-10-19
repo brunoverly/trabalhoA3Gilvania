@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.beans.binding.Bindings;
@@ -77,6 +78,8 @@ public class ConsultarItemController implements Initializable{
     private OnFecharJanela onFecharJanela;
     private double xOffset = 0;
     private double yOffset = 0;
+
+    FormsUtil alerta = new FormsUtil();
 
     public void setOnFecharJanela(OnFecharJanela onFecharJanela) {
         this.onFecharJanela = onFecharJanela;
@@ -208,31 +211,21 @@ public class ConsultarItemController implements Initializable{
                     try {
                         if (modo == null) return;
                         if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
-                            Alert alert2 = new Alert(Alert.AlertType.WARNING);
-                            alert2.setTitle("Aviso");
-                            alert2.setHeaderText(null);
-                            alert2.setContentText("O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'");
-                            alert2.showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'")
+                            .showAndWait();
                             return;
                         }
 
                         if(!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") && selecionado.getStatus().equals("Recebido")) {
                             if (selecionado != null) {
+                                String mensagem = "Deseja solicitar a entrega do item: '"+ selecionado.getDescricao() +"' na oficina?";
+                                boolean confirmacao = alerta.criarAlertaConfirmacao("Aviso", mensagem);
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.setTitle("Confirmação");
-                                alert.setHeaderText(null);
-                                alert.setContentText("Deseja solicitar a entrega do item: '"+ selecionado.getDescricao() +"' na oficina?");
-                                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
 
-                                Optional<ButtonType> resultado = alert.showAndWait();
-                                if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                                    alert2.setTitle("Aviso");
-                                    alert2.setHeaderText(null);
-                                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                                    alert2.setContentText("Requisitado a entrega do item: '" + selecionado.getDescricao() + "'");
-                                    alert2.showAndWait();
+                                if (confirmacao) {
+                                    mensagem = "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'" ;
+                                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", mensagem)
+                                            .showAndWait();
 
                                     // Atualiza status do item
                                     try (Connection connectDB = new DataBaseConection().getConection()) {
@@ -431,13 +424,8 @@ public class ConsultarItemController implements Initializable{
     public boolean verificarNumeroOS() {
         boolean retorno = true;
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Informe o número da ordem de servico");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+                    .showAndWait();
             retorno = false;
         }
         else{
@@ -451,13 +439,8 @@ public class ConsultarItemController implements Initializable{
                     if (resultadoBuscaOs.next()) {
                         int count = resultadoBuscaOs.getInt(1);
                         if (count == 0) {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Aviso");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Não foi localizada ordem de serviço aberta com  número informado");
-                            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert.showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Não foi localizada ordem de serviço aberta com  número informado")
+                                    .showAndWait();
                             retorno =  false;
                         }
                     }
@@ -777,21 +760,14 @@ public class ConsultarItemController implements Initializable{
             contextMenu.getItems().add(solicitarItem);
 
             solicitarItem.setOnAction(event -> {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmação");
-                alert.setHeaderText(null);
-                alert.setContentText("Deseja solicitar a entrega do item: '" + selecionado.getDescricao() + "' na oficina?");
-                Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                String mensagem = "Deseja solicitar a entrega do item: '" + selecionado.getDescricao() + "' na oficina?";
+                boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", mensagem );
 
-                Optional<ButtonType> resultado = alert.showAndWait();
-                if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                if (confirmar) {
+                    mensagem = "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'";
+                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",mensagem)
+                            .showAndWait();
 
-                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                    alert2.setTitle("Aviso");
-                    alert2.setHeaderText(null);
-                    alert2.setContentText("Requisitado a entrega do item: '" + selecionado.getDescricao() + "'.");
-                    alert2.showAndWait();
                     try (Connection connectDB = new DataBaseConection().getConection()) {
                         String querySqlItem = "UPDATE item SET status = 'Solicitado na oficina' WHERE id = ?";
                         String querySqlOperacao = "UPDATE operacao SET status = 'Item(s) solicitados' WHERE id = ?";

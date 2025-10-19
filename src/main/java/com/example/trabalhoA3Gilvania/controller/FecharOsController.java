@@ -1,6 +1,6 @@
 package com.example.trabalhoA3Gilvania.controller;
-
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.application.Platform;
@@ -18,7 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -53,11 +52,11 @@ public class FecharOsController implements Initializable {
 
     private OnFecharJanela listener;
 
+    FormsUtil alerta = new FormsUtil();
+
     public void setOnFecharJanela(OnFecharJanela listener) {
         this.listener = listener;
     }
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -136,13 +135,8 @@ public class FecharOsController implements Initializable {
     @FXML
     public void confirmCloseOsButton(ActionEvent event) {
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Informe o número da ordem de serviço");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+                    .showAndWait();
             return;
         }
         else{
@@ -160,25 +154,12 @@ public class FecharOsController implements Initializable {
                     String status = rs.getString("status");
 
                     if (status.equals("Encerrada")) {
-                        Alert alert2 = new Alert(Alert.AlertType.WARNING);
-                        alert2.setTitle("Aviso");
-                        alert2.setHeaderText(null);
-                        alert2.setContentText("OS já se encontra encerrada");
-                        Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                        alert2.showAndWait();
+                        alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS já se encontra encerrada")
+                                .showAndWait();
 
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Confirmação");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Tem certeza que deseja encerrar a OS?");
-                        Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-
-                        Optional<ButtonType> resultado = alert.showAndWait();
-
-                        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                        boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja encerrar a OS?");
+                        if (confirmar) {
                             try {
                                 String querySqlOs = """
                                              UPDATE ordem_servico
@@ -252,21 +233,12 @@ public class FecharOsController implements Initializable {
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
-
-
-                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                            alert2.setTitle("Aviso");
-                            alert2.setHeaderText(null);
-                            alert2.setContentText("Ordem de serviço encerrada");
-                            stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert2.showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada")
+                                    .showAndWait();
                         }
                     }
                 }
             }
-
-
             } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -350,18 +322,12 @@ public class FecharOsController implements Initializable {
     public boolean verificarNumeroOS() {
         boolean retorno = true;
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Informe o número da ordem de serviço");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+                    .showAndWait();
             retorno = false;
         }
         else{
             try (Connection connectDB = new DataBaseConection().getConection()) {
-
                 String verifcarCadastroBanco = "SELECT COUNT(*) FROM ordem_servico WHERE cod_os = ?";
                 try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
                     statement1.setString(1, consultNumeroOs.getText());
@@ -370,13 +336,8 @@ public class FecharOsController implements Initializable {
                     if (resultadoBuscaOs.next()) {
                         int count = resultadoBuscaOs.getInt(1);
                         if (count == 0) {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Aviso");
-                            alert.setHeaderText(null);
-                            alert.setContentText("O número da ordem de serviço informada não foi localizado");
-                            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert.showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION,"Aviso", "O número da ordem de serviço informada não foi localizado")
+                                    .showAndWait();
                             retorno =  false;
                         }
                     }

@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.excelHandling.GerenciadorOperacao;
 import javafx.application.Platform;
@@ -17,23 +18,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-
-import javafx.scene.input.MouseEvent;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.io.File;
 import javafx.scene.image.Image;
 import lombok.Cleanup;
-import lombok.Data;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -57,10 +52,10 @@ public class ImportarOsController implements Initializable {
     @FXML private AnchorPane importarOsTableViewOrdem;
     @FXML private AnchorPane importarOsTableViewOperacao;
     @FXML private AnchorPane importarOsTableViewItens;
-
     @FXML private ImageView importarOsVoltarImage;
 
     private OnFecharJanela listener;
+    FormsUtil alerta = new FormsUtil();
 
     public void setOnFecharJanela(OnFecharJanela listener) {
         this.listener = listener;
@@ -115,9 +110,6 @@ public class ImportarOsController implements Initializable {
                         );
                         consultTableOperacao.setItems(operacoesFiltradas);
 
-                        // DEBUG: listar operações filtradas
-                        System.out.println("Operações filtradas para OS " + selectedOS.getCodOrdemServico() + ":");
-                        operacoesFiltradas.forEach(op -> System.out.println(op.getCodOperacao()));
 
                         importarOsTableViewOperacao.setVisible(true); // Mostrar tabela de operações
                         importarOsTableViewItens.setVisible(false);   // Esconder tabela de itens até selecionar operação
@@ -134,8 +126,6 @@ public class ImportarOsController implements Initializable {
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, selectedOperacao) -> {
                     if (selectedOperacao != null) {
-                        System.out.println("Operação selecionada: '" + selectedOperacao.getCodOperacao() + "'");
-
                         OrdemServico osSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
                         if (osSelecionada != null) {
                             // Filtra itens relacionados à operação e OS
@@ -200,26 +190,16 @@ public class ImportarOsController implements Initializable {
 
     public void verificarImport(){
         if(filePath == null){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Selecione o arquivo");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione um arquivo para importar os dados")
+            .showAndWait();
         }
         else {
-            //String numeroOsDigitado = importNumeroOs.getText();
-            //cadastrarOs.criar(numeroOsDigitado, filePath);
-
             try {
                 PreviewTable(filePath);
                 importOsAnchorPanelTable.setVisible(true);
                 consultTableItem.setSelectionModel(null);
-
-
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 e.getCause();
             }
@@ -228,38 +208,20 @@ public class ImportarOsController implements Initializable {
 
     public void importFazerImportOnAction(ActionEvent event) {
         if (filePath == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Selecione arquivo Excel para fazer o import");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione um arquivo para importar os dados")
+                    .showAndWait();
             return;
             }
             else if (consultTableOrdemServico.getSelectionModel().getSelectedItem() == null) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Aviso");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Selecione uma ordem da tabela para prosseguir com o import");
-                    Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                    alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione uma ordem de serviço da tabela para prosseguir")
+                    .showAndWait();
                     return;
                 } else {
                     OrdemServico ordemSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmação");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Tem certeza que deseja cadastrar a ordem de número: '" + ordemSelecionada.getCodOrdemServico() + "' ?");
-                    Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-                    stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
+                    String mensagem = "Tem certeza que deseja cadastrar a ordem de número: '" + ordemSelecionada.getCodOrdemServico() + "' ?";
+                    boolean confirmar = alerta.criarAlertaConfirmacao("Aviso", mensagem);
 
-                    Optional<ButtonType> resultado = alert.showAndWait();
-
-                    if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-
-
+                    if (confirmar) {
                         if (ordemSelecionada != null) {
                             String codOrdemSelecionada = ordemSelecionada.getCodOrdemServico();
                             try {
@@ -329,13 +291,9 @@ public class ImportarOsController implements Initializable {
                 }
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
+                    .showAndWait();
+
             importarOsTableViewOrdem.setVisible(false);
             importarOsTableViewOperacao.setVisible(false);
             importarOsTableViewItens.setVisible(false);
@@ -363,13 +321,8 @@ public class ImportarOsController implements Initializable {
             );
             consultTableItem.setItems(itensFiltrados);
         } catch (Exception e) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Aviso");
-        alert.setHeaderText(null);
-        alert.setContentText("Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação");
-        Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-        stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-        alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
+                    .showAndWait();
 
         importarOsTableViewOrdem.setVisible(false);
         importarOsTableViewOperacao.setVisible(false);

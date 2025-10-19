@@ -1,9 +1,8 @@
 package com.example.trabalhoA3Gilvania.controller;
-
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
-import com.example.trabalhoA3Gilvania.controller.SaidaItemController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -39,8 +37,9 @@ public class EntradaItemController implements Initializable {
     private String descricaoItem;
     private String qtdPedido;
     private int idOperacao;
-
     private OnFecharJanela listener;
+
+    FormsUtil alerta = new FormsUtil();
 
     public void setOnFecharJanela(OnFecharJanela listener) {
         this.listener = listener;
@@ -126,22 +125,13 @@ public class EntradaItemController implements Initializable {
 
     public void entradaItemConfirmarOnAction(){
         if((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Informe a quantidade recebida e local armazenado");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Informe a quantidade recebida e local armazenado")
+                    .showAndWait();
+
         }
         else if(!verificarValorDigitado()){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null); // opcional, sem cabeçalho
-            alert.setContentText("Valor informado é inválida ou maior que a quantidade informada na ordem de serviço");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-            alert.showAndWait();
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Valor informado é inválida ou maior que a quantidade informada na ordem de serviço")
+                    .showAndWait();
         }
         else{
                 try (Connection connectDB = new DataBaseConection().getConection()) {
@@ -163,18 +153,8 @@ public class EntradaItemController implements Initializable {
 
                         int linhasAfetadas = statement.executeUpdate();
                         if(linhasAfetadas > 0){
-                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                            alert2.setTitle("Aviso");
-                            alert2.setHeaderText(null);
-                            alert2.setContentText("Item atualizado com sucesso");
-                            Stage stageAlert = (Stage) alert2.getDialogPane().getScene().getWindow();
-                            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-                            alert2.showAndWait();
-
-                            System.out.println(" Id do item" + idItem);
-                            System.out.println(descricaoItem);
-                            System.out.println(" Id da operacao" + idOperacao);
-
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso","Item atualizado com sucesso")
+                                    .showAndWait();
                         }
 
                     }

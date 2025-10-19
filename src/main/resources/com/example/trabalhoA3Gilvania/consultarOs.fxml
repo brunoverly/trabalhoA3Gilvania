@@ -13,7 +13,7 @@
 
 <AnchorPane fx:id="consultarOsPane" prefHeight="700.0" prefWidth="1145.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarOsController">
    <children>
-      <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234" style="-fx-background-color: white; -fx-border-color: #434A50; -fx-border-width: 0 0 2 0;">
+      <TextField fx:id="consultNumeroOs" layoutX="53.0" layoutY="150.0" prefHeight="35.0" prefWidth="325.0" promptText="Ex: 765234" style="-fx-background-color: white; -fx-border-color: #434A50; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
          <font>
             <Font size="15.0" />
          </font>

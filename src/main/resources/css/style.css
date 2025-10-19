@@ -1,4 +1,3 @@
-
 .root {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
@@ -6,8 +5,6 @@
     -fx-background-radius: 10;
     -fx-border-radius: 10;
 }
-
-
 
 .root-pane,
 .text-field,
@@ -18,7 +15,7 @@
 .combo-box,
 .list-view,
 .table-view {
-    -fx-font-family: "Poppins"; /* aplica Poppins em todos os componentes */
+-fx-font-family: "Poppins";
 }
 
 .root-pane {
@@ -29,9 +26,6 @@
     -fx-background-color: #f0f0f0;
 }
 
-/* ========================
-   Botões e campos de texto
-   ======================== */
 .button {
      -fx-background-radius: 6;
      -fx-border-radius: 6;
@@ -45,29 +39,20 @@
     -fx-border-width: 1;
 }
 
-/* ========================
-   VBox de início
-   ======================== */
 #inicioVbox {
-    -fx-background-color: #264653; /* cor de fundo */
-    -fx-border-color: #264653;     /* cor da borda */
-    -fx-border-width: 2;           /* espessura da borda */
+    -fx-background-color: #264653;
+    -fx-border-color: #264653;
+    -fx-border-width: 2;
     -fx-border-radius: 0 10 10 0;
     -fx-background-radius: 0 10 10 0;
 }
 
-/* ========================
-   Alinhamento de ícones + texto nos botões do VBox
-   ======================== */
 .vbox .button {
     -fx-alignment: center-left;
     -fx-content-display: left;
     -fx-graphic-text-gap: 10px;
 }
 
-/* ========================
-   Botões do menu da tela de início
-   ======================== */
 #menuAddUser,
 #menuRemoveUser,
 #menuSair,
@@ -91,10 +76,6 @@
     -fx-transition: all 0.2s ease-in-out;
 }
 
-/* ========================
-   Hover: exibe linha inferior laranja, aumenta levemente a fonte,
-   muda cor do texto e deixa em negrito
-   ======================== */
 #menuAddUser:hover,
 #menuRemoveUser:hover,
 #menuSair:hover,
@@ -105,55 +86,49 @@
 #menuSolcitarItem:hover,
 #menuRetiradaItem:hover,
 #menuEntradaItem:hover {
-    -fx-border-color: transparent transparent #fca311 transparent; /* linha inferior laranja */
-    -fx-border-width: 0 0 1 0;  /* altura da linha inferior */
-    -fx-font-size: 1.3em;       /* aumenta levemente a fonte apenas no hover */
-    -fx-text-fill: #fca311;     /* muda a cor da fonte para o mesmo tom da linha */
+    -fx-border-color: transparent transparent #fca311 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-size: 1.3em;
+    -fx-text-fill: #fca311;
     -fx-font-weight: bold;
-    -fx-font-family: "Poppins"; /* deixa o texto em negrito no hover */
+    -fx-font-family: "Poppins";
 }
 
 .text-field:disabled {
-    -fx-opacity: 1;                 /* mantém aparência normal */
-    -fx-text-fill: #888888;         /* cinza claro */
-    -fx-background-color: white;    /* fundo normal */
-    -fx-border-color: #cccccc;      /* borda igual aos outros */
-    -fx-border-radius: 8;           /* mesmo arredondamento que os outros campos */
+    -fx-opacity: 1;
+    -fx-text-fill: #888888;
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 8;
     -fx-background-radius: 8;
 }
 
 .text-field:disabled:focused {
-    -fx-border-color: #cccccc;      /* remove borda azul quando focado */
-    -fx-background-color: white;    /* mantém fundo */
+    -fx-border-color: #cccccc;
+    -fx-background-color: white;
 }
 
-/* ===========================
-   ESTILO GERAL DA TABLEVIEW
-   =========================== */
 .table-view {
-    -fx-background-color: white;           /* fundo da TableView */
-    -fx-background-radius: 40 40 40 40;        /* cantos superiores arredondados */
-    -fx-border-color: #b0b0b0;             /* cinza mais forte, visível */
-    -fx-border-width: 1 1 0 1;             /* sem borda inferior */
+    -fx-background-color: white;
+    -fx-background-radius: 40 40 40 40;
+    -fx-border-color: #b0b0b0;
+    -fx-border-width: 1 1 0 1;
     -fx-border-radius: 40 40 0 0;
-    -fx-padding: 0;                         /* remove padding interno que corta a borda */
+    -fx-padding: 0;
 }
 
 .table-view > .virtual-flow > .clipped-container > .sheet {
-    -fx-background-color: transparent;     /* mantém fundo transparente para a borda */
-    -fx-background-insets: 0;              /* garante que a borda externa apareça */
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
 }
 
-/* ===========================
-   CABEÇALHO DAS COLUNAS
-   =========================== */
 .table-view .column-header-background {
     -fx-background-color: #434A50;
-    -fx-background-radius: 40 40 0 0; /* cantos superiores arredondados */
+    -fx-background-radius: 40 40 0 0;
     -fx-padding: 0;
 }
 .table-view .column-header {
-    -fx-pref-height: 30px; /* aumenta a altura do cabeçalho */
+    -fx-pref-height: 30px;
 }
 
 .table-view .column-header,
@@ -170,9 +145,6 @@
     -fx-alignment: CENTER;
 }
 
-/* ===========================
-   CÉLULAS DA TABELA
-   =========================== */
 .table-cell {
     -fx-font-family: "Poppins";
     -fx-font-weight: regular;
@@ -183,9 +155,6 @@
     -fx-text-fill: #14213d;
 }
 
-/* ===========================
-   LINHAS ALTERNADAS
-   =========================== */
 .table-row-cell:odd .table-cell {
     -fx-background-color: #E3E3E3;
 }
@@ -194,17 +163,11 @@
     -fx-background-color: #ffffff;
 }
 
-/* ===========================
-   HOVER (MOUSE SOBRE LINHA)
-   =========================== */
 .table-row-cell:hover .table-cell {
     -fx-background-color: rgba(38,70,83,0.2);
     -fx-text-fill: #000;
 }
 
-/* ===========================
-   LINHA SELECIONADA (AZUL CLÁSSICO WINDOWS)
-   =========================== */
 .table-row-cell:selected {
     -fx-background-color: #0a64ad !important;
 }
@@ -222,23 +185,17 @@
     -fx-background-color: #0a64ad !important;
 }
 
-/* ===========================
-   SPLIT PANE
-   =========================== */
 .split-pane {
-    -fx-background-color:  #e5e5e5; /* cor de fundo */
+    -fx-background-color:  #e5e5e5;
     -fx-padding: 0;
     -fx-background-insets: 0;
 }
 
 .split-pane .split-pane-divider {
-    -fx-background-color: white; /* invisível, mesmo tom do fundo */
+    -fx-background-color: white;
     -fx-pref-width: 2px;
 }
 
-/* ===========================
-   SCROLLBARS
-   =========================== */
 .table-view .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -260,38 +217,41 @@
     -fx-pref-height: 0;
 }
 
-/* usar id do root: #rootPane */
 #rootPane {
-    -fx-background-color: white; /* cor do fundo da "janela" */
+    -fx-background-color: white;
     -fx-border-color: #cccccc;
     -fx-border-width: 1;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-padding: 10; /* mantém conteúdo longe da borda */
+    -fx-padding: 10;
 }
 
-/* Se quiser uma borda mais grossa diferente do corpo: */
 #rootPane.outer-border {
     -fx-border-color: #3498db;
     -fx-border-width: 4;
 }
 
-/* Fonte Poppins aplicada globalmente */
 .root, .text-field, .vbox, .label, .check-box, .radio-button, .combo-box, .list-view, .table-view {
     -fx-font-family: "Poppins";
 }
 
-/* ajustes de botões / campos - sua versão já ok */
-.button { -fx-background-radius: 6; -fx-border-radius: 6; -fx-padding: 2 8 2 8; }
-.text-field { -fx-background-radius: 7; -fx-border-radius: 7; -fx-border-color: #cccccc; -fx-border-width: 1; }
+.button {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6; -fx-padding: 2 8 2 8;
+ }
+
+.text-field {
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+}
 
 #enterUserNameField,
 #enterPasswordField {
-    -fx-text-fill: white;         /* cor do texto */
-    -fx-prompt-text-fill: rgba(255,255,255,0.6); /* cor do placeholder */
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255,255,255,0.6);
 }
-
-
 
 #removeUser,
 #register,
@@ -303,11 +263,9 @@
 #consultarOsPane,
 #inicioPane{
     -fx-background-color: white;
-    -fx-background-radius: 40; /* define cantos arredondados */
-    -fx-border-radius: 40;     /* garante que a borda siga o arredondamento */
+    -fx-background-radius: 40;
+    -fx-border-radius: 40;
 }
-
-
 
 #importSelecionarExcel:hover,
 #importFazerImport:hover,
@@ -321,7 +279,7 @@
 #loginButton:hover {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-scale-x: 1.1;          /* aumenta 10% horizontalmente */
+    -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
-   -fx-cursor: hand; /* aumenta 10% verticalmente */
+    -fx-cursor: hand;
 }
