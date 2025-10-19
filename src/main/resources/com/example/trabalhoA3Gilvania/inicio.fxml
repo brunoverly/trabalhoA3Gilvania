@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="inicioPane" prefHeight="840.0" prefWidth="1298.0" style="-fx-background-color: #f1f1f1; -fx-background-radius: 40;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
+<AnchorPane fx:id="inicioPane" prefHeight="909.0" prefWidth="1270.0" style="-fx-background-color: #f1f1f1; -fx-background-radius: 40;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
    <children>
-      <AnchorPane layoutX="2.0" prefHeight="909.0" prefWidth="1296.0">
+      <AnchorPane layoutX="2.0" prefHeight="909.0" prefWidth="1279.0">
          <children>
-            <Pane layoutX="23.0" layoutY="141.0" prefHeight="519.0" prefWidth="159.0" style="-fx-background-color: #434A50; -fx-background-radius: 30 30 30 30;" />
+            <Pane layoutX="23.0" layoutY="141.0" prefHeight="519.0" prefWidth="180.0" style="-fx-background-color: #434A50; -fx-background-radius: 30 30 30 30;" />
             <Pane layoutX="235.0" layoutY="59.0" prefHeight="335.0" prefWidth="1018.0" style="-fx-background-color: #ffffff; -fx-background-radius: 40; -fx-background-radius: 30 30 30 30;">
                <children>
                   <Label contentDisplay="CENTER" layoutX="30.0" layoutY="14.0" prefHeight="38.0" prefWidth="173.0" stylesheets="@../../../css/style.css" text="Dashboard  |" textFill="#434a50">
@@ -32,7 +32,7 @@
                      <children>
                         <Label layoutX="14.0" layoutY="22.0" prefHeight="35.0" prefWidth="142.0" text="ABERTAS" textFill="#434a50">
                            <font>
-                              <Font name="Tahoma Bold" size="20.0" />
+                              <Font name="Tahoma Bold" size="24.0" />
                            </font>
                         </Label>
                         <Label fx:id="inicioLabelOsAbertas" contentDisplay="CENTER" layoutX="14.0" layoutY="57.0" prefHeight="125.0" prefWidth="245.0" text="50" textFill="#434a50">
@@ -44,7 +44,7 @@
                   </Pane>
                   <Pane layoutX="330.0" layoutY="102.0" prefHeight="200.0" prefWidth="259.0" style="-fx-background-color: FCB944; -fx-background-radius: 40;">
                      <children>
-                        <Label layoutX="14.0" layoutY="21.0" prefHeight="35.0" prefWidth="207.0" text="EM ANDAMENTO" textFill="#434a50">
+                        <Label layoutX="14.0" layoutY="22.0" prefHeight="35.0" prefWidth="207.0" text="EM ANDAMENTO" textFill="#434a50">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
@@ -63,7 +63,7 @@
                               <Font name="System Bold" size="72.0" />
                            </font>
                         </Label>
-                        <Label layoutX="14.0" layoutY="14.0" prefHeight="35.0" prefWidth="165.0" text="CONCLUIDAS" textFill="WHITE">
+                        <Label layoutX="14.0" layoutY="22.0" prefHeight="35.0" prefWidth="165.0" text="ENCERRADAS" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
@@ -91,7 +91,7 @@
                               <TableColumn fx:id="inicioTableUsuario" prefWidth="155.0" text="Úsuario" />
                           </columns>
                         </TableView>
-                        <Label contentDisplay="CENTER" layoutX="28.0" layoutY="8.0" prefHeight="29.0" prefWidth="240.0" text="Últimas atualizaçãoes" textFill="#434a50">
+                        <Label contentDisplay="CENTER" layoutX="56.0" layoutY="9.0" prefHeight="29.0" prefWidth="240.0" text="Últimas atualizações" textFill="#434a50">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -212,21 +212,21 @@
                   </Button>
                </children>
             </VBox>
-            <Button fx:id="inicioButtonFecharJanela" layoutX="1225.0" layoutY="11.0" mnemonicParsing="false" onAction="#inicioButtonFecharJanelaOnAction" prefHeight="44.0" prefWidth="49.0" style="-fx-background-radius: 40; -fx-background-color: transparent;">
+            <Button fx:id="inicioButtonFecharJanela" layoutX="1192.0" layoutY="4.0" mnemonicParsing="false" onAction="#inicioButtonFecharJanelaOnAction" prefHeight="44.0" prefWidth="49.0" style="-fx-background-radius: 40; -fx-background-color: transparent;">
                <graphic>
-                  <ImageView fx:id="inicioImagemFechar" fitHeight="40.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="inicioImagemFechar" fitHeight="49.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../imagens/close.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Label alignment="CENTER" layoutX="23.0" layoutY="68.0" prefHeight="58.0" prefWidth="159.0" style="-fx-background-color: #434A50; -fx-background-radius: 30 30 30 30;" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="23.0" layoutY="59.0" prefHeight="58.0" prefWidth="180.0" style="-fx-background-color: #434A50; -fx-background-radius: 30 30 30 30;" textFill="WHITE">
                <font>
                   <Font name="Tahoma Bold" size="24.0" />
                </font>
                <graphic>
-                  <ImageView fx:id="inicioLogo" fitHeight="64.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="inicioLogo" fitHeight="49.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../imagens/brand.png" />
                      </image>
