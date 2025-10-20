@@ -146,7 +146,8 @@
                     </children>
                 </Pane>
 
-                <Pane fx:id="inicioPaneDash" layoutX="164.5" layoutY="12.6" prefHeight="234.5" prefWidth="651.7" style="-fx-background-color: #ffffff; -fx-background-radius: 30 30 30 30;">
+                <!-- Borda do dashboard corrigida -->
+                <Pane fx:id="inicioPaneDash" layoutX="164.5" layoutY="12.6" prefHeight="234.5" prefWidth="651.7" style="-fx-background-color: #ffffff; -fx-background-radius: 28;">
                     <children>
                         <Pane layoutX="21.0" layoutY="71.4" prefHeight="140.0" prefWidth="181.3" style="-fx-background-color: C2C6CA; -fx-background-radius: 28;" />
                         <Pane layoutX="231.0" layoutY="71.4" prefHeight="140.0" prefWidth="181.3" style="-fx-background-color: FCB944; -fx-background-radius: 28;" />
