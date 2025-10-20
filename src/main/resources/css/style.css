@@ -57,6 +57,7 @@
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-font-size: 11px;
+    -fx-text-fill: white;
 }
 
 #menuAddUser,
@@ -81,7 +82,7 @@
     -fx-padding: 3 7 3 7;
     -fx-border-width: 0;
     -fx-border-color: transparent;
-    -fx-transition: all 0.2s ease-in-out;
+    -fx-text-fill: white;
 }
 
 #menuAddUser:hover,
@@ -99,7 +100,7 @@
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
-    -fx-text-fill: white !important; /* forçar branco */
+    -fx-text-fill: white !important;
 }
 
 .text-field:disabled {
@@ -276,6 +277,7 @@
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-cursor: hand;
+    -fx-text-fill: white !important;
 }
 
 #inicioPaneDash:hover,
