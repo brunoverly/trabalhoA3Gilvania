@@ -112,17 +112,12 @@ public class FecharOsController implements Initializable {
             fecharImagem.setScaleY(1.0);
             consultVoltarButton.setCursor(Cursor.DEFAULT);
         });
-
-
     }
-
 
     @FXML
     public void consultBuscarOsOnAction(ActionEvent event) {
         if (verificarNumeroOS()) {
             BuscarDB();
-            consultLabelOsBuscada.setVisible(true);
-            fecharAnchorPane.setVisible(true);
         }
     }
 
@@ -132,190 +127,132 @@ public class FecharOsController implements Initializable {
         stage.close();
     }
 
+
     @FXML
     public void confirmCloseOsButton(ActionEvent event) {
-        if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
+        // Verifica se o campo está vazio
+        if (consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             return;
         }
-        else{
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlConsultaStatus = """
-                        SELECT status
-                        FROM ordem_servico
-                        WHERE cod_os = ?
-                    """;
-
-            try (PreparedStatement buscar = connectDB.prepareStatement(querySqlConsultaStatus)) {
-                buscar.setString(1, consultNumeroOs.getText());
-                ResultSet rs = buscar.executeQuery();
-                if (rs.next()) {
-                    String status = rs.getString("status");
-
-                    if (status.equals("Encerrada")) {
-                        alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS já se encontra encerrada")
-                                .showAndWait();
-
-                    } else {
-                        boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja encerrar a OS?");
-                        if (confirmar) {
-                            try {
-                                String querySqlOs = """
-                                             UPDATE ordem_servico
-                                                            SET status = ?, datahora_encerramento = ?
-                                                            WHERE cod_os = ?
-                                        """;
-
-                                LocalDateTime agora = LocalDateTime.now();
-                                Timestamp ts = Timestamp.valueOf(agora);
-
-                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlOs)) {
-                                    atualizar.setString(1, "Encerrada");
-                                    atualizar.setTimestamp(2, ts);
-                                    atualizar.setString(3, consultNumeroOs.getText());
-                                    atualizar.executeUpdate();
-                                }
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                            DataBaseConection registarAtualizacao = new DataBaseConection();
-                            registarAtualizacao.AtualizarBanco(
-                                    "Ordem de serviço",
-                                    consultNumeroOs.getText(),
-                                    "Ordem de serviço encerrada",
-                                    Sessao.getMatricula()
-                            );
-                            try {
-                                String querySqlOperacao = """
-                                             UPDATE operacao
-                                                            SET status = ?
-                                                            WHERE cod_os = ?
-                                        """;
-
-                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlOperacao)) {
-                                    atualizar.setString(1, "OS encerrada");
-                                    atualizar.setString(2, consultNumeroOs.getText());
-                                    atualizar.executeUpdate();
-
-                                }
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                            try {
-                                String querySqlCodOperacao = """
-                                             SELECT id
-                                             FROM operacao
-                                             WHERE cod_os = ?
-                                        """;
-                                try (PreparedStatement atualizar = connectDB.prepareStatement(querySqlCodOperacao)) {
-                                    atualizar.setString(1, consultNumeroOs.getText());
-                                    ResultSet busca = atualizar.executeQuery();
-
-                                    while (busca.next()) {
-                                        try {
-                                            String querySqlItem = """
-                                                         UPDATE item
-                                                                        SET status = ?
-                                                                        WHERE id_operacao = ?
-                                                    """;
-
-                                            try (PreparedStatement atualizarItem = connectDB.prepareStatement(querySqlItem)) {
-                                                atualizarItem.setString(1, "OS encerrada");
-                                                atualizarItem.setString(2, busca.getString("id"));
-                                                atualizarItem.executeUpdate();
-                                            }
-                                        } catch (SQLException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    }
-                                }
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada")
-                                    .showAndWait();
-                        }
-                    }
-                }
-            }
-            } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        }
-    }
-
-    public void BuscarDB() {
-        ObservableList<Item> listaItens = FXCollections.observableArrayList();
-        ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
         String numeroOs = consultNumeroOs.getText();
 
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlItem = """
-                        SELECT item.cod_item,
-                               item.id_operacao,
-                               operacao.cod_operacao,
-                               item.descricao,
-                               item.qtd_pedido,
-                               item.qtd_recebida,
-                               item.status
-                        FROM item
-                        JOIN operacao ON operacao.id = item.id_operacao
-                        WHERE operacao.cod_os = ?
-                    """;
 
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
+            // Chama procedure encerrar_os
+            int resultadoEncerramento = 0;
+            try (CallableStatement csEncerrar = connectDB.prepareCall("{ CALL projeto_java_a3.encerrar_os(?, ?, ?, ?) }")) {
+                csEncerrar.setString(1, numeroOs);
+                csEncerrar.setString(2, "Ordem de serviço"); // tipo
+                csEncerrar.setString(3, "Ordem de serviço encerrada"); // descrição
+                csEncerrar.setInt(4, Sessao.getMatricula());
 
-                while (rs.next()) {
-                    Item item = new Item(
-                            rs.getString("cod_item"),
-                            rs.getInt("id_operacao"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("descricao"),
-                            rs.getInt("qtd_pedido"),
-                            rs.getInt("qtd_recebida"),
-                            rs.getString("status")
-                    );
-                    listaItens.add(item);
+                boolean hasRS = csEncerrar.execute();
+                if (hasRS) {
+                    try (ResultSet rs = csEncerrar.getResultSet()) {
+                        if (rs.next()) {
+                            resultadoEncerramento = rs.getInt("resultado");
+                        }
+                    }
                 }
             }
-            todosItens.clear();
-            todosItens.addAll(listaItens);
 
+            // Mostra alerta baseado no resultado
+            switch (resultadoEncerramento) {
+                case 0 -> alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
+                case 1 -> alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS já se encontra encerrada").showAndWait();
+                case 2 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
+                default -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao acessar o banco de dados").showAndWait();
         }
+
+        consultNumeroOs.setText("");
+        consultLabelOsBuscada.setVisible(false);
+        fecharAnchorPane.setVisible(false);
+    }
+
+
+
+
+    public void BuscarDB() {
+        String numeroOs = consultNumeroOs.getText();
+
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlOperacao = """
-                SELECT cod_operacao, MAX(id) AS id, MAX(status) AS status
-                FROM operacao
-                WHERE cod_os = ?
-                GROUP BY cod_operacao
-            """;
+            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.fecharos_buscardados(?) }");
+            cs.setString(1, numeroOs);
 
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlOperacao)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
+            boolean hasResults = cs.execute();
 
-                while (rs.next()) {
-                    Operacao operacao = new Operacao(
-                            rs.getInt("id"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("status")
-                    );
-                    listaOperacao.add(operacao);
+            // Primeiro ResultSet: verifica se a OS existe
+            if (hasResults) {
+                try (ResultSet rsResultado = cs.getResultSet()) {
+                    if (rsResultado.next()) {
+                        int resultado = rsResultado.getInt("resultado");
+                        if (resultado == 0) {
+                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço não encontrada")
+                                    .showAndWait();
+                            return; // para execução do método
+                        }
+                    }
                 }
             }
 
-            consultTableOperacao.setItems(listaOperacao);
+            // Agora lemos os outros ResultSets: itens e operações
+            ObservableList<Item> listaItens = FXCollections.observableArrayList();
+            ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // Avança para o próximo ResultSet (itens)
+            if (cs.getMoreResults()) {
+                try (ResultSet rsItens = cs.getResultSet()) {
+                    while (rsItens.next()) {
+                        Item item = new Item(
+                                rsItens.getString("cod_item"),
+                                rsItens.getInt("id_operacao"),
+                                rsItens.getString("cod_operacao"),
+                                rsItens.getString("descricao"),
+                                rsItens.getInt("qtd_pedido"),
+                                rsItens.getInt("qtd_recebida"),
+                                rsItens.getString("status")
+                        );
+                        listaItens.add(item);
+                    }
+                    todosItens.clear();
+                    todosItens.addAll(listaItens);
+                }
+            }
+
+            // Avança para o próximo ResultSet (operações)
+            if (cs.getMoreResults()) {
+                try (ResultSet rsOperacoes = cs.getResultSet()) {
+                    while (rsOperacoes.next()) {
+                        Operacao operacao = new Operacao(
+                                rsOperacoes.getInt("id"),
+                                rsOperacoes.getString("cod_operacao"),
+                                rsOperacoes.getString("status")
+                        );
+                        listaOperacao.add(operacao);
+                    }
+                    todasOperacoes.clear();
+                    todasOperacoes.addAll(listaOperacao);
+                }
+            }
+
+            // Atualiza as TableViews
+            consultTableOperacao.setItems(todasOperacoes);
+            consultTableItem.setItems(todosItens);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao acessar o banco de dados").showAndWait();
         }
+        consultLabelOsBuscada.setVisible(true);
+        fecharAnchorPane.setVisible(true);
     }
 
 
@@ -325,26 +262,6 @@ public class FecharOsController implements Initializable {
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             retorno = false;
-        }
-        else{
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String verifcarCadastroBanco = "SELECT COUNT(*) FROM ordem_servico WHERE cod_os = ?";
-                try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
-                    statement1.setString(1, consultNumeroOs.getText());
-                    ResultSet resultadoBuscaOs = statement1.executeQuery();
-
-                    if (resultadoBuscaOs.next()) {
-                        int count = resultadoBuscaOs.getInt(1);
-                        if (count == 0) {
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION,"Aviso", "O número da ordem de serviço informada não foi localizado")
-                                    .showAndWait();
-                            retorno =  false;
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return retorno;
     }

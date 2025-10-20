@@ -110,8 +110,6 @@ public class ConsultarOsController implements Initializable {
     public void consultBuscarOsOnAction(ActionEvent event) {
         if (verificarNumeroOS()) {
             BuscarDB();
-            consultarOsSplitPane.setVisible(true);
-            consultarOsTableViewOperacao.setVisible(true);
         }
     }
 
@@ -123,80 +121,78 @@ public class ConsultarOsController implements Initializable {
 
     public void BuscarDB() {
         consultarOsTableViewItens.setVisible(false);
+
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
         String numeroOs = consultNumeroOs.getText();
 
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlItem = """
-                        SELECT item.id,
-                               item.cod_item,
-                               item.id_operacao,
-                               operacao.cod_operacao,
-                               item.descricao,
-                               item.qtd_pedido,
-                               item.qtd_recebida,
-                               item.status
-                        FROM item
-                        JOIN operacao ON operacao.id = item.id_operacao
-                        WHERE operacao.cod_os = ?
-                    """;
+        try (Connection connectDB = new DataBaseConection().getConection();
+             CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultarOs(?) }")) {
 
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
+            cs.setString(1, numeroOs);
+            boolean hasResults = cs.execute();
 
-                while (rs.next()) {
-                    Item item = new Item(
-                            rs.getInt("id"),
-                            rs.getString("cod_item"),
-                            rs.getInt("id_operacao"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("descricao"),
-                            rs.getInt("qtd_pedido"),
-                            rs.getInt("qtd_recebida"),
-                            rs.getString("status")
-                    );
-                    listaItens.add(item);
+            // 1️⃣ Primeiro ResultSet: COUNT(*)
+            if (hasResults) {
+                try (ResultSet rsCount = cs.getResultSet()) {
+                    if (rsCount.next()) {
+                        int total = rsCount.getInt("total");
+                        if (total == 0) {
+                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
+                            consultarOsSplitPane.setVisible(false);
+                            consultarOsTableViewOperacao.setVisible(false);
+                            consultarOsTableViewItens.setVisible(false);
+                            return; // Sai da função, nada para mostrar
+                        }
+                    }
                 }
             }
 
-            todosItens.clear();
-            todosItens.addAll(listaItens);
+            // 2️⃣ Segundo ResultSet: itens da OS
+            if (cs.getMoreResults()) {
+                try (ResultSet rsItens = cs.getResultSet()) {
+                    while (rsItens.next()) {
+                        Item item = new Item(
+                                rsItens.getInt("id"),
+                                rsItens.getString("cod_item"),
+                                rsItens.getInt("id_operacao"),
+                                rsItens.getString("cod_operacao"),
+                                rsItens.getString("descricao"),
+                                rsItens.getInt("qtd_pedido"),
+                                rsItens.getInt("qtd_recebida"),
+                                rsItens.getString("status")
+                        );
+                        listaItens.add(item);
+                    }
+                }
+                todosItens.clear();
+                todosItens.addAll(listaItens);
+            }
 
+            // 3️⃣ Terceiro ResultSet: operações agregadas
+            if (cs.getMoreResults()) {
+                try (ResultSet rsOperacoes = cs.getResultSet()) {
+                    while (rsOperacoes.next()) {
+                        Operacao operacao = new Operacao(
+                                rsOperacoes.getInt("id"),
+                                rsOperacoes.getString("cod_operacao"),
+                                rsOperacoes.getString("status")
+                        );
+                        listaOperacao.add(operacao);
+                    }
+                }
+                consultTableOperacao.setItems(listaOperacao);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao buscar OS").showAndWait();
         }
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlOperacao = """
-                SELECT cod_operacao, MAX(id) AS id, MAX(status) AS status
-                FROM operacao
-                WHERE cod_os = ?
-                GROUP BY cod_operacao
-            """;
-
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlOperacao)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
-
-                while (rs.next()) {
-                    Operacao operacao = new Operacao(
-                            rs.getInt("id"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("status")
-                    );
-                    listaOperacao.add(operacao);
-                }
-            }
-
-            consultTableOperacao.setItems(listaOperacao);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        consultarOsSplitPane.setVisible(true);
+        consultarOsTableViewOperacao.setVisible(true);
     }
+
 
 
     public boolean verificarNumeroOS() {
@@ -205,27 +201,6 @@ public class ConsultarOsController implements Initializable {
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             retorno = false;
-        }
-        else{
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-
-                String verifcarCadastroBanco = "SELECT COUNT(*) FROM ordem_servico WHERE cod_os = ?";
-                try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
-                    statement1.setString(1, consultNumeroOs.getText());
-                    ResultSet resultadoBuscaOs = statement1.executeQuery();
-
-                    if (resultadoBuscaOs.next()) {
-                        int count = resultadoBuscaOs.getInt(1);
-                        if (count == 0) {
-                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "O número da ordem de serviço informada não foi localizado")
-                                    .showAndWait();
-                            retorno =  false;
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return retorno;
     }

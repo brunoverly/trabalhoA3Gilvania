@@ -11,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
@@ -64,26 +61,32 @@ public class RemoverUsuarioController implements Initializable {
 
     public void removeBuscarMatriculaOnAction(ActionEvent event) {
         if (!matriculaValida()) {
-            System.out.println("a");
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso" , "Infome uma matrícula válida para prosseguir")
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe uma matrícula válida para prosseguir")
                     .showAndWait();
+            return;
         }
-        else{
-            System.out.println("b");
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String verifcarCadastroBanco = "SELECT nome, cargo FROM users WHERE matricula = ?";
-                try (PreparedStatement statement = connectDB.prepareStatement(verifcarCadastroBanco)) {
-                    int matricula = Integer.parseInt(removeMatricula.getText());
-                    statement.setInt(1, matricula);
 
-                    try (ResultSet rs = statement.executeQuery()) {
-                        if (rs.next()) {
-                            // Usuário encontrado, preenche os campos
+        int matricula = Integer.parseInt(removeMatricula.getText());
+        String procedureCall = "{ CALL projeto_java_a3.remover_usuario_dados(?) }";
+
+        try (Connection connectDB = new DataBaseConection().getConection();
+             CallableStatement cs = connectDB.prepareCall(procedureCall)) {
+
+            cs.setInt(1, matricula);
+
+            boolean hasResults = cs.execute();
+
+            if (hasResults) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    if (rs.next()) {
+                        int resultado = rs.getInt("resultado");
+
+                        if (resultado == 1) {
                             removeDadosNome.setText(rs.getString("nome"));
                             removeDadosCargo.setText(rs.getString("cargo"));
                             removeDadosMatricula.setText(String.valueOf(matricula));
                         } else {
-                            // Usuário não encontrado
+                            // Usuário não encontrado, limpa campos
                             removeDadosNome.setText("");
                             removeDadosCargo.setText("");
                             removeDadosMatricula.setText("");
@@ -93,15 +96,16 @@ public class RemoverUsuarioController implements Initializable {
                         }
                     }
                 }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                e.getCause();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                e.getCause();
             }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+
 
     private boolean matriculaValida() {
             if (removeMatricula.getText().isBlank()) {
@@ -118,33 +122,47 @@ public class RemoverUsuarioController implements Initializable {
 
     public void removeConfirmarButtonOnAction (ActionEvent event){
             boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja remover este usuário?");
-            if (confirmar) {
-                DataBaseConection connectNow = new DataBaseConection();
-                try (Connection connectDB = connectNow.getConection()) {
+        if (confirmar) {
+            int matricula = Integer.parseInt(removeMatricula.getText());
 
-                    int matricula = Integer.parseInt(removeMatricula.getText());
-                    String query = "DELETE FROM users WHERE matricula = ?";
+            String procedureCall = "{ CALL projeto_java_a3.remover_usuario_deletar(?) }";
 
-                    try (PreparedStatement ps = connectDB.prepareStatement(query)) {
-                        ps.setInt(1, matricula);
-                        int linhasAfetadas = ps.executeUpdate();
+            try (Connection connectDB = new DataBaseConection().getConection();
+                 CallableStatement cs = connectDB.prepareCall(procedureCall)) {
 
-                        if (linhasAfetadas > 0) {
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Usuário removido")
-                                            .showAndWait();
+                cs.setInt(1, matricula);
 
-                            removeMatricula.setText("");
-                            removeDadosNome.setText("");
-                            removeDadosMatricula.setText("");
-                            removeDadosCargo.setText("");
+                boolean hasResult = cs.execute();
+
+                if (hasResult) {
+                    try (ResultSet rs = cs.getResultSet()) {
+                        if (rs.next()) {
+                            int resultado = rs.getInt("resultado");
+
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Aviso");
+                            alert.setHeaderText(null);
+
+                            if (resultado == 1) {
+                                alert.setContentText("Usuário removido com sucesso");
+                                // Limpa os campos
+                                removeMatricula.setText("");
+                                removeDadosNome.setText("");
+                                removeDadosCargo.setText("");
+                                removeDadosMatricula.setText("");
+                            } else {
+                                alert.setContentText("Usuário não encontrado");
+                            }
+                            alert.showAndWait();
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao remover usuário")
+                    .showAndWait();
             }
+        }
         }
     }

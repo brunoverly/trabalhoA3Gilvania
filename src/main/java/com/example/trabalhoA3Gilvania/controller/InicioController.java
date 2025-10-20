@@ -139,7 +139,6 @@ public class InicioController implements Initializable {
         inicioTableView.setItems(listaAtualizacoes);
         inicioTableView.setSelectionModel(null);
 
-        atualizarDashBoard();
         carregarAtualizacoes();
 
         LocalDate hoje = LocalDate.now();
@@ -166,48 +165,6 @@ public class InicioController implements Initializable {
 
 
     }
-    //Atuailizar o dashboard da pagina inicial
-    private void atualizarDashBoard() {
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status != 'Encerrada'";
-            try (PreparedStatement stmt = connectDB.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-
-                if (rs.next()) {
-                    inicioLabelOsAbertas.setText(String.valueOf(rs.getInt(1)));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status = 'Encerrada'";
-            try (PreparedStatement stmt = connectDB.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-
-                if (rs.next()) {
-                    inicioLabelOsEncerrada.setText(String.valueOf(rs.getInt(1)));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String query = "SELECT COUNT(*) FROM ordem_servico " +
-                    "WHERE status = 'Em andamento'";
-            try (PreparedStatement stmt = connectDB.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-
-                if (rs.next()) {
-                    inicioLabelOsEmAndamento.setText(String.valueOf(rs.getInt(1)));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     //Acao ao clicar em fechar janela
     public void inicioButtonFecharJanelaOnAction(ActionEvent event){
         Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
@@ -215,29 +172,42 @@ public class InicioController implements Initializable {
     }
     //Carrega a tabela da pagina inicial
     public void carregarAtualizacoes() {
-
-        listaAtualizacoes.clear();
-
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            String query = "SELECT datahora, tipo, cod_os, descricao, matricula FROM atualizacoes ORDER BY datahora DESC";
-            try (PreparedStatement stmt = connectDB.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-                int contador = 1;
-                while (rs.next() && contador <= 30) {
+            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.carregar_dashboard_e_atualizacoes() }");
+
+            boolean hasResult = cs.execute();
+
+            // Primeiro ResultSet: dashboard
+            if (hasResult) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    if (rs.next()) {
+                        inicioLabelOsAbertas.setText(String.valueOf(rs.getInt("abertas")));
+                        inicioLabelOsEncerrada.setText(String.valueOf(rs.getInt("encerradas")));
+                        inicioLabelOsEmAndamento.setText(String.valueOf(rs.getInt("em_andamento")));
+                    }
+                }
+            }
+
+            // Segundo ResultSet: últimas atualizações
+            if (cs.getMoreResults()) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    listaAtualizacoes.clear();
+                    while (rs.next()) {
                         Timestamp datahora = rs.getTimestamp("datahora");
                         String tipo = rs.getString("tipo");
                         String os = rs.getString("cod_os");
                         String descricao = rs.getString("descricao");
-                        String usuario = String.valueOf(rs.getInt("matricula")); // ou busque nome de outra tabela
+                        String usuario = String.valueOf(rs.getInt("matricula"));
 
                         listaAtualizacoes.add(new Atualizacao(datahora, tipo, os, descricao, usuario));
-                        contador++;
+                    }
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
     //Define o que fica visivel e o que fica escondido dependendo do usuario
     private void verificarUsuario() {
 
@@ -351,7 +321,6 @@ public class InicioController implements Initializable {
             ImportarOsController controller = fxmlLoader.getController();
             controller.setOnFecharJanela(() -> {
                 carregarAtualizacoes();
-                atualizarDashBoard();
             });
 
             // Criar cena transparente
@@ -618,7 +587,6 @@ public class InicioController implements Initializable {
             // Define o callback que será chamado ao fechar a janela
             controller.setOnFecharJanela(() -> {
                 carregarAtualizacoes();
-                atualizarDashBoard();
             });
 
             // Define o que acontece ao fechar a janela
@@ -743,7 +711,6 @@ public class InicioController implements Initializable {
                 @Override
                 public void aoFecharJanela() {
                     carregarAtualizacoes();
-                    atualizarDashBoard();
                 }
             });
 

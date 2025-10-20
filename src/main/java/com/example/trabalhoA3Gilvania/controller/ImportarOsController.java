@@ -173,10 +173,6 @@ public class ImportarOsController implements Initializable {
 
     }
 
-
-
-
-
     public void importSelecionarExcelOnAction(ActionEvent event){
         filePath = cadastrarOs.selecionarArquivo((Stage) importSelecionarExcel.getScene().getWindow());
         importOsPathField.setText(filePath.getAbsolutePath());
@@ -231,13 +227,6 @@ public class ImportarOsController implements Initializable {
                                 e.printStackTrace();
                                 e.getCause();
                             }
-                            DataBaseConection registarAtualizacao = new DataBaseConection();
-                            registarAtualizacao.AtualizarBanco(
-                                    "Ordem de serviço",
-                                    ordemSelecionada.getCodOrdemServico(),
-                                    "Cadastro de nova ordem de serviço",
-                                    Sessao.getMatricula()
-                            );
                         }
                     }
 

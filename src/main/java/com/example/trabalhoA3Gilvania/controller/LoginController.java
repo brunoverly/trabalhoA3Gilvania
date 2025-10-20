@@ -91,11 +91,7 @@ public class LoginController implements Initializable {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connectDB = connectNow.getConection();
         try {
-            String querySqlUser = """
-                        SELECT nome, matricula, cargo
-                        FROM users
-                        WHERE matricula = ? AND pin = ?
-                    """;
+            String querySqlUser = "{ CALL projeto_java_a3.loginVerificarPin(?, ?) }";
             try (PreparedStatement buscaUsuario = connectDB.prepareStatement(querySqlUser)) {
                 buscaUsuario.setInt(1, Integer.parseInt(enterUserNameField.getText().trim()));
                 buscaUsuario.setInt(2, Integer.parseInt(enterPasswordField.getText().trim()));

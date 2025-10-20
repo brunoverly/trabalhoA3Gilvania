@@ -110,12 +110,7 @@ public class EntradaItemController implements Initializable {
             entradaItemCancelar.setCursor(Cursor.DEFAULT);
         });
 
-
-
-
     }
-
-
 
 
     public void entradaItemCancelarOnAction(ActionEvent event){
@@ -123,58 +118,47 @@ public class EntradaItemController implements Initializable {
         stage.close();
     }
 
-    public void entradaItemConfirmarOnAction(){
-        if((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())){
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Informe a quantidade recebida e local armazenado")
+    public void entradaItemConfirmarOnAction() {
+        if ((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())) {
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe a quantidade recebida e local armazenado")
                     .showAndWait();
 
-        }
-        else if(!verificarValorDigitado()){
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Valor informado é inválida ou maior que a quantidade informada na ordem de serviço")
+        } else if (!verificarValorDigitado()) {
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Valor informado é inválida ou maior que a quantidade informada na ordem de serviço")
                     .showAndWait();
-        }
-        else{
-                try (Connection connectDB = new DataBaseConection().getConection()) {
-                    String querySqlItem = """
-                             UPDATE item
-                                SET status = ?, localizacao = ?, qtd_recebida = ?, ultima_atualizacao = ?
-                                WHERE id = ?
-                        """;
+        } else {
+            int qtdRecebida = Integer.parseInt(entradaQtdRecebida.getText());
+            String localizacao = entradaLocalArmazenado.getText();
 
-                    LocalDateTime agora = LocalDateTime.now();
-                    Timestamp ts = Timestamp.valueOf(agora);
+            String procedureCall = "{ CALL projeto_java_a3.atualizar_item_e_log(?, ?, ?, ?, ?, ?, ?, ?) }";
 
-                    try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                        statement.setString(1, "Recebido");
-                        statement.setString(2, entradaLocalArmazenado.getText());
-                        statement.setInt(3,Integer.parseInt(entradaQtdRecebida.getText()));
-                        statement.setTimestamp(4, ts);
-                        statement.setInt(5, idItem);
+            try (Connection connectDB = new DataBaseConection().getConection();
+                 CallableStatement cs = connectDB.prepareCall(procedureCall)) {
 
-                        int linhasAfetadas = statement.executeUpdate();
-                        if(linhasAfetadas > 0){
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso","Item atualizado com sucesso")
-                                    .showAndWait();
-                        }
+                cs.setInt(1, idItem);                // p_id
+                cs.setString(2, "Recebido");         // p_status
+                cs.setString(3, localizacao);        // p_localizacao
+                cs.setInt(4, qtdRecebida);           // p_qtd_recebida
+                cs.setString(5, "Item");             // p_tipo
+                cs.setString(6, codOs);              // p_cod_os
+                cs.setString(7, "Item recebido na base"); // p_descricao
+                cs.setInt(8, Sessao.getMatricula()); // p_matricula
 
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                cs.execute();
 
-                DataBaseConection registarAtualizacao = new DataBaseConection();
-                registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
-                registarAtualizacao.AtualizarBanco(
-                        "Item",
-                         codOs,
-                        "Item recebido na base",
-                        Sessao.getMatricula()
-                );
+                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Item atualizado com sucesso")
+                        .showAndWait();
 
                 Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
                 stage.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao atualizar item")
+                        .showAndWait();
             }
         }
+    }
 
         public boolean verificarValorDigitado(){
             try{

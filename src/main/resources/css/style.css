@@ -97,9 +97,9 @@
     -fx-border-color: transparent transparent #fca311 transparent;
     -fx-border-width: 0 0 0.7 0;
     -fx-font-size: 11px;
-    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
+    -fx-text-fill: white !important; /* forçar branco */
 }
 
 .text-field:disabled {

@@ -218,54 +218,36 @@ public class ConsultarItemController implements Initializable{
                             return;
                         }
 
-                        if(!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") && selecionado.getStatus().equals("Recebido")) {
+                        if (!Sessao.getCargo().equals("Aprovisionador")
+                                && modo.equals("Solicitar")
+                                && selecionado.getStatus().equals("Recebido")) {
+
                             if (selecionado != null) {
                                 String mensagem = "Deseja solicitar a entrega do item: '"+ selecionado.getDescricao() +"' na oficina?";
                                 boolean confirmacao = alerta.criarAlertaConfirmacao("Aviso", mensagem);
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
                                 if (confirmacao) {
-                                    mensagem = "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'" ;
-                                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", mensagem)
+                                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                                    "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
                                             .showAndWait();
 
-                                    // Atualiza status do item
+                                    // Chama a procedure
                                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                                        String querySqlItem = "UPDATE item SET status = 'Solicitado na oficina' WHERE id = ?";
-                                        String querySqlOperacao = "UPDATE operacao SET status = 'Item(s) solicitados' WHERE id = ?";
-                                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                                            statement.setInt(1, selecionado.getIdItem());
-                                            statement.executeUpdate();
-                                        }
-                                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlOperacao)) {
-                                            statement.setInt(1, selecionado.getIdOperacao());
-                                            statement.executeUpdate();
+                                        String sql = "CALL projeto_java_a3.solicitar_item(?, ?, ?, ?, ?)";
+                                        try (CallableStatement cs = connectDB.prepareCall(sql)) {
+                                            cs.setInt(1, selecionado.getIdItem());        // p_id
+                                            cs.setInt(2, selecionado.getIdOperacao());    // p_id_operacao
+                                            cs.setString(3, codOsItemSelecionado);        // p_cod_os
+                                            cs.setInt(4, Sessao.getMatricula());          // p_solicitado_por
+                                            cs.setInt(5, Sessao.getMatricula());          // p_matricula (para log)
+                                            cs.execute();
                                         }
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);
                                     }
+
+                                    // Atualiza a tela
                                     BuscarDB(consultNumeroOs.getText());
-
-                                    DataBaseConection registarAtualizacao = new DataBaseConection();
-                                    registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
-                                    registarAtualizacao.AtualizarBanco(
-                                            "Operação",
-                                            codOsItemSelecionado,
-                                            "Item solicitado na oficina",
-                                            Sessao.getMatricula()
-                                    );
-
-                                    // Insere registro na tabela de controle de solicitações
-                                    try (Connection connectDB = new DataBaseConection().getConection()) {
-                                        String querySqlSolicitacao = "INSERT INTO controle_solicitacao_item (solicitador_por, id_item) VALUES (?, ?)";
-                                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlSolicitacao)) {
-                                            statement.setInt(1, Sessao.getMatricula());
-                                            statement.setInt(2, selecionado.getIdItem());
-                                            statement.executeUpdate();
-                                        }
-                                    } catch (SQLException e) {
-                                        throw new RuntimeException(e);
-                                    }
                                 }
                             }
                         }
@@ -283,16 +265,13 @@ public class ConsultarItemController implements Initializable{
                                     break;
 
                                 case "Retirar":
+
                                     if (selecionado.getStatus().equals("Solicitado na oficina") || selecionado.getStatus().equals("Recebido")) {
                                         try (Connection connectDB = new DataBaseConection().getConection()) {
-                                            String querySqlItem = """
-                    SELECT localizacao, status, qtd_recebida
-                    FROM item
-                    WHERE id = ?
-                """;
-                                            try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                                                statement.setInt(1, idItemselecionado);
-                                                ResultSet rs = statement.executeQuery();
+                                            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item_atualizardadossaida(?) }");
+                                            cs.setInt(1, idItemselecionado);
+
+                                            try (ResultSet rs = cs.executeQuery()) {
                                                 if (rs.next()) {
                                                     localizacao = rs.getString("localizacao");
                                                     status = rs.getString("status");
@@ -302,7 +281,6 @@ public class ConsultarItemController implements Initializable{
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
                                         }
-
                                         LancaSaidaItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,
                                                 descricaoItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,
                                                 localizacao, status, qtdRecebida, idOperacaoItemSelecionado);
@@ -327,10 +305,7 @@ public class ConsultarItemController implements Initializable{
 
     @FXML
     public void consultBuscarOsOnAction(ActionEvent event) {
-        if (verificarNumeroOS()) {
             BuscarDB(consultNumeroOs.getText());
-
-        }
     }
 
     @FXML
@@ -346,113 +321,73 @@ public class ConsultarItemController implements Initializable{
     }
 
     public void BuscarDB(String numeroOs) {
-
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlItem = """
-                        SELECT item.id,
-                               item.cod_item,
-                               item.id_operacao,
-                               operacao.cod_operacao,
-                               item.descricao,
-                               item.qtd_pedido,
-                               item.qtd_recebida,
-                               item.status
-                        FROM item
-                        JOIN operacao ON operacao.id = item.id_operacao
-                        WHERE operacao.cod_os = ?
-                    """;
+            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item(?) }");
+            cs.setString(1, numeroOs);
 
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
+            boolean hasResults = cs.execute();
 
-                while (rs.next()) {
-                    Item item = new Item(
-                            rs.getInt("id"),
-                            rs.getString("cod_item"),
-                            rs.getInt("id_operacao"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("descricao"),
-                            rs.getInt("qtd_pedido"),
-                            rs.getInt("qtd_recebida"),
-                            rs.getString("status")
-                    );
-                    listaItens.add(item);
+            // Primeiro ResultSet: itens
+            if (hasResults) {
+                try (ResultSet rsItens = cs.getResultSet()) {
+                    while (rsItens.next()) {
+                        // Se o resultado for apenas a contagem (0), trata separadamente
+                        try {
+                            int resultado = rsItens.getInt("resultado");
+                            if (resultado == 0) {
+                                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                                "Não foi localizada ordem de serviço aberta com número informado")
+                                        .showAndWait();
+                                return;
+                            }
+                        } catch (SQLException ignored) {
+                            // Não era a coluna 'resultado', continua para carregar os itens
+                            Item item = new Item(
+                                    rsItens.getInt("id"),
+                                    rsItens.getString("cod_item"),
+                                    rsItens.getInt("id_operacao"),
+                                    rsItens.getString("cod_operacao"),
+                                    rsItens.getString("descricao"),
+                                    rsItens.getInt("qtd_pedido"),
+                                    rsItens.getInt("qtd_recebida"),
+                                    rsItens.getString("status")
+                            );
+                            listaItens.add(item);
+                        }
+                    }
                 }
             }
+
+            // Segundo ResultSet: operações
+            if (cs.getMoreResults()) {
+                try (ResultSet rsOperacoes = cs.getResultSet()) {
+                    while (rsOperacoes.next()) {
+                        Operacao operacao = new Operacao(
+                                rsOperacoes.getInt("id"),
+                                rsOperacoes.getString("cod_operacao"),
+                                rsOperacoes.getString("status")
+                        );
+                        listaOperacao.add(operacao);
+                    }
+                }
+            }
+
             todosItens.clear();
             todosItens.addAll(listaItens);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try (Connection connectDB = new DataBaseConection().getConection()) {
-            String querySqlOperacao = """
-                SELECT cod_operacao, MAX(id) AS id, MAX(status) AS status
-                FROM operacao
-                WHERE cod_os = ?
-                GROUP BY cod_operacao
-            """;
-
-            try (PreparedStatement statement = connectDB.prepareStatement(querySqlOperacao)) {
-                statement.setString(1, numeroOs);
-                ResultSet rs = statement.executeQuery();
-
-                while (rs.next()) {
-                    Operacao operacao = new Operacao(
-                            rs.getInt("id"),
-                            rs.getString("cod_operacao"),
-                            rs.getString("status")
-                    );
-                    listaOperacao.add(operacao);
-                }
-            }
-
             consultTableOperacao.setItems(listaOperacao);
+
+            consultItenTableViewOperacao.setVisible(true);
+            consultarItemSplitPane.setVisible(true);
+            consultItemTableViewItem.setVisible(false);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        consultItenTableViewOperacao.setVisible(true);
-        consultarItemSplitPane.setVisible(true);
-        consultItemTableViewItem.setVisible(false);
     }
 
-
-    public boolean verificarNumeroOS() {
-        boolean retorno = true;
-        if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
-                    .showAndWait();
-            retorno = false;
-        }
-        else{
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-
-                String verifcarCadastroBanco = "SELECT COUNT(*) FROM ordem_servico WHERE cod_os = ? AND status <> 'Encerrada'";
-                try (PreparedStatement statement1 = connectDB.prepareStatement(verifcarCadastroBanco)) {
-                    statement1.setString(1, consultNumeroOs.getText());
-                    ResultSet resultadoBuscaOs = statement1.executeQuery();
-
-                    if (resultadoBuscaOs.next()) {
-                        int count = resultadoBuscaOs.getInt(1);
-                        if (count == 0) {
-                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Não foi localizada ordem de serviço aberta com  número informado")
-                                    .showAndWait();
-                            retorno =  false;
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return retorno;
-    }
 
     public static class Item {
         private SimpleIntegerProperty idItem;
@@ -805,47 +740,27 @@ public class ConsultarItemController implements Initializable{
                 boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", mensagem );
 
                 if (confirmar) {
-                    mensagem = "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'";
-                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",mensagem)
+                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                    "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
                             .showAndWait();
 
+                    // Chama a procedure
                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                        String querySqlItem = "UPDATE item SET status = 'Solicitado na oficina' WHERE id = ?";
-                        String querySqlOperacao = "UPDATE operacao SET status = 'Item(s) solicitados' WHERE id = ?";
-                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                            statement.setInt(1, selecionado.getIdItem());
-                            statement.executeUpdate();
-                        }
-                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlOperacao)) {
-                            statement.setInt(1, selecionado.getIdOperacao());
-                            statement.executeUpdate();
+                        String sql = "CALL projeto_java_a3.solicitar_item(?, ?, ?, ?, ?)";
+                        try (CallableStatement cs = connectDB.prepareCall(sql)) {
+                            cs.setInt(1, selecionado.getIdItem());        // p_id
+                            cs.setInt(2, selecionado.getIdOperacao());    // p_id_operacao
+                            cs.setString(3, consultNumeroOs.getText());        // p_cod_os
+                            cs.setInt(4, Sessao.getMatricula());          // p_solicitado_por
+                            cs.setInt(5, Sessao.getMatricula());          // p_matricula (para log)
+                            cs.execute();
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
+
+                    // Atualiza a tela
                     BuscarDB(consultNumeroOs.getText());
-
-                    // Registrar atualização no banco
-                    DataBaseConection registarAtualizacao = new DataBaseConection();
-                    registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
-                    registarAtualizacao.AtualizarBanco(
-                            "Operação",
-                            selecionado.getCodOperacao(),
-                            "Item solicitado na oficina",
-                            Sessao.getMatricula()
-                    );
-
-                    // Inserir registro de solicitação
-                    try (Connection connectDB = new DataBaseConection().getConection()) {
-                        String querySqlSolicitacao = "INSERT INTO controle_solicitacao_item (solicitador_por, id_item) VALUES (?, ?)";
-                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlSolicitacao)) {
-                            statement.setInt(1, Sessao.getMatricula());
-                            statement.setInt(2, selecionado.getIdItem());
-                            statement.executeUpdate();
-                        }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
             });
         }
@@ -880,10 +795,10 @@ public class ConsultarItemController implements Initializable{
 
                 lancarSaida.setOnAction(event -> {
                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                        String querySqlItem = "SELECT localizacao, status, qtd_recebida FROM item WHERE id = ?";
-                        try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                            statement.setInt(1, selecionado.getIdItem());
-                            ResultSet rs = statement.executeQuery();
+                        CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item_atualizardadossaida(?) }");
+                        cs.setInt(1, selecionado.getIdItem());
+
+                        try (ResultSet rs = cs.executeQuery()) {
                             if (rs.next()) {
                                 localizacao = rs.getString("localizacao");
                                 status = rs.getString("status");
@@ -893,7 +808,6 @@ public class ConsultarItemController implements Initializable{
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
-
                     try {
                         LancaSaidaItem(
                                 selecionado.getCodItem(),

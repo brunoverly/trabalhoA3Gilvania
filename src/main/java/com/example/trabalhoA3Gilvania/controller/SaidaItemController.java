@@ -150,80 +150,34 @@ public class SaidaItemController implements Initializable {
                         .showAndWait();
                 return;
             }
+            try (Connection conn = new DataBaseConection().getConection()) {
+                String sql = "CALL projeto_java_a3.atualizar_saidaitem_e_log(?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setInt(1, idItem);
+                    stmt.setString(2, codOperacao);
+                    stmt.setString(3, "Item");
+                    stmt.setString(4, codOs);
+                    stmt.setInt(5, Integer.parseInt(retirarMatriculaMecanico.getText()));
+                    stmt.setInt(6, Sessao.getMatricula());
+                    stmt.setString(7, "Item entregue na oficina");
+                    stmt.setInt(8, Sessao.getMatricula());
 
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String querySqlRetirada = """
-                            INSERT INTO controle_retirada_itens
-                                (id_item, entregue_para, data_retirada, cod_os, cod_operacao, entregue_por)
-                            VALUES (?, ?, ?, ?, ?, ?)
-                        """;
-                LocalDateTime agora = LocalDateTime.now();
-                Timestamp ts = Timestamp.valueOf(agora);
+                    stmt.execute();
 
-                try (PreparedStatement statement = connectDB.prepareStatement(querySqlRetirada)) {
-                    statement.setInt(1, idItem);
-                    statement.setString(2, retirarMatriculaMecanico.getText());
-                    statement.setTimestamp(3, ts);
-                    statement.setString(4, codOs);
-                    statement.setString(5, codOperacao);
-                    statement.setInt(6, Sessao.getMatricula());
-
-                    int linhasAfetadas = statement.executeUpdate();
-                    if(linhasAfetadas > 0){
-                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Registro cadastrado com sucesso")
-                            .showAndWait();
-                    }
-                    statement.close();
-                    connectDB.close();
+                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Registro atualizado com sucesso").showAndWait();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String querySqlItem = """
-                                UPDATE item
-                                SET status = 'Entregue a oficina'
-                                WHERE id = ?
-                            """;
-                try (PreparedStatement statement = connectDB.prepareStatement(querySqlItem)) {
-                    statement.setInt(1, idItem);
-                    statement.executeUpdate();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            try (Connection connectDB = new DataBaseConection().getConection()) {
-                String querySqlOs = """
-                                UPDATE ordem_servico
-                                SET status = 'Em andamento'
-                                WHERE cod_os = ?
-                            """;
-                try (PreparedStatement statement = connectDB.prepareStatement(querySqlOs)) {
-                    statement.setString(1, codOs);
-                    statement.executeUpdate();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            DataBaseConection registarAtualizacao = new DataBaseConection();
-            registarAtualizacao.AtualizarStatusPorSolicitacao(idOperacao);
-
-            registarAtualizacao.AtualizarBanco(
-                    "Item",
-                     codOs,
-                    "Item entregue na oficina",
-                    Sessao.getMatricula()
-            );
 
             Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
 
-// 🔔 chama o callback antes de fechar
+            // 🔔 chama o callback antes de fechar
             if (listener != null) {
                 listener.aoFecharJanela();
             }
 
-// fecha a janela
+            // fecha a janela
             stage.close();
         }
 }

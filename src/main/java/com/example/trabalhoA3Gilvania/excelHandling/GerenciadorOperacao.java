@@ -1,18 +1,19 @@
 package com.example.trabalhoA3Gilvania.excelHandling;
+
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
+import com.example.trabalhoA3Gilvania.Sessao;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Cleanup;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import javax.swing.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,29 +31,23 @@ public class GerenciadorOperacao {
 
         if (fileSelected == null) {
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Nenhum arquivo foi selecionado")
-                            .showAndWait();
+                    .showAndWait();
         }
 
         return fileSelected;
     }
 
     public void criar(String numeroOs, File fileSelected) throws IOException {
-        DataFormatter formatter = new DataFormatter();
         DataBaseConection connectNow = new DataBaseConection();
         Connection connetDB = connectNow.getConection();
 
         List<String> operacoes = new ArrayList<>();
 
-        operacoes.clear();
-
-        //Acessando o arquivo
+        // Acessando o arquivo
         @Cleanup FileInputStream file = new FileInputStream(fileSelected);
         Workbook workbook = new XSSFWorkbook(file);
+        Sheet sheet = workbook.getSheetAt(0); // primeira aba
 
-        //Seleciona a primeira aba
-        Sheet sheet = workbook.getSheetAt(0);
-
-        boolean osExistOnExcel = false;
         boolean osExistente = false;
         boolean osCadastrada = false;
 
@@ -60,125 +55,104 @@ public class GerenciadorOperacao {
             connetDB.setAutoCommit(false);
         } catch (SQLException e) {
             e.printStackTrace();
-            e.getCause();
         }
 
-        for (Row row : sheet) {
-            if (row.getRowNum() == 0) continue;
+        // 🔹 Primeiro, verifica ou insere a OS usando procedure
+        try {
+            String procVerificarOuInserirOS = "{CALL verificar_ou_inserir_os(?, ?, ?, ?)}";
+            try (CallableStatement cs = connetDB.prepareCall(procVerificarOuInserirOS)) {
+                cs.setString(1, numeroOs);
+                cs.setInt(2, Sessao.getMatricula());
+                cs.registerOutParameter(3, java.sql.Types.BOOLEAN); // p_os_existente
+                cs.registerOutParameter(4, java.sql.Types.BOOLEAN); // p_os_inserida
 
-            String osString = formatter.formatCellValue(row.getCell(1));
-            String operacaoString = formatter.formatCellValue(row.getCell(2));
+                cs.execute();
+
+                osExistente = cs.getBoolean(3);
+                osCadastrada = cs.getBoolean(4);
+
+                if (osExistente) {
+                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço já cadastrada")
+                            .showAndWait();
+                    return; // interrompe execução
+                }
+
+                // **Não mostra alerta aqui, vamos aguardar todas inserções**
+
+                connetDB.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            return;
+        }
+
+        // 🔹 Processa as linhas da planilha para inserir operações e itens
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) continue; // cabeçalho
+
+            String osString = row.getCell(1).getStringCellValue();
+            if (!osString.equals(numeroOs)) continue; // ignora outras OS
+
+            String operacaoString = row.getCell(2).getStringCellValue();
             int idOperacao = 0;
 
-            if (osString.equals(numeroOs)) {
-                osExistOnExcel = true;
+            try {
+                // 🔹 Inserir operação ou buscar idOperacao existente
+                if (!operacoes.contains(operacaoString)) {
+                    String sqlOperacao = "{CALL inserir_operacao(?, ?, ?)}";
+                    try (CallableStatement csOp = connetDB.prepareCall(sqlOperacao)) {
+                        csOp.setString(1, operacaoString);
+                        csOp.setString(2, osString);
+                        csOp.registerOutParameter(3, java.sql.Types.INTEGER);
+                        csOp.execute();
 
-                String verifcarCadastroBanco = "SELECT COUNT(*) FROM ordem_servico WHERE cod_os = ?";
-                try (PreparedStatement statement1 = connetDB.prepareStatement(verifcarCadastroBanco)) {
-                    statement1.setString(1, osString);
-                    ResultSet resultadoBuscaOs = statement1.executeQuery();
+                        idOperacao = csOp.getInt(3);
+                    }
+                    operacoes.add(operacaoString);
+                } else {
+                    String sqlBuscaOperacao = "{CALL buscar_operacao_id(?, ?, ?)}";
+                    try (CallableStatement csBusca = connetDB.prepareCall(sqlBuscaOperacao)) {
+                        csBusca.setString(1, operacaoString);
+                        csBusca.setString(2, osString);
+                        csBusca.registerOutParameter(3, java.sql.Types.INTEGER);
+                        csBusca.execute();
 
-                if (resultadoBuscaOs.next()) {
-                    int count = resultadoBuscaOs.getInt(1);
-                    if (count > 0) {
-                        osExistente = true;
-                    } else {
-                        osExistOnExcel = true;
-                        LocalDateTime agora = LocalDateTime.now();
-                        Timestamp ts = Timestamp.valueOf(agora);
-                        try {
-                            String sqlOrdem = "INSERT INTO ordem_servico (datahora_abertura, cod_os) VALUES (?, ?)";
-                            try (PreparedStatement ps = connetDB.prepareStatement(sqlOrdem)) {
-                                ps.setTimestamp(1, ts); // data/hora no formato MySQL
-                                ps.setString(2, osString); // numero_os
-                                ps.executeUpdate();
-                                osCadastrada = true;
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            e.getCause();
-                        }
+                        idOperacao = csBusca.getInt(3);
                     }
                 }
-                    try {
-                        connetDB.commit();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+
+                // 🔹 Inserir item, sempre que houver quantidade > 0
+                int qtdPedido = (int) row.getCell(6).getNumericCellValue();
+                if (idOperacao != 0 && qtdPedido != 0) {
+                    String sqlItem = "{CALL inserir_item(?, ?, ?, ?)}";
+                    try (CallableStatement csItem = connetDB.prepareCall(sqlItem)) {
+                        csItem.setInt(1, idOperacao);
+                        csItem.setString(2, row.getCell(4).getStringCellValue()); // cod_item
+                        csItem.setString(3, row.getCell(5).getStringCellValue()); // descricao
+                        csItem.setInt(4, qtdPedido);
+                        csItem.execute();
                     }
-
-                    if (osCadastrada) {
-                        try {
-                            if (!operacoes.contains(operacaoString)) {
-                                // 🔹 Inserir operação e recuperar idOperacao corretamente
-                                String sqlOperacao = "INSERT INTO operacao (cod_operacao, cod_os, cod_item) VALUES (?, ?, ?)";
-                                try (PreparedStatement ps = connetDB.prepareStatement(sqlOperacao, Statement.RETURN_GENERATED_KEYS)) {
-                                    ps.setString(1, operacaoString);
-                                    ps.setString(2, osString);
-                                    ps.setString(3, row.getCell(4).getStringCellValue());
-                                    ps.executeUpdate();
-
-                                    try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                                        if (generatedKeys.next()) {
-                                            idOperacao = generatedKeys.getInt(1);
-                                        }
-                                    }
-                                }
-                                operacoes.add(operacaoString);
-                            } else {
-                                // 🔹 Buscar o idOperacao existente no banco
-                                String sqlBuscaOperacao = "SELECT id FROM operacao WHERE cod_operacao = ? AND cod_os = ?";
-                                try (PreparedStatement psBusca = connetDB.prepareStatement(sqlBuscaOperacao)) {
-                                    psBusca.setString(1, operacaoString);
-                                    psBusca.setString(2, osString);
-                                    ResultSet rs = psBusca.executeQuery();
-                                    if (rs.next()) {
-                                        idOperacao = rs.getInt("id");
-                                    }
-                                }
-                            }
-
-                            // 🔹 Agora SEMPRE teremos um idOperacao válido aqui
-                            if (idOperacao != 0 && (int) row.getCell(6).getNumericCellValue() != 0) {
-                                String sqlItem = "INSERT INTO item (id_operacao, cod_item, descricao, qtd_pedido) VALUES (?, ?, ?, ?)";
-                                try (PreparedStatement psItem = connetDB.prepareStatement(sqlItem)) {
-                                    psItem.setInt(1, idOperacao);
-                                    psItem.setString(2, row.getCell(4).getStringCellValue());
-                                    psItem.setString(3, row.getCell(5).getStringCellValue());
-                                    psItem.setInt(4, (int) row.getCell(6).getNumericCellValue());
-                                    psItem.executeUpdate();
-                                }
-                            }
-
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    e.getCause();
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+                throw new RuntimeException(e);
             }
         }
 
+        // 🔹 Commit final após inserir todas operações e itens
         try {
-            connetDB.setAutoCommit(true);
+            connetDB.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            e.getCause();
+            try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            return;
         }
-        if (osCadastrada) {
-            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço cadastrada com sucesso")
-                    .showAndWait();
-        }
-        else if (osExistente) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço já cadastrada")
-                    .showAndWait();
-        }
+
+        // 🔹 Mostra alerta apenas se tudo deu certo
+        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço cadastrada com sucesso")
+                .showAndWait();
     }
 }
-
-
-
