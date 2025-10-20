@@ -11,50 +11,51 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fecharOsAnchorPane" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.FecharOsController">
+<AnchorPane fx:id="fecharOsAnchorPane" prefHeight="490.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.FecharOsController">
     <children>
-        <TextField fx:id="consultNumeroOs" layoutX="55.0" layoutY="129.0" prefHeight="35.0" prefWidth="241.0" promptText="Ex: 765234" style="-fx-background-color: transparent; -fx-border-color: #434a50; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
-        <Label layoutX="57.0" layoutY="90.0" text="Digite o numero da OS a ser encerrada" textFill="#434a50">
+        <TextField fx:id="consultNumeroOs" layoutX="38.0" layoutY="90.0" prefHeight="25.0" prefWidth="169.0" promptText="Ex: 765234" style="-fx-background-color: transparent; -fx-border-color: #434a50; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>
-                <Font size="24.0" />
+                <Font size="10.0" />
+            </font>
+        </TextField>
+        <Label layoutX="40.0" layoutY="63.0" text="Digite o numero da OS a ser encerrada" textFill="#434a50">
+            <font>
+                <Font size="17.0" />
             </font>
         </Label>
-        <Button fx:id="consultBuscarOs" layoutX="305.0" layoutY="129.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="35.0" prefWidth="104.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
+        <Button fx:id="consultBuscarOs" layoutX="214.0" layoutY="90.0" mnemonicParsing="false" onAction="#consultBuscarOsOnAction" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
             <font>
-                <Font name="Verdana Bold" size="15.0" />
+                <Font name="Verdana Bold" size="10.0" />
             </font>
         </Button>
-        <Label fx:id="consultLabelOsBuscada" focusTraversable="false" layoutX="63.0" layoutY="201.0" prefHeight="17.0" prefWidth="118.0" text="Ordem de Servico" visible="false">
+        <Label fx:id="consultLabelOsBuscada" focusTraversable="false" layoutX="44.0" layoutY="141.0" prefHeight="12.0" prefWidth="83.0" text="Ordem de Servico" visible="false">
             <font>
-                <Font size="13.0" />
+                <Font size="9.0" />
             </font>
         </Label>
-        <AnchorPane fx:id="fecharAnchorPane" layoutX="45.0" layoutY="186.0" prefHeight="427.0" prefWidth="924.0" style="-fx-background-color: white;" visible="false">
+        <AnchorPane fx:id="fecharAnchorPane" layoutX="31.0" layoutY="130.0" prefHeight="300.0" prefWidth="650.0" style="-fx-background-color: white;" visible="false">
             <children>
-                <SplitPane dividerPositions="0.28900949796472186" layoutX="-4.0" layoutY="52.0" prefHeight="412.0" prefWidth="909.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.289" layoutX="-3.0" layoutY="36.0" prefHeight="295.0" prefWidth="650.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="100.0" style="-fx-background-color: white;">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="126.0" prefWidth="70.0" style="-fx-background-color: white;">
                             <children>
-                                <TableView fx:id="consultTableOperacao" layoutX="1.0" layoutY="-146.0" prefHeight="396.0" prefWidth="268.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableOperacao" layoutX="1.0" layoutY="-102.0" prefHeight="277.0" prefWidth="188.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="104.0" text="Operação" />
-                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="154.0" text="Status" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="6.0" prefWidth="73.0" text="Operação" />
+                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="108.0" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
                         </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="658.0" style="-fx-background-color: white;">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="460.0" style="-fx-background-color: white;">
                             <children>
-                                <TableView fx:id="consultTableItem" layoutX="-16.0" layoutY="-151.0" prefHeight="410.0" prefWidth="638.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableItem" layoutX="-11.0" layoutY="-106.0" prefHeight="287.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="142.0" text="Código do item" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="149.0" text="Descrição" />
-                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="84.0" text="Qtd. pedido" />
-                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="101.0" text="Qtd. recebida" />
-                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="174.0" text="Status" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="99.0" text="Código do item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="104.0" text="Descrição" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="59.0" text="Pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="70.0" text="Recebido" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="122.0" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -63,27 +64,27 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-        <Button fx:id="consultVoltarButton" layoutX="48.0" layoutY="623.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="47.0" prefWidth="85.0" style="-fx-background-color: transparent;" textFill="#14213d">
+        <Button fx:id="consultVoltarButton" layoutX="34.0" layoutY="436.0" mnemonicParsing="false" onAction="#constulVoltarButtonOnAction" prefHeight="33.0" prefWidth="60.0" style="-fx-background-color: transparent;" textFill="#14213d">
             <font>
-                <Font name="Verdana Bold" size="15.0" />
+                <Font name="Verdana Bold" size="10.0" />
             </font>
-         <graphic>
-            <ImageView fx:id="fecharOsVoltar" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../imagens/voltar.png" />
-               </image>
-            </ImageView>
-         </graphic>
+            <graphic>
+                <ImageView fx:id="fecharOsVoltar" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/close.png" />
+                    </image>
+                </ImageView>
+            </graphic>
         </Button>
-      <Button fx:id="confirmCloseOsButton" layoutX="814.0" layoutY="630.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="35.0" prefWidth="132.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Encerrar Os" textFill="#434a50">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-      </Button>
-      <Label focusTraversable="false" layoutX="55.0" layoutY="25.0" text="Fechar Ordem de Serviço" textFill="#434a50">
-         <font>
-            <Font name="System Bold" size="44.0" />
-         </font>
-      </Label>
+        <Button fx:id="confirmCloseOsButton" layoutX="570.0" layoutY="441.0" mnemonicParsing="false" onAction="#confirmCloseOsButton" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Encerrar Os" textFill="#434a50">
+            <font>
+                <Font name="Verdana Bold" size="10.0" />
+            </font>
+        </Button>
+        <Label focusTraversable="false" layoutX="38.0" layoutY="17.0" text="Fechar Ordem de Serviço" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="31.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>

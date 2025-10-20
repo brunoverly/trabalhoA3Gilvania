@@ -10,72 +10,79 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="register" prefHeight="670.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.CadastrarUsuarioController">
-   <children>
-      <Button fx:id="cadastrarCancelButton" layoutX="24.0" layoutY="590.0" mnemonicParsing="false" onAction="#cadastrarCancelButtonOnAction" prefHeight="35.0" prefWidth="85.0" style="-fx-background-color: transparent;" textFill="#14213d">
+<AnchorPane fx:id="register" prefHeight="469.0" prefWidth="350.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.CadastrarUsuarioController">
+    <children>
+        <Button fx:id="cadastrarCancelButton" layoutX="16.8" layoutY="413.0" mnemonicParsing="false" onAction="#cadastrarCancelButtonOnAction" prefHeight="24.5" prefWidth="59.5" style="-fx-background-color: transparent;" textFill="#14213d">
+            <font>
+                <Font name="Verdana Bold" size="10.5" />
+            </font>
+            <graphic>
+                <ImageView fx:id="cadastrarVoltarButtonImage" fitHeight="31.5" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/voltar.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label layoutX="28.0" layoutY="63.0" text="Nome completo" textFill="#434a50">
+            <font>
+                <Font size="11.2" />
+            </font>
+        </Label>
+        <TextField fx:id="cadastroNome" layoutX="28.0" layoutY="84.0" prefHeight="24.5" prefWidth="249.2" promptText="Ex: Bruno Souza" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="9.8" />
+            </font>
+        </TextField>
+        <Label layoutX="28.0" layoutY="119.0" text="Matrícula" textFill="#434a50">
+            <font>
+                <Font size="11.2" />
+            </font>
+        </Label>
+        <TextField fx:id="cadastroMatricula" layoutX="28.0" layoutY="140.0" prefHeight="24.5" prefWidth="108.5" promptText="Ex: 5675341" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="9.8" />
+            </font>
+        </TextField>
+        <Label layoutX="28.0" layoutY="175.0" text="Cargo" textFill="#434a50">
+            <font>
+                <Font size="11.2" />
+            </font>
+        </Label>
+        <ComboBox fx:id="cadastroComboBox" layoutX="28.0" layoutY="198.1" prefHeight="24.5" prefWidth="130.2" promptText="Selecione um Cargo" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0.5 0.5 0.5 0.5;" />
+        <Label layoutX="28.0" layoutY="231.0" text="PIN" textFill="#434a50">
+            <font>
+                <Font size="11.2" />
+            </font>
+        </Label>
+        <PasswordField fx:id="cadastroSenha" layoutX="28.0" layoutY="252.0" prefHeight="24.5" prefWidth="235.2" promptText="Ex: 356549" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 0; -fx-border-width: 0 0 2 0;">
+            <font>
+                <Font size="9.8" />
+            </font>
+        </PasswordField>
+        <Label layoutX="28.0" layoutY="287.0" text="Confirme o PIN" textFill="#434a50">
+            <font>
+                <Font size="11.2" />
+            </font>
+        </Label>
+        <PasswordField fx:id="cadastroConfirmarSenha" layoutX="28.0" layoutY="308.0" prefHeight="24.5" prefWidth="235.2" promptText="Confirmação do PIN" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="9.8" />
+            </font>
+        </PasswordField>
+        <Button fx:id="cadastrarButton" layoutX="238.0" layoutY="421.4" mnemonicParsing="false" onAction="#cadastrarButtonOnAction" prefHeight="24.5" prefWidth="88.9" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Cadastrar" textFill="#434a50">
+            <font>
+                <Font name="Verdana Bold" size="10.5" />
+            </font>
+        </Button>
+        <Label layoutX="15.4" layoutY="17.5" text="Cadastrar novo usuário" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="25.2" />
+            </font>
+        </Label>
+        <Label layoutX="55.0" layoutY="232.0" text="(Deve ser composto de 6 numeros)" textFill="#434a50">
          <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-         <graphic>
-            <ImageView fx:id="cadastrarVoltarButtonImage" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../imagens/voltar.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Label layoutX="40.0" layoutY="90.0" text="Nome completo" textFill="#434a50">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="cadastroNome" layoutX="40.0" layoutY="120.0" prefHeight="35.0" prefWidth="356.0" promptText="Ex: Bruno Souza" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
-      <Label layoutX="40.0" layoutY="170.0" text="Matrícula" textFill="#434a50">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="cadastroMatricula" layoutX="40.0" layoutY="200.0" prefHeight="35.0" prefWidth="155.0" promptText="Ex: 5675341" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
-      <Label layoutX="40.0" layoutY="250.0" text="Cargo" textFill="#434a50">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="cadastroComboBox" layoutX="40.0" layoutY="283.0" prefHeight="35.0" prefWidth="186.0" promptText="Selecione um Cargo" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0.5 0.5 0.5 0.5;" />
-      <Label layoutX="40.0" layoutY="330.0" text="PIN" textFill="#434a50">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="cadastroSenha" layoutX="40.0" layoutY="360.0" prefHeight="35.0" prefWidth="336.0" promptText="Ex: 356549" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 0; -fx-border-width: 0 0 2 0;">
-         <font>
-            <Font size="14.0" />
-         </font></PasswordField>
-      <Label layoutX="40.0" layoutY="410.0" text="Confirme o PIN" textFill="#434a50">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="cadastroConfirmarSenha" layoutX="40.0" layoutY="440.0" prefHeight="35.0" prefWidth="336.0" promptText="Confirmação do PIN" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
-         <font>
-            <Font size="14.0" />
-         </font></PasswordField>
-      <Button fx:id="cadastrarButton" layoutX="340.0" layoutY="602.0" mnemonicParsing="false" onAction="#cadastrarButtonOnAction" prefHeight="35.0" prefWidth="127.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Cadastrar" textFill="#434a50">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-      </Button>
-      <Label layoutX="22.0" layoutY="25.0" text="Cadastrar novo usuário" textFill="#434a50">
-         <font>
-            <Font name="System Bold" size="36.0" />
-         </font>
-      </Label>
-      <Label layoutX="190.0" layoutY="334.0" text="(Deve ser composto de 6 numeros)" textFill="#434a50" />
-   </children>
+            <Font size="9.0" />
+         </font></Label>
+    </children>
 </AnchorPane>

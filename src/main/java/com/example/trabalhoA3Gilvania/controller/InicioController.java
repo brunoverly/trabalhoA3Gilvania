@@ -146,7 +146,7 @@ public class InicioController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
         String dataPorExtenso = hoje.format(formatter);
 
-        inicioLabelBemVindo.setText("Bem vindo de volta "+ Sessao.getNome());
+        inicioLabelBemVindo.setText("Bem vindo de volta, "+ Sessao.getNome());
         inicioLabelData.setText(dataPorExtenso);
 
         //Aumentar o icone de sair ao passar o mouse

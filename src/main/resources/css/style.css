@@ -1,10 +1,10 @@
 .root {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
-    -fx-border-width: 1;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);
+    -fx-border-width: 0.7;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 3);
 }
 
 .root-pane,
@@ -21,44 +21,43 @@
 
 .root-pane {
     -fx-border-color: #3498db;
-    -fx-border-width: 4;
-    -fx-border-radius: 15;
-    -fx-background-radius: 15;
+    -fx-border-width: 2.8;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-background-color: #f0f0f0;
 }
 
 .button {
-    -fx-background-radius: 6;
-    -fx-border-radius: 6;
-    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 1.4 5.6 1.4 5.6;
     -fx-font-family: "Poppins";
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
+    -fx-font-size: 11px;
 }
 
 .text-field {
-    -fx-background-radius: 7;
-    -fx-border-radius: 7;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
     -fx-border-color: #cccccc;
-    -fx-border-width: 1;
+    -fx-border-width: 0.7;
 }
 
 #inicioVbox {
     -fx-background-color: #264653;
     -fx-border-color: #264653;
-    -fx-border-width: 2;
-    -fx-border-radius: 0 10 10 0;
-    -fx-background-radius: 0 10 10 0;
+    -fx-border-width: 1.4;
+    -fx-border-radius: 0 7 7 0;
+    -fx-background-radius: 0 7 7 0;
 }
 
 .vbox .button {
     -fx-alignment: center-left;
     -fx-content-display: left;
-    -fx-graphic-text-gap: 10px;
+    -fx-graphic-text-gap: 7;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
+    -fx-font-size: 11px;
 }
 
 #menuAddUser,
@@ -79,12 +78,11 @@
     -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: LEFT;
-    -fx-graphic-text-gap: 10;
-    -fx-padding: 5 10 5 10;
+    -fx-graphic-text-gap: 7;
+    -fx-padding: 3 7 3 7;
     -fx-border-width: 0;
     -fx-border-color: transparent;
     -fx-transition: all 0.2s ease-in-out;
-    -fx-text-fill: white;
 }
 
 #menuAddUser:hover,
@@ -98,8 +96,8 @@
 #menuRetiradaItem:hover,
 #menuEntradaItem:hover {
     -fx-border-color: transparent transparent #fca311 transparent;
-    -fx-border-width: 0 0 1 0;
-    -fx-font-size: 16px;
+    -fx-border-width: 0 0 0.7 0;
+    -fx-font-size: 11px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
@@ -110,8 +108,8 @@
     -fx-text-fill: #888888;
     -fx-background-color: white;
     -fx-border-color: #cccccc;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+    -fx-border-radius: 5.6;
+    -fx-background-radius: 5.6;
 }
 
 .text-field:disabled:focused {
@@ -121,10 +119,10 @@
 
 .table-view {
     -fx-background-color: white;
-    -fx-background-radius: 40 40 40 40;
+    -fx-background-radius: 28;
     -fx-border-color: #b0b0b0;
-    -fx-border-width: 1 1 0 1;
-    -fx-border-radius: 40 40 0 0;
+    -fx-border-width: 0.7 0.7 0 0.7;
+    -fx-border-radius: 28 28 0 0;
     -fx-padding: 0;
 }
 
@@ -135,12 +133,12 @@
 
 .table-view .column-header-background {
     -fx-background-color: #434A50;
-    -fx-background-radius: 10 10 0 0;
+    -fx-background-radius: 7 7 0 0;
     -fx-padding: 0;
 }
 
 .table-view .column-header {
-    -fx-pref-height: 30px;
+    -fx-pref-height: 21px;
 }
 
 .table-view .column-header,
@@ -151,15 +149,33 @@
 
 .table-view .column-header .label {
     -fx-font-family: "Poppins";
-    -fx-text-fill: white;
+    -fx-font-size: 9px;
     -fx-font-weight: bold;
-    -fx-font-size: 13px;
+    -fx-text-fill: white;
     -fx-alignment: CENTER;
 }
 
-.table-view .table-row-cell:hover .table-cell {
-    -fx-background-color: rgba(38,70,83,0.2);
+.table-view .table-cell {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: regular;
+    -fx-padding: 4px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-font-size: 10px;
     -fx-text-fill: #14213d;
+}
+
+.table-row-cell:odd .table-cell {
+    -fx-background-color: #E3E3E3;
+}
+
+.table-row-cell:even .table-cell {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-background-color: rgba(38,70,83,0.2);
+    -fx-text-fill: #000;
 }
 
 .table-row-cell:selected {
@@ -171,29 +187,37 @@
     -fx-text-fill: white !important;
 }
 
+.table-row-cell:selected:focused {
+    -fx-background-color: #0a64ad !important;
+}
+
+.table-row-cell:selected:armed {
+    -fx-background-color: #0a64ad !important;
+}
+
 .split-pane {
-    -fx-background-color:  #e5e5e5;
+    -fx-background-color: #e5e5e5;
     -fx-padding: 0;
     -fx-background-insets: 0;
 }
 
 .split-pane .split-pane-divider {
     -fx-background-color: white;
-    -fx-pref-width: 2px;
+    -fx-pref-width: 1.4px;
 }
 
 .table-view .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-padding: 0;
-    -fx-pref-width: 6px;
-    -fx-min-width: 6px;
-    -fx-max-width: 6px;
+    -fx-pref-width: 4px;
+    -fx-min-width: 4px;
+    -fx-max-width: 4px;
 }
 
 .table-view .scroll-bar:vertical .thumb {
     -fx-background-color: #264653;
     -fx-background-insets: 0;
-    -fx-background-radius: 3;
+    -fx-background-radius: 2;
 }
 
 .table-view .scroll-bar:horizontal {
@@ -206,15 +230,15 @@
 #rootPane {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
-    -fx-border-width: 1;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
-    -fx-padding: 10;
+    -fx-border-width: 0.7;
+    -fx-border-radius: 8.4;
+    -fx-background-radius: 8.4;
+    -fx-padding: 7;
 }
 
 #rootPane.outer-border {
     -fx-border-color: #3498db;
-    -fx-border-width: 4;
+    -fx-border-width: 2.8;
 }
 
 #enterUserNameField,
@@ -233,8 +257,8 @@
 #consultarOsPane,
 #inicioPane {
     -fx-background-color: white;
-    -fx-background-radius: 25;
-    -fx-border-radius: 25;
+    -fx-background-radius: 17.5;
+    -fx-border-radius: 17.5;
 }
 
 #importSelecionarExcel:hover,
@@ -247,7 +271,7 @@
 #removeConfirmarButton:hover,
 #removeBuscarMatricula:hover,
 #loginButton:hover {
-    -fx-font-size: 16px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-scale-x: 1.05;

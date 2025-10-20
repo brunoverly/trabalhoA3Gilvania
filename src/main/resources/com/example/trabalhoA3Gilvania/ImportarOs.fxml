@@ -11,82 +11,82 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ImportarOsAcnhorPane" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
-   <children>
-      <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="638.0" layoutY="100.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="48.0" prefWidth="204.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Selecionar arquivo" textFill="#434a50">
-         <font>
-            <Font name="Verdana Bold" size="17.0" />
-         </font>
-      </Button>
-      <Button fx:id="importVoltar" layoutX="50.0" layoutY="630.0" mnemonicParsing="false" onAction="#importVoltarOnAction" prefHeight="56.0" prefWidth="80.0" style="-fx-background-color: transparent;" textFill="#14213d">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-         <graphic>
-            <ImageView fx:id="importarOsVoltarImage" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../imagens/voltar.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Button fx:id="importFazerImport" layoutX="822.0" layoutY="630.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="35.0" prefWidth="128.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Importar" textFill="#434a50">
-         <font>
-            <Font name="Verdana Bold" size="15.0" />
-         </font>
-      </Button>
-      <Label fx:id="importLabelSelecionar" focusTraversable="false" layoutX="50.0" layoutY="163.0" prefHeight="35.0" prefWidth="630.0" text="Selecione a ordem de servico a ser importada" textFill="#14213d" visible="false">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label focusTraversable="false" layoutX="50.0" layoutY="15.0" text="Importar Ordem de Serviço" textFill="#434a50">
-         <font>
-            <Font name="System Bold" size="44.0" />
-         </font>
-      </Label>
-      <TextField fx:id="importOsPathField" disable="true" editable="false" layoutX="51.0" layoutY="106.0" prefHeight="35.0" prefWidth="574.0" promptText="C:\documents\" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
-      <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="46.0" layoutY="174.0" prefHeight="427.0" prefWidth="907.0" style="-fx-background-color: white;">
-         <children>
-            <SplitPane fx:id="imortarSplitPane" dividerPositions="0.15418994413407822, 0.28268156424581004" layoutY="-12.0" prefHeight="405.0" prefWidth="907.0" style="-fx-background-color: white;" visible="false">
-              <items>
-                <AnchorPane fx:id="importarOsTableViewOrdem" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
-                     <children>
-                        <TableView fx:id="consultTableOrdemServico" prefHeight="307.0" prefWidth="261.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="136.0" text="Ordem" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane fx:id="importarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="189.0" style="-fx-background-color: white;" visible="false">
-                     <children>
-                        <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="307.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="constulTabelCodOperacao" prefWidth="109.0" text="Operação" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="importarOsTableViewItens" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="631.0" style="-fx-background-color: white;" visible="false">
-                     <children>
-                        <TableView fx:id="consultTableItem" prefHeight="307.0" prefWidth="585.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="consultTableCodItem" prefWidth="142.0" text="Cod. Item" />
-                            <TableColumn fx:id="consultTablePedidoItem" prefWidth="74.0" text="Qtd. Item" />
-                              <TableColumn fx:id="consultTableDescricaoItem" prefWidth="429.0" text="Descrição" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
-         </children>
-      </AnchorPane>
-      <Button layoutX="922.0" layoutY="23.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
-   </children>
+<AnchorPane fx:id="ImportarOsAcnhorPane" prefHeight="490.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
+    <children>
+        <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="449.0" layoutY="80.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="25.0" prefWidth="144.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Selecionar arquivo" textFill="#434a50">
+            <font>
+                <Font name="Verdana Bold" size="10.0" />
+            </font>
+        </Button>
+        <Button fx:id="importVoltar" layoutX="34.0" layoutY="436.0" mnemonicParsing="false" onAction="#importVoltarOnAction" prefHeight="33.0" prefWidth="60.0" style="-fx-background-color: transparent;" textFill="#14213d">
+            <font>
+                <Font name="Verdana Bold" size="10.0" />
+            </font>
+            <graphic>
+                <ImageView fx:id="importarOsVoltarImage" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/close.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label focusTraversable="false" layoutX="35.0" layoutY="10.0" text="Importar Ordem de Serviço" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="31.0" />
+            </font>
+        </Label>
+        <TextField fx:id="importOsPathField" disable="true" editable="false" layoutX="35.0" layoutY="80.0" prefHeight="25.0" prefWidth="400.0" promptText="C:\documents\" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+            <font>
+                <Font size="10.0" />
+            </font>
+        </TextField>
+        <AnchorPane fx:id="importOsAnchorPanelTable" layoutX="31.0" layoutY="143.0" prefHeight="293.0" prefWidth="639.0" style="-fx-background-color: white;">
+            <children>
+                <SplitPane fx:id="imortarSplitPane" dividerPositions="0.16118935837245696, 0.323943661971831" layoutX="-3.0" layoutY="-2.0" prefHeight="294.0" prefWidth="641.0" style="-fx-background-color: white;" visible="false">
+                    <items>
+                        <AnchorPane fx:id="importarOsTableViewOrdem" minHeight="0.0" minWidth="0.0" prefHeight="126.0" prefWidth="70.0" style="-fx-background-color: white;" visible="false">
+                            <children>
+                                <TableView fx:id="consultTableOrdemServico" prefHeight="277.0" prefWidth="188.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="99.0" text="Ordem" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="importarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="188.0" style="-fx-background-color: white;" visible="false">
+                            <children>
+                                <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="292.0" prefWidth="106.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="constulTabelCodOperacao" prefWidth="97.0" text="Operação" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="importarOsTableViewItens" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="460.0" style="-fx-background-color: white;" visible="false">
+                            <children>
+                                <TableView fx:id="consultTableItem" prefHeight="277.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="119.0" text="Cod. Item" />
+                                        <TableColumn fx:id="consultTablePedidoItem" prefWidth="84.66668701171875" text="Pedido" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="224.33331298828125" text="Descrição" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+        <Button layoutX="630.0" layoutY="23.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
+        <Label fx:id="importLabelSelecionar" focusTraversable="false" layoutX="35.0" layoutY="112.0" prefHeight="24.0" prefWidth="450.0" text="Selecione a ordem de serviço a ser importada" textFill="#434a50" visible="false">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Label>
+        <Button fx:id="importFazerImport" layoutX="580.0" layoutY="438.0" mnemonicParsing="false" onAction="#importFazerImportOnAction" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Importar" textFill="#434a50">
+            <font>
+                <Font name="Verdana Bold" size="10.0" />
+            </font>
+        </Button>
+    </children>
 </AnchorPane>
