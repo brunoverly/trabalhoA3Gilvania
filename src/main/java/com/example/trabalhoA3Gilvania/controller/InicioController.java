@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
+import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.screen.*;
@@ -81,6 +82,7 @@ public class InicioController implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private ObservableList<Atualizacao> listaAtualizacoes = FXCollections.observableArrayList();
+    FormsUtil alerta = new FormsUtil();
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -167,13 +169,16 @@ public class InicioController implements Initializable {
     }
     //Acao ao clicar em fechar janela
     public void inicioButtonFecharJanelaOnAction(ActionEvent event){
-        Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
-        stage.close();
+        boolean confirmacao = alerta.criarAlertaConfirmacao("Confirmação", "Deseja encerrar a aplicação?");
+        if(confirmacao) {
+            Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
+            stage.close();
+        }
     }
     //Carrega a tabela da pagina inicial
     public void carregarAtualizacoes() {
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.carregar_dashboard_e_atualizacoes() }");
+            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.inicio_dashboard_tableview() }");
 
             boolean hasResult = cs.execute();
 
@@ -272,16 +277,8 @@ public class InicioController implements Initializable {
     //Acao ao clicar em log off
     public void menuSairOnAction (ActionEvent event){
         try{
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmação");
-            alert.setHeaderText(null);
-            alert.setContentText("Encerrar sessão?");
-            Stage stageAlert = (Stage) alert.getDialogPane().getScene().getWindow();
-            stageAlert.getIcons().add(new Image(getClass().getResource("/imagens/logo.png").toExternalForm()));
-
-            Optional<ButtonType> resultado = alert.showAndWait();
-
-            if (resultado.isPresent() && resultado.get() == ButtonType.OK){
+            boolean confirmacao = alerta.criarAlertaConfirmacao("Confirmação", "Encerrar sessão?");
+            if(confirmacao){
                 Stage stage = (Stage) menuSair.getScene().getWindow();
                 stage.close();
                 Sessao.getCargo();

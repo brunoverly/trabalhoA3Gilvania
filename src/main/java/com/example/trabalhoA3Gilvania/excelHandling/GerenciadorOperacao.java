@@ -30,7 +30,7 @@ public class GerenciadorOperacao {
         File fileSelected = fileChooser.showOpenDialog(stage);
 
         if (fileSelected == null) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Nenhum arquivo foi selecionado")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Nenhum arquivo foi selecionado")
                     .showAndWait();
         }
 
@@ -59,7 +59,7 @@ public class GerenciadorOperacao {
 
         // 🔹 Primeiro, verifica ou insere a OS usando procedure
         try {
-            String procVerificarOuInserirOS = "{CALL verificar_ou_inserir_os(?, ?, ?, ?)}";
+            String procVerificarOuInserirOS = "{CALL excel_verificar(?, ?, ?, ?)}";
             try (CallableStatement cs = connetDB.prepareCall(procVerificarOuInserirOS)) {
                 cs.setString(1, numeroOs);
                 cs.setInt(2, Sessao.getMatricula());

@@ -132,7 +132,7 @@ public class FecharOsController implements Initializable {
     public void confirmCloseOsButton(ActionEvent event) {
         // Verifica se o campo está vazio
         if (consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             return;
         }
@@ -162,14 +162,14 @@ public class FecharOsController implements Initializable {
             // Mostra alerta baseado no resultado
             switch (resultadoEncerramento) {
                 case 0 -> alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
-                case 1 -> alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS já se encontra encerrada").showAndWait();
+                case 1 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "OS já se encontra encerrada").showAndWait();
                 case 2 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
                 default -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao acessar o banco de dados").showAndWait();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao conectar com banco de dados").showAndWait();
         }
 
         consultNumeroOs.setText("");
@@ -184,7 +184,7 @@ public class FecharOsController implements Initializable {
         String numeroOs = consultNumeroOs.getText();
 
         try (Connection connectDB = new DataBaseConection().getConection()) {
-            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.fecharos_buscardados(?) }");
+            CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.encerrar_os_dados(?) }");
             cs.setString(1, numeroOs);
 
             boolean hasResults = cs.execute();
@@ -195,7 +195,7 @@ public class FecharOsController implements Initializable {
                     if (rsResultado.next()) {
                         int resultado = rsResultado.getInt("resultado");
                         if (resultado == 0) {
-                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço não encontrada")
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada")
                                     .showAndWait();
                             return; // para execução do método
                         }
@@ -249,7 +249,7 @@ public class FecharOsController implements Initializable {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao acessar o banco de dados").showAndWait();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao conectar com banco de dados").showAndWait();
         }
         consultLabelOsBuscada.setVisible(true);
         fecharAnchorPane.setVisible(true);
@@ -259,7 +259,7 @@ public class FecharOsController implements Initializable {
     public boolean verificarNumeroOS() {
         boolean retorno = true;
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             retorno = false;
         }

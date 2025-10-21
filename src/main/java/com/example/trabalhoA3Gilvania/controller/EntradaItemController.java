@@ -120,17 +120,17 @@ public class EntradaItemController implements Initializable {
 
     public void entradaItemConfirmarOnAction() {
         if ((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe a quantidade recebida e local armazenado")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe a quantidade recebida e local armazenado")
                     .showAndWait();
 
         } else if (!verificarValorDigitado()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Valor informado é inválida ou maior que a quantidade informada na ordem de serviço")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Valor informado é inválida ou maior que a quantidade informada na ordem de serviço")
                     .showAndWait();
         } else {
             int qtdRecebida = Integer.parseInt(entradaQtdRecebida.getText());
             String localizacao = entradaLocalArmazenado.getText();
 
-            String procedureCall = "{ CALL projeto_java_a3.atualizar_item_e_log(?, ?, ?, ?, ?, ?, ?, ?) }";
+            String procedureCall = "{ CALL projeto_java_a3.atualizar_item_entrada(?, ?, ?, ?, ?, ?, ?, ?) }";
 
             try (Connection connectDB = new DataBaseConection().getConection();
                  CallableStatement cs = connectDB.prepareCall(procedureCall)) {

@@ -192,7 +192,7 @@ public class ImportarOsController implements Initializable {
 
     public void verificarImport(){
         if(filePath == null){
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione um arquivo para importar os dados")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Selecione um arquivo para importar os dados")
             .showAndWait();
         }
         else {
@@ -224,12 +224,12 @@ public class ImportarOsController implements Initializable {
 
     public void importFazerImportOnAction(ActionEvent event) {
         if (filePath == null) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione um arquivo para importar os dados")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Selecione um arquivo para importar os dados")
                     .showAndWait();
             return;
             }
             else if (consultTableOrdemServico.getSelectionModel().getSelectedItem() == null) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Selecione uma ordem de serviço da tabela para prosseguir")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Selecione uma ordem de serviço da tabela para prosseguir")
                     .showAndWait();
                     return;
                 } else {

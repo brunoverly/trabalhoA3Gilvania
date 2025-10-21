@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.net.URL;
 import javafx.scene.image.Image;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 import java.util.ResourceBundle;
 
@@ -117,7 +119,7 @@ public class LoginController implements Initializable {
                             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Usuário ou PIN inválidos").showAndWait();
                             break;
                         case 2:
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Insira valores númericos para matrícula e PIN").showAndWait();
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Insira valores numéricos para matrícula e PIN").showAndWait();
                             break;
                         case 3:
                             alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao conectar ao banco de dados").showAndWait();
@@ -146,31 +148,44 @@ public class LoginController implements Initializable {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connectDB = connectNow.getConection();
         try {
-            String querySqlUser = "{ CALL projeto_java_a3.loginVerificarPin(?, ?) }";
+            String querySqlUser = "{ CALL projeto_java_a3.login(?) }"; // só matrícula
             try (CallableStatement cs = connectDB.prepareCall(querySqlUser)) {
-                cs.setInt(1, Integer.parseInt(enterUserNameField.getText().trim()));
-                cs.setInt(2, Integer.parseInt(enterPasswordField.getText().trim()));
+
+                int matricula;
+                try {
+                    matricula = Integer.parseInt(enterUserNameField.getText().trim());
+                } catch (NumberFormatException e) {
+                    return 2; // entrada não numérica
+                }
+
+                cs.setInt(1, matricula);
                 ResultSet rs = cs.executeQuery();
+
                 if (rs.next()) {
                     Sessao.setUsuario(
                             rs.getInt("matricula"),
                             rs.getString("nome"),
                             rs.getString("cargo")
                     );
-                    return 0; // sucesso
+
+                    String senhaDigitada = enterPasswordField.getText().trim();
+                    String hashArmazenado = rs.getString("pin"); // hash do banco
+
+                    boolean senhaCorreta = BCrypt.checkpw(senhaDigitada, hashArmazenado);
+                    return senhaCorreta ? 0 : 1;
                 } else {
-                    return 1; // usuário ou PIN inválidos
+                    return 1; // usuário não encontrado
                 }
-            } catch (NumberFormatException e) {
-                return 2; // entrada não numérica
+
             } catch (SQLException e) {
                 e.printStackTrace();
-                return 3; // erro de SQL
+                return 3; // erro SQL
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     //Chama a tela inicial
     public static void TelaInicial() {
         InicioScreen telaInicial = new InicioScreen();

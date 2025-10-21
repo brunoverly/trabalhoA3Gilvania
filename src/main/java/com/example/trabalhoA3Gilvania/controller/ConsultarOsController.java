@@ -128,7 +128,7 @@ public class ConsultarOsController implements Initializable {
         String numeroOs = consultNumeroOs.getText();
 
         try (Connection connectDB = new DataBaseConection().getConection();
-             CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultarOs(?) }")) {
+             CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_os(?) }")) {
 
             cs.setString(1, numeroOs);
             boolean hasResults = cs.execute();
@@ -198,7 +198,7 @@ public class ConsultarOsController implements Initializable {
     public boolean verificarNumeroOS() {
         boolean retorno = true;
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe o número da ordem de serviço")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
             retorno = false;
         }

@@ -13,6 +13,7 @@ module com.example.trabalhoA3Gilvania {
     requires org.apache.commons.collections4;
     requires org.apache.poi.ooxml;
     requires mysql.connector.j;
+    requires jbcrypt;
 
     opens com.example.trabalhoA3Gilvania to javafx.fxml;
     exports com.example.trabalhoA3Gilvania;

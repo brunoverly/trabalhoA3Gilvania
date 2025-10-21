@@ -220,7 +220,8 @@ public class ConsultarItemController implements Initializable{
                     try {
                         if (modo == null) return;
                         if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
-                            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'")
+                            System.out.println("teste 2");
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'")
                             .showAndWait();
                             return;
                         }
@@ -230,11 +231,12 @@ public class ConsultarItemController implements Initializable{
                                 && selecionado.getStatus().equals("Recebido")) {
 
                             if (selecionado != null) {
+                                System.out.println("teste 1");
                                 String mensagem = "Deseja solicitar a entrega do item: '"+ selecionado.getDescricao() +"' na oficina?";
                                 boolean confirmacao = alerta.criarAlertaConfirmacao("Aviso", mensagem);
 
                                 if (confirmacao) {
-                                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
                                                     "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
                                             .showAndWait();
 
@@ -250,7 +252,9 @@ public class ConsultarItemController implements Initializable{
                                             cs.execute();
                                         }
                                     } catch (SQLException e) {
-                                        throw new RuntimeException(e);
+                                        e.printStackTrace();
+                                        e.getCause();
+                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait();
                                     }
 
                                     // Atualiza a tela
@@ -351,7 +355,7 @@ public class ConsultarItemController implements Initializable{
                         try {
                             int resultado = rsItens.getInt("resultado");
                             if (resultado == 0) {
-                                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
                                                 "Não foi localizada ordem de serviço aberta com número informado")
                                         .showAndWait();
                                 return;
@@ -742,9 +746,19 @@ public class ConsultarItemController implements Initializable{
 
         Item selecionado = row.getItem();
         if (selecionado == null) return;
-
         // 🔹 Caso o usuário nao seja aprovisionador e o modo seja "solicitar"
-        if (modo.equals("Solicitar") && (selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina")  )&& !Sessao.getCargo().equals("Aprovisionador")) {
+        if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
+            MenuItem solicitarItem = new MenuItem("Requisitar item");
+            contextMenu.getItems().add(solicitarItem);
+
+            solicitarItem.setOnAction(event -> {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'")
+                    .showAndWait();
+            return;
+            });
+        }
+
+        else if (modo.equals("Solicitar") && (selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina")  )&& !Sessao.getCargo().equals("Aprovisionador")) {
             MenuItem solicitarItem = new MenuItem("Requisitar item");
             contextMenu.getItems().add(solicitarItem);
 
@@ -753,7 +767,7 @@ public class ConsultarItemController implements Initializable{
                 boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", mensagem );
 
                 if (confirmar) {
-                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
                                     "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
                             .showAndWait();
 
@@ -808,7 +822,7 @@ public class ConsultarItemController implements Initializable{
 
                 lancarSaida.setOnAction(event -> {
                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                        CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item_atualizardadossaida(?) }");
+                        CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item_att_saida(?) }");
                         cs.setInt(1, selecionado.getIdItem());
 
                         try (ResultSet rs = cs.executeQuery()) {

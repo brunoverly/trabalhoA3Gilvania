@@ -69,7 +69,7 @@ public class FormsUtil {
 
         // Cria o StackPane de overlay
         StackPane overlay = new StackPane(gifView);
-        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.08); " +
+        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.05); " +
                 "-fx-background-radius: 17.5px;");
         // 5% opacidade
         // fundo semi-transparente

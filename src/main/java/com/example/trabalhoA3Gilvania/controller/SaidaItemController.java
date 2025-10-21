@@ -138,7 +138,7 @@ public class SaidaItemController implements Initializable {
 
         public void retirarConfirmarButtonOnAction(){
             if((retirarMatriculaMecanico.getText().isBlank())){
-                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","Informe a matrícula a quem foi entregue")
+                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso","Informe a matrícula a quem foi entregue")
                         .showAndWait();
             }
 
@@ -151,7 +151,7 @@ public class SaidaItemController implements Initializable {
                 return;
             }
             try (Connection conn = new DataBaseConection().getConection()) {
-                String sql = "CALL projeto_java_a3.atualizar_saidaitem_e_log(?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "CALL projeto_java_a3.atualizar_item_saida(?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.setInt(1, idItem);
                     stmt.setString(2, codOperacao);

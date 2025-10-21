@@ -61,7 +61,7 @@ public class RemoverUsuarioController implements Initializable {
 
     public void removeBuscarMatriculaOnAction(ActionEvent event) {
         if (!matriculaValida()) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe uma matrícula válida para prosseguir")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe uma matrícula válida para prosseguir")
                     .showAndWait();
             return;
         }
@@ -125,7 +125,7 @@ public class RemoverUsuarioController implements Initializable {
         if (confirmar) {
             int matricula = Integer.parseInt(removeMatricula.getText());
 
-            String procedureCall = "{ CALL projeto_java_a3.remover_usuario_deletar(?) }";
+            String procedureCall = "{ CALL projeto_java_a3.remover_usuario(?) }";
 
             try (Connection connectDB = new DataBaseConection().getConection();
                  CallableStatement cs = connectDB.prepareCall(procedureCall)) {

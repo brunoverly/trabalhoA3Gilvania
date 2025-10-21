@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import org.mindrot.jbcrypt.BCrypt;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -101,6 +101,7 @@ public class CadastrarUsuarioController implements Initializable {
         int matricula = Integer.parseInt(cadastroMatricula.getText());
         String cargo = cadastroComboBox.getValue();
         int pin = Integer.parseInt(cadastroSenha.getText());
+        String hash = BCrypt.hashpw(String.valueOf(pin), BCrypt.gensalt(12));
 
         String procedureCall = "{ CALL projeto_java_a3.cadastrar_usuario(?, ?, ?, ?) }";
 
@@ -110,7 +111,7 @@ public class CadastrarUsuarioController implements Initializable {
             cs.setInt(1, matricula);
             cs.setString(2, nome);
             cs.setString(3, cargo);
-            cs.setInt(4, pin);
+            cs.setString(4, hash);
 
             boolean hasResult = cs.execute();
 
