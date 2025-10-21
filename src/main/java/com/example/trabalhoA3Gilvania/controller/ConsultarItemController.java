@@ -4,12 +4,16 @@ import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,11 +26,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.net.URL;
@@ -51,6 +57,7 @@ public class ConsultarItemController implements Initializable{
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
     @FXML private ImageView consultarItem1;
+    @FXML private AnchorPane consultItemSplitPane;
     @FXML private AnchorPane consultarItemAnchorPane;
     @FXML private AnchorPane consultItenTableViewOperacao;
     @FXML private AnchorPane consultItemTableViewItem;
@@ -310,15 +317,21 @@ public class ConsultarItemController implements Initializable{
 
     @FXML
     public void constulVoltarButtonOnAction(ActionEvent event) {
-        // Chama o callback ANTES de fechar
+        StackPane loadingPane = FormsUtil.createGifLoading();
+        loadingPane.prefWidthProperty().bind(consultItemSplitPane.widthProperty());
+        loadingPane.prefHeightProperty().bind(consultItemSplitPane.heightProperty());
+        consultItemSplitPane.getChildren().add(loadingPane);
+
         if (onFecharJanela != null) {
             onFecharJanela.aoFecharJanela();
         }
 
-        // Fecha a janela normalmente
         Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
         stage.close();
+
+        consultItemSplitPane.getChildren().remove(loadingPane);
     }
+
 
     public void BuscarDB(String numeroOs) {
         ObservableList<Item> listaItens = FXCollections.observableArrayList();

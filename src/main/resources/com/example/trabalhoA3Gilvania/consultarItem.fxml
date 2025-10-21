@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="consultItemSplitPane" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
+<AnchorPane fx:id="consultItemSplitPane" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white; -fx-background-radius: 17.5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarItemController">
     <children>
         <TextField fx:id="consultNumeroOs" layoutX="37.0" layoutY="105.0" prefHeight="25.0" prefWidth="228.0" promptText="Ex: 765234" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>

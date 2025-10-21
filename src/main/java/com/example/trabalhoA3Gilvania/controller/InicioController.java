@@ -592,7 +592,6 @@ public class InicioController implements Initializable {
             // Define o que acontece ao fechar a janela
             janelaFecharOs.setOnHidden(e -> {
                 janelaFecharOs = null;
-                System.out.println("Janela Fechar OS fechada.");
             });
 
             // Exibe a janela

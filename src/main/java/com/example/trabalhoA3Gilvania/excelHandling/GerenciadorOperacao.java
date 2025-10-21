@@ -37,7 +37,7 @@ public class GerenciadorOperacao {
         return fileSelected;
     }
 
-    public void criar(String numeroOs, File fileSelected) throws IOException {
+    public int criar(String numeroOs, File fileSelected) throws IOException {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connetDB = connectNow.getConection();
 
@@ -72,9 +72,7 @@ public class GerenciadorOperacao {
                 osCadastrada = cs.getBoolean(4);
 
                 if (osExistente) {
-                    alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem de serviço já cadastrada")
-                            .showAndWait();
-                    return; // interrompe execução
+                    return 1;
                 }
 
                 // **Não mostra alerta aqui, vamos aguardar todas inserções**
@@ -84,7 +82,7 @@ public class GerenciadorOperacao {
         } catch (SQLException e) {
             e.printStackTrace();
             try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
-            return;
+            return 0;
         }
 
         // 🔹 Processa as linhas da planilha para inserir operações e itens
@@ -148,11 +146,8 @@ public class GerenciadorOperacao {
         } catch (SQLException e) {
             e.printStackTrace();
             try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
-            return;
+            return 3;
         }
-
-        // 🔹 Mostra alerta apenas se tudo deu certo
-        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço cadastrada com sucesso")
-                .showAndWait();
+        return 2;
     }
 }

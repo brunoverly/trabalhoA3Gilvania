@@ -1,14 +1,13 @@
 package com.example.trabalhoA3Gilvania.controller;
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.Sessao;
 import com.example.trabalhoA3Gilvania.excelHandling.GerenciadorOperacao;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -16,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.FileInputStream;
@@ -29,13 +29,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
-import java.util.Optional;
+
 import java.util.ResourceBundle;
 
 public class ImportarOsController implements Initializable {
     @FXML private Button importVoltar;
     @FXML private Button importFazerImport;
     @FXML private Button importSelecionarExcel;
+    @FXML private AnchorPane ImportarOsAcnhorPane;
     @FXML private AnchorPane importOsAnchorPanelTable;
     @FXML private Label importLabelSelecionar;
     @FXML private TextField importNumeroOs;
@@ -68,13 +69,13 @@ public class ImportarOsController implements Initializable {
     GerenciadorOperacao cadastrarOs = new GerenciadorOperacao();
     File filePath;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+    @Override    public void initialize(URL url, ResourceBundle resourceBundle) {
         // Configura imagens
         URL importarOsVoltarImageURL = getClass().getResource("/imagens/close.png");
         Image importarOsVoltarImageImagem = new Image(importarOsVoltarImageURL.toExternalForm());
         importarOsVoltarImage.setImage(importarOsVoltarImageImagem);
-
 
         // Campo de caminho desabilitado
         importOsPathField.setDisable(true);
@@ -110,6 +111,11 @@ public class ImportarOsController implements Initializable {
                         );
                         consultTableOperacao.setItems(operacoesFiltradas);
 
+                        // 🔹 Resetar seleção da operação ao trocar de OS
+                        consultTableOperacao.getSelectionModel().clearSelection();
+
+                        // 🔹 Limpa itens ao trocar de OS
+                        consultTableItem.getItems().clear();
 
                         importarOsTableViewOperacao.setVisible(true); // Mostrar tabela de operações
                         importarOsTableViewItens.setVisible(false);   // Esconder tabela de itens até selecionar operação
@@ -138,6 +144,7 @@ public class ImportarOsController implements Initializable {
                             importarOsTableViewItens.setVisible(!itensFiltrados.isEmpty());
                         }
                     } else {
+                        // 🔹 Se nenhuma operação selecionada, limpa itens
                         consultTableItem.setItems(FXCollections.observableArrayList());
                         importarOsTableViewItens.setVisible(false);
                     }
@@ -169,9 +176,8 @@ public class ImportarOsController implements Initializable {
             fecharImagem.setScaleY(1.0);
             importVoltar.setCursor(Cursor.DEFAULT);
         });
-
-
     }
+
 
     public void importSelecionarExcelOnAction(ActionEvent event){
         filePath = cadastrarOs.selecionarArquivo((Stage) importSelecionarExcel.getScene().getWindow());
@@ -190,15 +196,29 @@ public class ImportarOsController implements Initializable {
             .showAndWait();
         }
         else {
-            try {
-                PreviewTable(filePath);
+            StackPane loadingPane = FormsUtil.createGifLoading();
+            loadingPane.prefWidthProperty().bind(ImportarOsAcnhorPane.widthProperty());
+            loadingPane.prefHeightProperty().bind(ImportarOsAcnhorPane.heightProperty());
+            ImportarOsAcnhorPane.getChildren().add(loadingPane);
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    PreviewTable(filePath); // processamento pesado
+                    return null;
+                }
+            };
+            task.setOnSucceeded(event -> {
+                ImportarOsAcnhorPane.getChildren().remove(loadingPane);
                 importOsAnchorPanelTable.setVisible(true);
                 consultTableItem.setSelectionModel(null);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                e.getCause();
-            }
+            });
+            task.setOnFailed(event -> {
+                ImportarOsAcnhorPane.getChildren().remove(loadingPane);
+                task.getException().printStackTrace();
+            });
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 
@@ -213,24 +233,76 @@ public class ImportarOsController implements Initializable {
                     .showAndWait();
                     return;
                 } else {
-                    OrdemServico ordemSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
-                    String mensagem = "Tem certeza que deseja cadastrar a ordem de número: '" + ordemSelecionada.getCodOrdemServico() + "' ?";
-                    boolean confirmar = alerta.criarAlertaConfirmacao("Aviso", mensagem);
+            OrdemServico ordemSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
+            if (ordemSelecionada != null) {
+                String mensagem = "Tem certeza que deseja cadastrar a ordem de número: '"
+                        + ordemSelecionada.getCodOrdemServico() + "' ?";
+                boolean confirmar = alerta.criarAlertaConfirmacao("Aviso", mensagem);
 
-                    if (confirmar) {
-                        if (ordemSelecionada != null) {
-                            String codOrdemSelecionada = ordemSelecionada.getCodOrdemServico();
-                            try {
-                                GerenciadorOperacao cadastrarOs = new GerenciadorOperacao();
-                                cadastrarOs.criar(codOrdemSelecionada, filePath);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                e.getCause();
+                if (confirmar) {
+                    String codOrdemSelecionada = ordemSelecionada.getCodOrdemServico();
+                    try {
+                        // 🔹 Criar overlay com GIF de loading
+                        StackPane loadingPane = FormsUtil.createGifLoading();
+                        loadingPane.prefWidthProperty().bind(ImportarOsAcnhorPane.widthProperty());
+                        loadingPane.prefHeightProperty().bind(ImportarOsAcnhorPane.heightProperty());
+                        loadingPane.setStyle("-fx-background-color: rgba(0,0,0,0.15);"); // leve transparência
+                        ImportarOsAcnhorPane.getChildren().add(loadingPane);
+
+                        // 🔹 Task em background
+                        Task<Integer> task = new Task<>() {
+                            @Override
+                            protected Integer call() throws Exception {
+                                GerenciadorOperacao op = new GerenciadorOperacao();
+                                return op.criar(codOrdemSelecionada, filePath); // retorna int
                             }
-                        }
-                    }
+                        };
 
+                        // 🔹 Ao terminar a Task
+                        task.setOnSucceeded(event2 -> {
+                            ImportarOsAcnhorPane.getChildren().remove(loadingPane);
+                            int resultado = task.getValue();
+
+                            // ⚡ Atualiza UI na Application Thread
+                            Platform.runLater(() -> {
+                                switch (resultado) {
+                                    case 0:
+                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao processar a OS").showAndWait();
+                                        break;
+                                    case 1:
+                                        alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Ordem já cadastrada").showAndWait();
+                                        break;
+                                    case 2:
+                                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Ordem cadastrada com sucesso").showAndWait();
+                                        break;
+                                    case 3:
+                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao finalizar o cadastro da OS").showAndWait();
+                                        break;
+                                }
+
+                                // Atualiza tabela e seleção
+                                importOsAnchorPanelTable.setVisible(true);
+                                consultTableItem.setSelectionModel(null);
+                            });
+                        });
+
+                        task.setOnFailed(event2 -> {
+                            ImportarOsAcnhorPane.getChildren().remove(loadingPane);
+                            Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait());
+                        });
+
+                        // 🔹 Inicia Task
+                        Thread thread = new Thread(task);
+                        thread.setDaemon(true);
+                        thread.start();
+
+                    } catch (Exception e) {
+                        Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR,"Erro", "Erro ao cadastrar a ordem de serviço").showAndWait());
+                    }
+                }
+            }
         }
+
     }
 
     public void PreviewTable(File fileSelected) {
@@ -271,6 +343,7 @@ public class ImportarOsController implements Initializable {
                 if (item.getQtdPedido() != 0) {
                     todosItens.add(item);
                 }
+
                 // Adiciona Operação (se ainda não existir)
                 boolean existeOperacao = todasOperacoes.stream()
                         .anyMatch(op -> op.getCodOperacao().equals(operacaoString));
@@ -280,18 +353,28 @@ public class ImportarOsController implements Initializable {
                 }
             }
         } catch (Exception e) {
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
-                    .showAndWait();
+            // 🔹 Corrigido: chamar alert e atualizar UI na Application Thread
+            Platform.runLater(() -> {
+                alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                                "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
+                        .showAndWait();
 
-            importarOsTableViewOrdem.setVisible(false);
-            importarOsTableViewOperacao.setVisible(false);
-            importarOsTableViewItens.setVisible(false);
+                importOsPathField.setText("");
+                importarOsTableViewOrdem.setVisible(false);
+                importarOsTableViewOperacao.setVisible(false);
+                importarOsTableViewItens.setVisible(false);
+            });
             return;
         }
-        importLabelSelecionar.setVisible(true);
-        imortarSplitPane.setVisible(true);
-        importarOsTableViewOrdem.setVisible(true);
+
+        // 🔹 Atualização de UI na Application Thread
+        Platform.runLater(() -> {
+            importLabelSelecionar.setVisible(true);
+            imortarSplitPane.setVisible(true);
+            importarOsTableViewOrdem.setVisible(true);
+        });
     }
+
 
     // =================== NOVO MÉTODO DE FILTRO ===================
     private void filtrarOperacoesEItens(String codOS) {
