@@ -170,7 +170,7 @@
 
                 <Pane fx:id="inicioPanelInvisivel" layoutX="165.9" layoutY="14.0" prefHeight="280.0" prefWidth="712.6" style="-fx-background-color: transparent;">
                     <children>
-                        <Label fx:id="inicioLabelData" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="433.0" layoutY="9.0" prefHeight="29.4" prefWidth="181.0" text="Domingo, 27 de Abril de 2025" textFill="#434a50">
+                        <Label fx:id="inicioLabelData" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="383.0" layoutY="9.0" prefHeight="29.0" prefWidth="231.0" text="Domingo, 27 de Abril de 2025    " textFill="#434a50">
                             <font>
                                 <Font name="Tahoma" size="9.8" />
                             </font>
@@ -190,7 +190,7 @@
                                 <Font name="Tahoma Bold" size="16.8" />
                             </font>
                         </Label>
-                        <Label fx:id="inicioLabelBemVindo" layoutX="135.1" layoutY="9.0" prefHeight="29.4" prefWidth="156.1" text="Welcome back Bruno!" textFill="#434a50">
+                        <Label fx:id="inicioLabelBemVindo" layoutX="135.0" layoutY="9.0" prefHeight="29.0" prefWidth="231.0" text="Welcome back Bruno!" textFill="#434a50">
                             <font>
                                 <Font name="Tahoma" size="9.8" />
                             </font>
