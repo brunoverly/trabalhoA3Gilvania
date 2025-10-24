@@ -79,7 +79,8 @@ public class ConsultarOsController implements Initializable {
         Image consultarBack = new Image(consultarBackImageURL.toExternalForm());
         consultarBackImage.setImage(consultarBack);
 
-        // --- Configuração das Colunas ---
+        // --- Configuração das Colunas das Tabelas ---
+        // Vincula as colunas às propriedades das classes Item e Operacao
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
@@ -89,47 +90,59 @@ public class ConsultarOsController implements Initializable {
         consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
         consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
 
+        // Define o alinhamento centralizado para colunas específicas
         constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
         consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
         consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
         consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
         consultTableItemEntregue.setStyle("-fx-alignment: CENTER;");
 
-
+        // Define texto de placeholder (vazio)
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
+        // Vincula a lista de operações à tabela
         consultTableOperacao.setItems(todasOperacoes);
 
         // --- Configuração de Filtro dos Itens ---
+        // A tabela de itens usa a lista filtrada, que começa vazia (predicado `item -> false`)
         itensFiltrados = new FilteredList<>(todosItens, item -> false);
         consultTableItem.setItems(itensFiltrados);
 
         // --- Listener: seleção de operação ---
+        // Ouve mudanças na seleção da tabela de operações
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                // Se uma nova operação for selecionada, mostra a tabela de itens
                 consultarOsTableViewItens.setVisible(true);
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
+
+                // Atualiza o filtro da lista de itens para mostrar
+                // apenas itens que pertencem à operação selecionada.
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
             } else {
+                // Se nenhuma operação for selecionada, esconde todos os itens
                 itensFiltrados.setPredicate(item -> false);
             }
         });
 
         // --- Efeito visual no botão voltar ---
         ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
+        // Efeito ao entrar com o mouse
         consultVoltarButton.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
             fecharImagem.setScaleY(1.2);
             consultVoltarButton.setCursor(Cursor.HAND);
         });
+        // Efeito ao sair com o mouse
         consultVoltarButton.setOnMouseExited(e -> {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             consultVoltarButton.setCursor(Cursor.DEFAULT);
         });
 
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -166,25 +179,31 @@ public class ConsultarOsController implements Initializable {
      * Chama a procedure 'consultar_os' que retorna TRÊS ResultSets.
      */
     public void BuscarDB() {
+        // Esconde a tabela de itens antes de nova busca
         consultarOsTableViewItens.setVisible(false);
 
+        // Listas temporárias para carregar os dados
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
-        String numeroOs = consultNumeroOs.getText();
+        // **CORREÇÃO**: Adicionado .trim() para garantir que espaços
+        //              não invalidem a busca no banco de dados.
+        String numeroOs = consultNumeroOs.getText().trim();
 
+        // Try-with-resources para garantir o fechamento da conexão e statement
         try (Connection connectDB = new DataBaseConection().getConection();
              CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_os(?) }")) {
 
             cs.setString(1, numeroOs);
             boolean hasResults = cs.execute();
 
-            // 1️⃣ Verifica se OS existe
+            // 1️⃣ Verifica se OS existe (Primeiro ResultSet)
             if (hasResults) {
                 try (ResultSet rsCount = cs.getResultSet()) {
                     if (rsCount.next()) {
                         int total = rsCount.getInt("total");
                         if (total == 0) {
+                            // Se a OS não existe, informa o usuário e para a execução
                             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
                             consultarOsSplitPane.setVisible(false);
                             consultarOsTableViewOperacao.setVisible(false);
@@ -195,7 +214,7 @@ public class ConsultarOsController implements Initializable {
                 }
             }
 
-            // 2️⃣ Carrega Itens
+            // 2️⃣ Carrega Itens (Segundo ResultSet)
             if (cs.getMoreResults()) {
                 try (ResultSet rsItens = cs.getResultSet()) {
                     while (rsItens.next()) {
@@ -214,11 +233,12 @@ public class ConsultarOsController implements Initializable {
                         listaItens.add(item);
                     }
                 }
+                // Atualiza a lista principal de 'todosItens'
                 todosItens.clear();
                 todosItens.addAll(listaItens);
             }
 
-            // 3️⃣ Carrega Operações
+            // 3️⃣ Carrega Operações (Terceiro ResultSet)
             if (cs.getMoreResults()) {
                 try (ResultSet rsOperacoes = cs.getResultSet()) {
                     while (rsOperacoes.next()) {
@@ -230,6 +250,7 @@ public class ConsultarOsController implements Initializable {
                         listaOperacao.add(operacao);
                     }
                 }
+                // Define as operações na tabela e na lista principal
                 consultTableOperacao.setItems(listaOperacao);
                 todasOperacoes.setAll(listaOperacao);
             }
@@ -239,16 +260,18 @@ public class ConsultarOsController implements Initializable {
             alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao buscar OS").showAndWait();
         }
 
-        // Exibe os painéis
+        // Exibe os painéis com os resultados
         consultarOsSplitPane.setVisible(true);
         consultarOsTableViewOperacao.setVisible(true);
 
-        // 🔹 NOVO: pré-seleciona a primeira operação e carrega seus itens
+        // Pré-seleciona a primeira operação e carrega seus itens
         if (!todasOperacoes.isEmpty()) {
             consultTableOperacao.getSelectionModel().selectFirst();
             Operacao primeiraOperacao = consultTableOperacao.getSelectionModel().getSelectedItem();
             if (primeiraOperacao != null) {
+                // Torna a tabela de itens visível (redundante, mas garante)
                 consultarOsTableViewItens.setVisible(true);
+                // Filtra os itens para a primeira operação
                 String codOperacaoSelecionada = primeiraOperacao.getCodOperacao().trim();
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
@@ -260,10 +283,12 @@ public class ConsultarOsController implements Initializable {
 
     /**
      * Valida se o campo de texto da Ordem de Serviço foi preenchido.
-     * @return true se preenchido, false se estiver vazio ou nulo.
+     * (Nota: isBlank() já verifica se é nulo, vazio ou só tem espaços em branco).
+     * @return true se preenchido, false se estiver vazio.
      */
     public boolean verificarNumeroOS() {
         boolean retorno = true;
+        // isBlank() cobre nulo, "", " "
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
             alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
@@ -289,6 +314,7 @@ public class ConsultarOsController implements Initializable {
         private SimpleStringProperty status;
         private SimpleIntegerProperty qtdSolicitado;
         private SimpleIntegerProperty qtdEntregue;
+
         // Construtor vazio (potencialmente não utilizado, mas mantido)
         public Item(String codItem, String operacaoString, String descricaoItem, int qtdItem) {
         }

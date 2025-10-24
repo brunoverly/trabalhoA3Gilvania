@@ -51,7 +51,6 @@ import java.util.stream.Collectors;
 public class ConsultarItemController implements Initializable{
 
     // --- Injeção de Componentes FXML ---
-    // Estes campos são vinculados aos componentes definidos no arquivo .fxml
     @FXML private Button consultVoltarButton;
     @FXML private Label consultItemLabel; // Título da janela
     @FXML private TextField consultNumeroOs;
@@ -74,8 +73,8 @@ public class ConsultarItemController implements Initializable{
 
     // --- Campos Privados ---
     private Stage janelaEntradaItem; // Referência para a janela (pop-up) de entrada
-    private Stage janelaSaidaItem;
-    private Stage janelaSolicitarItem; // Referência para a janela (pop-up) de saída
+    private Stage janelaSaidaItem; // Referência para a janela (pop-up) de saída
+    private Stage janelaSolicitarItem; // Referência para a janela (pop-up) de solicitação
 
     // Listas de dados para as tabelas
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
@@ -95,7 +94,7 @@ public class ConsultarItemController implements Initializable{
     private int qtdRecebida;
     private int idOperacao;
 
-
+    // Constantes de Status (usadas para lógica de negócio)
     private String statusItem1 = "Aguardando entrega";
     private String statusItem2 = "Recebido (parcial)";
     private String statusItem3 = "Recebido (integral)";
@@ -132,7 +131,7 @@ public class ConsultarItemController implements Initializable{
     }
 
     // --- Setters para passagem de dados ---
-    // Métodos usados por outros controllers para "injetar" dados nesta tela
+    // Métodos usados by outros controllers para "injetar" dados nesta tela
     public void setModo(String modo) {
         this.modo = modo;
     }
@@ -171,7 +170,7 @@ public class ConsultarItemController implements Initializable{
         // --- Configuração das Colunas das Tabelas ---
         // Vincula as colunas da Tabela de Operações às propriedades da classe 'Operacao'
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
-        //consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        //consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status")); // Coluna de status da operação
 
         // Vincula as colunas da Tabela de Itens às propriedades da classe 'Item'
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -182,15 +181,12 @@ public class ConsultarItemController implements Initializable{
         consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
         consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
 
-
+        // Define o alinhamento centralizado para colunas numéricas/código
         constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
         consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
         consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
         consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
         consultTableItemEntregue.setStyle("-fx-alignment: CENTER;");
-
-
-
 
         // Define um texto padrão para tabelas vazias (aqui, vazio)
         consultTableOperacao.setPlaceholder(new Label(""));
@@ -247,48 +243,48 @@ public class ConsultarItemController implements Initializable{
         });
 
         // Configuração customizada das LINHAS da Tabela de Operações
-
         consultTableOperacao.setRowFactory(table -> {
-                    TableRow<Operacao> row = new TableRow<>();
+            TableRow<Operacao> row = new TableRow<>();
 
-                    // Cria o menu de contexto
-                    if (modo.equals("Entrada")) {
-                        ContextMenu contextMenu = new ContextMenu();
-                        MenuItem lancarEntradaTodos = new MenuItem("Lançar entrada para todos os itens");
-                        contextMenu.getItems().add(lancarEntradaTodos);
+            // Cria o menu de contexto (clique direito)
+            if (modo.equals("Entrada")) {
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem lancarEntradaTodos = new MenuItem("Lançar entrada para todos os itens");
+                contextMenu.getItems().add(lancarEntradaTodos);
 
-                        // Define a ação do menu (chamará outro método que você vai criar)
-                        lancarEntradaTodos.setOnAction(event -> {
-                            Operacao selecionada = row.getItem();
-                            if (selecionada != null && modo.equals("Entrada")) {
-                                boolean confirmacao = alerta.criarAlertaConfirmacao("Confirmação",
-                                        "Ao prosseguir sera lançada entrada TOTAL para TODOS os itens pendentes da operação: '" + selecionada.getCodOperacao() + "'. Deseja continuar?");
-                                if (confirmacao) {
-                                    if (consultNumeroOs.getText().isBlank() || consultNumeroOs == null) {
-                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro",
-                                                        "Erro ao recuperar o numero da OS, tente procurar a ordem de serviço novamente")
-                                                .showAndWait();
-                                    } else {
-                                        lancarEntradaTodosItens(consultNumeroOs.getText());
-                                    }
-                                } else {
-                                    return;
-                                }
+                // Define a ação do menu
+                lancarEntradaTodos.setOnAction(event -> {
+                    Operacao selecionada = row.getItem();
+                    if (selecionada != null && modo.equals("Entrada")) {
+                        boolean confirmacao = alerta.criarAlertaConfirmacao("Confirmação",
+                                "Ao prosseguir sera lançada entrada TOTAL para TODOS os itens pendentes da operação: '" + selecionada.getCodOperacao() + "'. Deseja continuar?");
+                        if (confirmacao) {
+                            if (consultNumeroOs.getText().isBlank() || consultNumeroOs == null) {
+                                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro",
+                                                "Erro ao recuperar o numero da OS, tente procurar a ordem de serviço novamente")
+                                        .showAndWait();
+                            } else {
+                                // Chama o método para lançar entrada em lote
+                                lancarEntradaTodosItens(consultNumeroOs.getText().trim());
                             }
-                        });
+                        } else {
+                            return; // Usuário cancelou
+                        }
+                    }
+                });
 
 
-                    // Só exibe o menu se a linha não estiver vazia
-                    row.contextMenuProperty().bind(
-                            Bindings.when(row.emptyProperty())
-                                    .then((ContextMenu) null)
-                                    .otherwise(contextMenu)
-                    );
-                }
-            // Clique normal
+                // Só exibe o menu se a linha não estiver vazia
+                row.contextMenuProperty().bind(
+                        Bindings.when(row.emptyProperty())
+                                .then((ContextMenu) null)
+                                .otherwise(contextMenu)
+                );
+            }
+            // Clique normal (botão esquerdo)
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
-                    consultItemTableViewItem.setVisible(true);
+                    consultItemTableViewItem.setVisible(true); // Mostra a tabela de itens
                 }
             });
 
@@ -325,7 +321,7 @@ public class ConsultarItemController implements Initializable{
                     // Coleta todos os dados necessários do item selecionado e da tela
                     String codItemSelecionado = selecionado.getCodItem();
                     String codOperacaoItemSelecionado = selecionado.getCodOperacao();
-                    String codOsItemSelecionado = consultNumeroOs.getText();
+                    String codOsItemSelecionado = consultNumeroOs.getText().trim(); // Usa .trim()
                     String descricaoItemSelecionado = selecionado.getDescricao();
                     int idOperacaoItemSelecionado = selecionado.getIdOperacao();
                     int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
@@ -347,6 +343,7 @@ public class ConsultarItemController implements Initializable{
                         if (!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") &&
                                 (selecionado.getStatus().equals(statusItem2) || selecionado.getStatus().equals(statusItem3) || selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem6))) {
                             if (selecionado != null) {
+                                // Abre a janela de Solicitação
                                 SolicitarItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,
                                         descricaoItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,
                                         localizacao, status, qtdRecebida, idOperacaoItemSelecionado);
@@ -361,13 +358,13 @@ public class ConsultarItemController implements Initializable{
                             switch (modo) {
                                 case "Entrada":
                                     // Só pode dar entrada se estiver "Aguardando entrega" ou "Recebido parcial"
-                                    // Bloqueia se for "Recebido integral"
                                     if (selecionado.getStatus().equals(statusItem1) || selecionado.getStatus().equals(statusItem2)) {
                                         // Abre a janela de Lançar Entrada
                                         LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado,
                                                 codOsItemSelecionado, descricaoItemSelecionado,
                                                 qtdPedidoItemSelecionado, idItemselecionado, idOperacaoItemSelecionado, qtdRecebida);
                                     } else if (selecionado.getStatus().equals(statusItem3)) {
+                                        // Bloqueia se for "Recebido integral"
                                         alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "O item já foi totalmente recebido e não pode ser lançado novamente.")
                                                 .showAndWait();
                                         return;
@@ -375,7 +372,7 @@ public class ConsultarItemController implements Initializable{
                                     break;
 
                                 case "Retirar":
-                                    // Só pode retirar se estiver "Solicitado entrega parcial" ou "Solicitado entrega integral"
+                                    // Só pode retirar se estiver "Solicitado (parcial)" ou "Solicitado (integral)" ou "Entregue (parcial)"
                                     if (selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem5) || selecionado.getStatus().equals(statusItem6)) {
 
                                         // Busca dados atualizados (localização, etc.) antes de abrir a janela
@@ -414,6 +411,11 @@ public class ConsultarItemController implements Initializable{
 
     } // Fim do método initialize()
 
+    /**
+     * Lança a entrada para TODOS os itens de uma operação que estejam "Aguardando entrega".
+     * Chamado pelo menu de contexto da tabela de operações.
+     * @param os O número da OS.
+     */
     private void lancarEntradaTodosItens(String os) {
         Operacao operacaoSelecionada = consultTableOperacao.getSelectionModel().getSelectedItem();
         if (operacaoSelecionada == null) {
@@ -423,9 +425,8 @@ public class ConsultarItemController implements Initializable{
 
         String codOperacaoSelecionada = operacaoSelecionada.getCodOperacao();
 
-        // 1. Pegar a lista de itens que serão atualizados.
-        // Usamos a 'itensFiltrados' que já mostra os itens da operação selecionada.
-        // Adicionamos um filtro extra para pegar APENAS os que estão "Aguardando entrega".
+        // 1. Filtra a lista de itens visíveis para pegar
+        //    APENAS os que estão "Aguardando entrega".
         ObservableList<Item> itensParaAtualizar = itensFiltrados.stream()
                 .filter(item -> item.getStatus().equals(statusItem1))
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)); // Cria uma nova lista
@@ -439,26 +440,19 @@ public class ConsultarItemController implements Initializable{
         try (Connection conn = new DataBaseConection().getConection()) {
             String sql = "{CALL lancar_entrada_itens_por_operacao(?, ?, ?, ?, ?, ?, ?, ?)}";
 
-            // 3. Faz o LOOP (para cada item da lista)
+            // 3. Itera sobre a lista de itens filtrados
             for (Item item : itensParaAtualizar) {
 
-                // 4. Prepara e executa a procedure PARA ESTE ITEM
+                // 4. Prepara e executa a procedure PARA CADA ITEM
                 try (CallableStatement stmt = conn.prepareCall(sql)) {
 
-                    // AGORA SIM você pode usar os dados do item:
-
-                    stmt.setInt(1, item.getIdItem()); // p_id <- USA O ID DO ITEM
+                    stmt.setInt(1, item.getIdItem()); // p_id
                     stmt.setString(2, os); // p_cod_os
                     stmt.setString(3, codOperacaoSelecionada); // p_cod_operacao
-                    stmt.setString(4, statusItem3); // p_status
+                    stmt.setString(4, statusItem3); // p_status (Define como Recebido Integral)
                     stmt.setString(5, "Item"); // p_tipo
-
-                    // --- AQUI ESTÁ A SUA SOLUÇÃO ---
                     stmt.setString(6, "Item recebido (Integral) na base"); // p_descricao
-
                     stmt.setInt(7, Sessao.getMatricula()); // p_matricula
-
-                    // --- E AQUI ---
                     stmt.setString(8, item.getCodItem()); // p_coditem
 
                     stmt.execute();
@@ -467,7 +461,7 @@ public class ConsultarItemController implements Initializable{
             }
             // O loop termina
 
-            // 5. Após o loop, atualiza a tela
+            // 5. Após o loop, atualiza a tela para refletir as mudanças
             BuscarDB(os);
             alerta.criarAlerta(Alert.AlertType.INFORMATION, "Sucesso",
                     "Entrada lançada com sucesso para " + itensParaAtualizar.size() + " itens.").showAndWait();
@@ -492,7 +486,8 @@ public class ConsultarItemController implements Initializable{
      */
     @FXML
     public void consultBuscarOsOnAction(ActionEvent event) {
-        BuscarDB(consultNumeroOs.getText());
+        // **CORREÇÃO**: Adicionado .trim() para limpar a entrada do usuário
+        BuscarDB(consultNumeroOs.getText().trim());
     }
 
     /**
@@ -574,6 +569,7 @@ public class ConsultarItemController implements Initializable{
             }
 
             // --- Leitura do Segundo ResultSet (Operações) ---
+            // Verifica se há um segundo conjunto de resultados
             if (cs.getMoreResults()) {
                 try (ResultSet rsOperacoes = cs.getResultSet()) {
                     while (rsOperacoes.next()) {
@@ -587,10 +583,12 @@ public class ConsultarItemController implements Initializable{
                 }
             }
 
-            // --- Atualização das Tabelas ---
+            // --- Atualização das Tabelas na UI ---
+            // Limpa e preenche a lista de todos os itens
             todosItens.clear();
             todosItens.addAll(listaItens);
 
+            // Define a lista de operações na tabela (não precisa limpar, setItens substitui)
             consultTableOperacao.setItems(listaOperacao);
 
             // Torna os painéis visíveis
@@ -681,6 +679,12 @@ public class ConsultarItemController implements Initializable{
         public String getStatus() {
             return status.get();
         }
+        public int getQtdSolicitado() {
+            return qtdSolicitado.get();
+        }
+        public int getQtdEntregue() {
+            return qtdEntregue.get();
+        }
 
         // --- Setters ---
         public void setIdItem(int idItem) {
@@ -707,11 +711,11 @@ public class ConsultarItemController implements Initializable{
         public void setStatus(String status) {
             this.status.set(status);
         }
-        public int getQtdSolicitado() {
-            return qtdSolicitado.get();
+        public void setQtdSolicitado(int qtdSolicitado) {
+            this.qtdSolicitado.set(qtdSolicitado);
         }
-        public int getQtdEntregue() {
-            return qtdEntregue.get();
+        public void setQtdEntregue(int qtdEntregue) {
+            this.qtdEntregue.set(qtdEntregue);
         }
 
         // --- Métodos Property (Necessários para o TableView) ---
@@ -730,12 +734,8 @@ public class ConsultarItemController implements Initializable{
         public SimpleStringProperty statusProperty() {
             return status;
         }
-        public void setQtdSolicitado(int qtdSolicitado) {
-            this.qtdSolicitado.set(qtdSolicitado);
-        }
-        public void setQtdEntregue(int qtdEntregue) {
-            this.qtdEntregue.set(qtdEntregue);
-        }
+        public SimpleIntegerProperty qtdSolicitadoProperty() { return qtdSolicitado; }
+        public SimpleIntegerProperty qtdEntregueProperty() { return qtdEntregue; }
     }
 
     /**
@@ -797,6 +797,7 @@ public class ConsultarItemController implements Initializable{
      * @param qtdPedido Dados do item selecionado
      * @param idItem Dados do item selecionado
      * @param idOperacao Dados do item selecionado
+     * @param qtdRecebidaParcial Quantidade já recebida (para entradas parciais)
      */
     public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, int idOperacao, int qtdRecebidaParcial) throws Exception {
         // Se a janela já estiver aberta, fecha a instância antiga
@@ -865,7 +866,7 @@ public class ConsultarItemController implements Initializable{
             controller.setOnFecharJanela(new OnFecharJanela() {
                 @Override
                 public void aoFecharJanela() {
-                    BuscarDB(consultNumeroOs.getText());
+                    BuscarDB(consultNumeroOs.getText().trim()); // Usa .trim()
                 }
             });
 
@@ -957,7 +958,7 @@ public class ConsultarItemController implements Initializable{
             controller.setOnFecharJanela(new OnFecharJanela() {
                 @Override
                 public void aoFecharJanela() {
-                    BuscarDB(consultNumeroOs.getText());
+                    BuscarDB(consultNumeroOs.getText().trim()); // Usa .trim()
                 }
             });
 
@@ -976,15 +977,18 @@ public class ConsultarItemController implements Initializable{
         }
     }
 
+    /**
+     * Abre a janela (Stage) de "Solicitar Item" (solicitarItem.fxml).
+     */
     public void SolicitarItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, String localizacao, String status, int qtdRecebida, int idOperacao) throws Exception {
-        // Garante que apenas uma janela de saída esteja aberta
+        // Garante que apenas uma janela de solicitação esteja aberta
         if (janelaSolicitarItem != null) {
             janelaSolicitarItem.close();
             janelaSolicitarItem = null;
         }
 
         try {
-            // Carrega o FXML da janela de saída
+            // Carrega o FXML da janela de solicitação
             URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/solicitarItem.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
@@ -1021,7 +1025,7 @@ public class ConsultarItemController implements Initializable{
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-            // Pega o controller da nova janela (SaidaItemController)
+            // Pega o controller da nova janela (SolicitarItemController)
             SolicitarItemController controller = fxmlLoader.getController();
 
             // "Injeta" os dados do item no novo controller
@@ -1036,18 +1040,18 @@ public class ConsultarItemController implements Initializable{
             controller.setQtdRecebida(qtdRecebida);
             controller.setIdOperacao(idOperacao);
             controller.verificarDisponibilidadeItem();
-            controller.carregaDados(); // Popula os campos da tela de saída
+            controller.carregaDados(); // Popula os campos da tela de solicitação
 
-            // Define o callback para atualizar esta tela quando a janela de saída fechar
+            // Define o callback para atualizar esta tela quando a janela de solicitação fechar
             controller.setOnFecharJanela(new OnFecharJanela() {
                 @Override
                 public void aoFecharJanela() {
-                    BuscarDB(consultNumeroOs.getText());
+                    BuscarDB(consultNumeroOs.getText().trim()); // Usa .trim()
                 }
             });
 
             // Configura e mostra a janela
-            janelaSolicitarItem.setTitle("Lançar entrega de item");
+            janelaSolicitarItem.setTitle("Solicitar item");
             janelaSolicitarItem.setResizable(false);
             janelaSolicitarItem.setScene(scene);
             janelaSolicitarItem.show();
@@ -1100,7 +1104,6 @@ public class ConsultarItemController implements Initializable{
 
         Item selecionado = row.getItem(); // Pega o item da linha
 
-
         if (selecionado == null) return; // Se a linha estiver vazia, não mostra menu
 
         // --- Lógica de Solicitação (Mecânico ou outros) ---
@@ -1121,10 +1124,10 @@ public class ConsultarItemController implements Initializable{
             MenuItem solicitarItem = new MenuItem("Requisitar item");
             contextMenu.getItems().add(solicitarItem);
 
-            // Ação: Confirma e chama a procedure 'solicitar_item'
+            // Ação: Abre a janela SolicitarItem
             solicitarItem.setOnAction(event -> {
                 try {
-                    SolicitarItem(selecionado.getCodItem(), selecionado.getCodOperacao(), consultNumeroOs.getText(),
+                    SolicitarItem(selecionado.getCodItem(), selecionado.getCodOperacao(), consultNumeroOs.getText().trim(),
                             selecionado.getDescricao(), selecionado.getQtdPedido(), selecionado.getIdItem(),
                             localizacao, status, selecionado.getQtdRecebida(), selecionado.getIdOperacao());
                 } catch (Exception e) {
@@ -1136,7 +1139,7 @@ public class ConsultarItemController implements Initializable{
         // --- Lógica de Entrada/Retirada (Admin/Aprovisionador) ---
         // 3. Usuário NÃO é Mecânico (ou seja, Admin ou Aprovisionador)
         else if (!Sessao.getCargo().equals("Mecânico")) {
-            // 3a. Modo "Entrada" e status "Aguardando entrega"
+            // 3a. Modo "Entrada" e status permite entrada ("Aguardando" ou "Solicitado Parcial")
             if (modo.equals("Entrada") && (selecionado.getStatus().equals(statusItem1) || selecionado.getStatus().equals(statusItem4))){
                 MenuItem lancarEntrada = new MenuItem("Lançar entrada");
                 contextMenu.getItems().add(lancarEntrada);
@@ -1147,7 +1150,7 @@ public class ConsultarItemController implements Initializable{
                         LancarEntradaItem(
                                 selecionado.getCodItem(),
                                 selecionado.getCodOperacao(),
-                                consultNumeroOs.getText(),
+                                consultNumeroOs.getText().trim(),
                                 selecionado.getDescricao(),
                                 selecionado.getQtdPedido(),
                                 selecionado.getIdItem(),
@@ -1160,7 +1163,7 @@ public class ConsultarItemController implements Initializable{
                 });
             }
 
-            // 3b. Modo "Retirar" e status "Recebido" ou "Solicitado"
+            // 3b. Modo "Retirar" e status permite retirada ("Solicitado" ou "Entregue Parcial")
             else if (modo.equals("Retirar") && (selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem5) || selecionado.getStatus().equals(statusItem6))) {
                 MenuItem lancarSaida = new MenuItem("Lançar retirada");
                 contextMenu.getItems().add(lancarSaida);
@@ -1169,8 +1172,6 @@ public class ConsultarItemController implements Initializable{
                 lancarSaida.setOnAction(event -> {
                     // Primeiro, busca dados atualizados do item (localização, etc.)
                     try (Connection connectDB = new DataBaseConection().getConection()) {
-                        // NOTA: O nome da procedure aqui está '..._att_saida',
-                        // no duplo clique estava '..._atualizardadossaida'
                         CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_item_att_saida(?) }");
                         cs.setInt(1, selecionado.getIdItem());
 
@@ -1190,7 +1191,7 @@ public class ConsultarItemController implements Initializable{
                         LancaSaidaItem(
                                 selecionado.getCodItem(),
                                 selecionado.getCodOperacao(),
-                                consultNumeroOs.getText(),
+                                consultNumeroOs.getText().trim(),
                                 selecionado.getDescricao(),
                                 selecionado.getQtdPedido(),
                                 selecionado.getIdItem(),

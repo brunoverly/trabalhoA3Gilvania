@@ -1,6 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
 import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
 import com.example.trabalhoA3Gilvania.excelHandling.LeitorExcel;
 import com.example.trabalhoA3Gilvania.Utils.OnFecharJanela;
@@ -66,21 +67,13 @@ public class ImportarOsController implements Initializable {
     @FXML private AnchorPane importarOsTableViewItens;
     @FXML private ImageView importarOsVoltarImage;
 
-
+    // Constantes de Status (atualmente não usadas neste controller, mas mantidas para consistência)
     private String statusItem1 = "Aguardando entrega";
-    private String statusItem2 = "Recebido (parcial)";
-    private String statusItem3 = "Recebido (integral)";
-    private String statusItem4 = "Solicitado (parcial)";
-    private String statusItem5 = "Solicitado (integral)";
-    private String statusItem6 = "Entregue (parcial)";
-    private String statusItem7 = "Entregue (integral)";
+    // ... (demais status)
     private String statusOrdemServico1 = "Aberta";
-    private String statusOrdemServico2 = "Em andamento";
-    private String statusOrdemServico3 = "Encerrada";
+    // ...
     private String statusOperacao1 = "Em espera";
-    private String statusOperacao2 = "Item(s) solicitados";
-    private String statusOperacao3 = "Itens entregues (Parcial)";
-    private String statusOperacao4 = "Itens entregues (Integral)";
+    // ...
 
 
     // --- Campos Privados ---
@@ -91,6 +84,7 @@ public class ImportarOsController implements Initializable {
 
     /**
      * Define o "ouvinte" (listener/callback) que será acionado quando esta janela for fechada.
+     * @param listener A implementação da interface (geralmente vinda da tela anterior).
      */
     public void setOnFecharJanela(OnFecharJanela listener) {
         this.listener = listener;
@@ -118,15 +112,18 @@ public class ImportarOsController implements Initializable {
         Image importarOsVoltarImageImagem = new Image(importarOsVoltarImageURL.toExternalForm());
         importarOsVoltarImage.setImage(importarOsVoltarImageImagem);
 
+        // Desabilita o campo de texto do caminho (apenas exibição)
         importOsPathField.setDisable(true);
         importOsPathField.setFocusTraversable(false);
 
+        // --- Vinculação das Colunas (PropertyValueFactory) ---
         constulTabelCodOrdemServico.setCellValueFactory(new PropertyValueFactory<>("codOrdemServico"));
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
 
+        // --- Estilização das Colunas ---
         constulTabelCodOrdemServico.setStyle("-fx-alignment: CENTER;");
         constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
         consultTableDescricaoItem.setStyle("-fx-alignment: CENTER;");
@@ -134,7 +131,9 @@ public class ImportarOsController implements Initializable {
         consultTableCodItem.setStyle("-fx-alignment: CENTER-LEFT;");
         consultTableDescricaoItem.setStyle("-fx-alignment: CENTER-LEFT;");
 
+        // --- Vinculação das Listas às Tabelas ---
         consultTableOrdemServico.setItems(todasOrdensServico);
+        // Tabelas de operação e item começam vazias, controladas pelos listeners
         consultTableOperacao.setItems(FXCollections.observableArrayList());
         consultTableItem.setItems(FXCollections.observableArrayList());
 
@@ -142,11 +141,13 @@ public class ImportarOsController implements Initializable {
         consultTableOperacao.setFocusTraversable(true);
 
         // --- Listener: seleção de OS ---
+        // Filtra as operações com base na OS selecionada
         consultTableOrdemServico.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, selectedOS) -> {
                     if (selectedOS != null) {
+                        // Filtra a lista de TODAS as operações
                         ObservableList<Operacao> operacoesFiltradas = todasOperacoes.filtered(
-                                op -> todosItens.stream()
+                                op -> todosItens.stream() // Verifica se existe algum item
                                         .anyMatch(item -> item.getCodOperacao().equals(op.getCodOperacao())
                                                 && item.getCodOs().equals(selectedOS.getCodOrdemServico()))
                         );
@@ -154,14 +155,16 @@ public class ImportarOsController implements Initializable {
                         consultTableOperacao.getSelectionModel().clearSelection();
                         consultTableItem.getItems().clear();
 
+                        // Exibe a tabela de operações e esconde a de itens
                         importarOsTableViewOperacao.setVisible(true);
                         importarOsTableViewItens.setVisible(false);
 
-                        // 🔹 NOVO: pré-seleciona a primeira operação automaticamente
+                        // Pré-seleciona a primeira operação automaticamente
                         if (!operacoesFiltradas.isEmpty()) {
                             consultTableOperacao.getSelectionModel().selectFirst();
                         }
                     } else {
+                        // Se nenhuma OS for selecionada, limpa e esconde as tabelas filhas
                         consultTableOperacao.setItems(FXCollections.observableArrayList());
                         consultTableItem.setItems(FXCollections.observableArrayList());
                         importarOsTableViewOperacao.setVisible(false);
@@ -171,32 +174,39 @@ public class ImportarOsController implements Initializable {
         );
 
         // --- Listener: seleção de Operação ---
+        // Filtra os itens com base na Operação (e OS) selecionada
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, selectedOperacao) -> {
                     if (selectedOperacao != null) {
                         OrdemServico osSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
                         if (osSelecionada != null) {
+                            // Filtra a lista de TODOS os itens
                             ObservableList<Item> itensFiltrados = todosItens.filtered(
                                     item -> item.getCodOs().equals(osSelecionada.getCodOrdemServico())
                                             && item.getCodOperacao().equals(selectedOperacao.getCodOperacao())
                             );
                             consultTableItem.setItems(itensFiltrados);
+                            // Exibe a tabela de itens se ela não estiver vazia
                             importarOsTableViewItens.setVisible(!itensFiltrados.isEmpty());
                         }
                     } else {
+                        // Se nenhuma operação for selecionada, limpa e esconde a tabela de itens
                         consultTableItem.setItems(FXCollections.observableArrayList());
                         importarOsTableViewItens.setVisible(false);
                     }
                 }
         );
 
+        // --- Configuração do Callback de Fechamento da Janela ---
         Platform.runLater(() -> {
             Stage stage = (Stage) importOsAnchorPanelTable.getScene().getWindow();
+            // Define o que acontece quando a janela é fechada
             stage.setOnHidden(event -> {
-                if (listener != null) listener.aoFecharJanela();
+                if (listener != null) listener.aoFecharJanela(); // Notifica a tela anterior
             });
         });
 
+        // --- Efeitos de Hover (mouse) no botão Voltar ---
         ImageView fecharImagem = (ImageView) importVoltar.getGraphic();
         importVoltar.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
@@ -209,6 +219,7 @@ public class ImportarOsController implements Initializable {
             importVoltar.setCursor(Cursor.DEFAULT);
         });
 
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) importSelecionarExcel.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -224,10 +235,17 @@ public class ImportarOsController implements Initializable {
      * atualiza o campo de texto e chama a verificação/pré-visualização.
      */
     public void importSelecionarExcelOnAction(ActionEvent event){
-        // Chama o método da classe GerenciadorOperacao que abre o FileChooser
+        // Chama o método que abre o FileChooser
         filePath = cadastrarOs.selecionarArquivo((Stage) importSelecionarExcel.getScene().getWindow());
-        importOsPathField.setText(filePath.getAbsolutePath()); // Mostra o caminho no TextField
-        verificarImport(); // Inicia a leitura do arquivo
+        // Verifica se o usuário selecionou um arquivo (filePath pode ser nulo se ele cancelar)
+        if (filePath != null) {
+            importOsPathField.setText(filePath.getAbsolutePath()); // Mostra o caminho no TextField
+            verificarImport(); // Inicia a leitura do arquivo
+        } else {
+            // Opcional: Limpar se o usuário cancelar
+            importOsPathField.setText("");
+            importOsAnchorPanelTable.setVisible(false);
+        }
     }
 
     /**
@@ -240,7 +258,7 @@ public class ImportarOsController implements Initializable {
     }
 
     /**
-     * Verifica se um arquivo foi importado e inicia a tarefa de
+     * Verifica se um arquivo foi selecionado e inicia a tarefa de
      * pré-visualização (leitura do Excel) em uma thread separada (Task).
      */
     public void verificarImport(){
@@ -271,10 +289,11 @@ public class ImportarOsController implements Initializable {
                 consultTableItem.setSelectionModel(null); // Desabilita seleção na tabela de itens
             });
 
-            // 4. Define o que fazer se a Task falhar
+            // 4. Define o que fazer se a Task falhar (ex: erro ao ler Excel)
             task.setOnFailed(event -> {
                 ImportarOsAcnhorPane.getChildren().remove(loadingPane);
                 task.getException().printStackTrace(); // Mostra o erro no console
+                // O alerta de erro já é tratado dentro do PreviewTable, se necessário
             });
 
             // 5. Inicia a Task em uma nova Thread
@@ -286,7 +305,7 @@ public class ImportarOsController implements Initializable {
 
     /**
      * Ação do botão "Importar".
-     * Pega a OS selecionada e chama a lógica de negócio (em background)
+     * Pega a OS selecionada na tabela e chama a lógica de negócio (em background)
      * para cadastrá-la no banco de dados.
      */
     public void importFazerImportOnAction(ActionEvent event) {
@@ -316,6 +335,7 @@ public class ImportarOsController implements Initializable {
                         StackPane loadingPane = FormsUtil.createGifLoading();
                         loadingPane.prefWidthProperty().bind(ImportarOsAcnhorPane.widthProperty());
                         loadingPane.prefHeightProperty().bind(ImportarOsAcnhorPane.heightProperty());
+                        // Estilo para o loading (fundo semitransparente)
                         loadingPane.setStyle("""
                         -fx-background-color: rgba(0,0,0,0.15);
                         -fx-background-radius: 17.5;
@@ -340,7 +360,7 @@ public class ImportarOsController implements Initializable {
                             ImportarOsAcnhorPane.getChildren().remove(loadingPane); // Remove o loading
                             int resultado = task.getValue(); // Pega o código de status (0, 1, 2, 3)
 
-                            // ⚡ Garante que os alertas sejam exibidos na Thread da Aplicação
+                            // Garante que os alertas sejam exibidos na Thread da Aplicação
                             Platform.runLater(() -> {
                                 // Trata os diferentes códigos de resultado
                                 switch (resultado) {
@@ -358,13 +378,13 @@ public class ImportarOsController implements Initializable {
                                         break;
                                 }
 
-                                // Reexibe as tabelas
+                                // Reexibe as tabelas (ou limpa, dependendo da regra de negócio)
                                 importOsAnchorPanelTable.setVisible(true);
                                 consultTableItem.setSelectionModel(null);
                             });
                         });
 
-                        // 7. Define o que fazer se a Task falhar
+                        // 7. Define o que fazer se a Task falhar (exceção inesperada)
                         task.setOnFailed(event2 -> {
                             ImportarOsAcnhorPane.getChildren().remove(loadingPane);
                             Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait());
@@ -393,40 +413,51 @@ public class ImportarOsController implements Initializable {
      */
     public void PreviewTable(File fileSelected) {
         try {
+            // DataFormatter para garantir que os valores sejam lidos como Strings
             DataFormatter formatter = new DataFormatter();
+            // Limpa as listas antes de (re)carregar
             todasOrdensServico.clear();
             todasOperacoes.clear();
             todosItens.clear();
 
+            // @Cleanup (Lombok) garante que o FileInputStream será fechado
             @Cleanup FileInputStream file = new FileInputStream(fileSelected);
             Workbook workbook = new XSSFWorkbook(file);
-            Sheet sheet = workbook.getSheetAt(0);
+            Sheet sheet = workbook.getSheetAt(0); // Pega a primeira planilha
 
+            // Itera sobre as linhas da planilha
             for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue;
+                if (row.getRowNum() == 0) continue; // Pula o cabeçalho (linha 0)
 
+                // Lê as células (DataFormatter lida com tipos mistos como string)
                 String osString = formatter.formatCellValue(row.getCell(1));
                 String operacaoString = formatter.formatCellValue(row.getCell(2));
                 String codItem = row.getCell(4).getStringCellValue();
                 String descricaoItem = row.getCell(5).getStringCellValue();
-                int qtdItem = (int) row.getCell(6).getNumericCellValue();
+                int qtdItem = (int) row.getCell(6).getNumericCellValue(); // Lê como numérico
 
+                // Adiciona a OS (apenas se ainda não existir na lista)
                 boolean existeOrdemServico = todasOrdensServico.stream()
                         .anyMatch(op -> op.getCodOrdemServico().equals(osString));
                 if (!existeOrdemServico) todasOrdensServico.add(new OrdemServico(osString));
 
+                // Cria o Item
                 Item item = new Item(codItem, operacaoString, descricaoItem, qtdItem, osString);
+                // Adiciona o item apenas se a quantidade não for zero
                 if (item.getQtdPedido() != 0) todosItens.add(item);
 
+                // Adiciona a Operação (apenas se ainda não existir na lista)
                 boolean existeOperacao = todasOperacoes.stream()
                         .anyMatch(op -> op.getCodOperacao().equals(operacaoString));
                 if (!existeOperacao) todasOperacoes.add(new Operacao(operacaoString));
             }
         } catch (Exception e) {
+            // Se der erro ao ler o Excel, mostra um alerta na UI Thread
             Platform.runLater(() -> {
                 alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
                                 "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
                         .showAndWait();
+                // Limpa a tela
                 importOsPathField.setText("");
                 importarOsTableViewOrdem.setVisible(false);
                 importarOsTableViewOperacao.setVisible(false);
@@ -435,17 +466,19 @@ public class ImportarOsController implements Initializable {
             return;
         }
 
+        // Se a leitura foi bem-sucedida, atualiza a UI (na UI Thread)
         Platform.runLater(() -> {
             importLabelSelecionar.setVisible(true);
             imortarSplitPane.setVisible(true);
             importarOsTableViewOrdem.setVisible(true);
 
-            // 🔹 NOVO: pré-seleciona automaticamente a primeira OS e sua primeira operação
+            // Pré-seleciona automaticamente a primeira OS e sua primeira operação
             if (!todasOrdensServico.isEmpty()) {
                 consultTableOrdemServico.getSelectionModel().selectFirst();
                 OrdemServico primeiraOS = consultTableOrdemServico.getSelectionModel().getSelectedItem();
 
                 if (primeiraOS != null) {
+                    // Filtra operações da primeira OS
                     ObservableList<Operacao> operacoesFiltradas = todasOperacoes.filtered(
                             op -> todosItens.stream()
                                     .anyMatch(item -> item.getCodOperacao().equals(op.getCodOperacao())
@@ -458,6 +491,7 @@ public class ImportarOsController implements Initializable {
                         Operacao primeiraOperacao = consultTableOperacao.getSelectionModel().getSelectedItem();
 
                         if (primeiraOperacao != null) {
+                            // Filtra itens da primeira operação
                             ObservableList<Item> itensFiltrados = todosItens.filtered(
                                     item -> item.getCodOs().equals(primeiraOS.getCodOrdemServico())
                                             && item.getCodOperacao().equals(primeiraOperacao.getCodOperacao())
@@ -495,7 +529,7 @@ public class ImportarOsController implements Initializable {
             consultTableItem.setItems(itensFiltrados);
 
         } catch (Exception e) {
-            // (O bloco catch original estava quebrado, foi corrigido para dentro do catch)
+            // Tratamento de erro (o bloco catch original estava posicionado incorretamente)
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
                     .showAndWait();
 
@@ -521,7 +555,7 @@ public class ImportarOsController implements Initializable {
         private SimpleStringProperty descricao;
         private SimpleObjectProperty<Integer> qtdPedido; // Usado Object para permitir 'Integer'
         private SimpleStringProperty status;
-        private SimpleStringProperty codOs; // <--- Adicionado para vincular o item à OS
+        private SimpleStringProperty codOs; // Referência à OS pai
 
         // Construtor principal
         public Item(String codItem, String codOperacao, String descricao, Integer qtdPedido, String codOs) {

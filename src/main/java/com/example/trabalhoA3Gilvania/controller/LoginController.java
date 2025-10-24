@@ -53,14 +53,17 @@ public class LoginController implements Initializable {
     @FXML private AnchorPane rootPane; // Painel raiz (usado para o GIF de loading)
 
     // Instância da classe utilitária para exibir pop-ups de alerta
+    FormsUtil alerta = new FormsUtil();
+
+    // Variáveis para permitir arrastar a janela (sem borda)
     private double xOffset = 0;
     private double yOffset = 0;
-    FormsUtil alerta = new FormsUtil();
 
     /**
      * Método de inicialização, chamado automaticamente pelo JavaFX
      * após o FXML ser carregado.
      */
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // --- Carregamento das Imagens da Interface ---
 
@@ -104,6 +107,7 @@ public class LoginController implements Initializable {
             loginButtonFechar.setCursor(Cursor.DEFAULT);
         });
 
+        // Define a janela principal na classe utilitária (para alertas futuros)
         Platform.runLater(() -> {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -126,7 +130,7 @@ public class LoginController implements Initializable {
      */
     public void LoginButtonOnAction(ActionEvent event) {
         // 1. Validação: Verifica se os campos NÃO estão em branco
-        if ((enterUserNameField.getText().isBlank() == false) && (enterPasswordField.getText().isBlank() == false)) {
+        if (!enterUserNameField.getText().isBlank() && !enterPasswordField.getText().isBlank()) {
 
             // 2. Cria o painel de "loading" (GIF) e o sobrepõe à tela
             StackPane loadingPane = FormsUtil.createGifLoading();
@@ -145,7 +149,7 @@ public class LoginController implements Initializable {
             };
 
             // 4. Define o que fazer quando a Task terminar (na UI Thread)
-            task.setOnSucceeded(event2 -> {
+            task.setOnSucceeded(e -> {
                 rootPane.getChildren().remove(loadingPane); // Remove o loading
                 int resultado = task.getValue(); // Pega o código de status (0, 1, 2, 3)
 
@@ -174,9 +178,10 @@ public class LoginController implements Initializable {
             });
 
             // 5. Define o que fazer se a Task falhar (exceção inesperada)
-            task.setOnFailed(event2 -> {
+            task.setOnFailed(e -> {
                 rootPane.getChildren().remove(loadingPane); // Remove o loading
-                Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait());
+                Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado: " + task.getException().getMessage()).showAndWait());
+                task.getException().printStackTrace(); // Loga o erro no console
             });
 
             // 6. Inicia a Task em uma nova Thread
@@ -200,23 +205,30 @@ public class LoginController implements Initializable {
     public int validateLogin() {
         DataBaseConection connectNow = new DataBaseConection();
         Connection connectDB = connectNow.getConection();
-        try {
-            // String de chamada da Stored Procedure 'login'
-            String querySqlUser = "{ CALL projeto_java_a3.login(?) }"; // A procedure só precisa da matrícula
 
-            // Try-with-resources para garantir o fechamento do CallableStatement (cs)
-            try (CallableStatement cs = connectDB.prepareCall(querySqlUser)) {
+        // Validação defensiva: se a conexão falhar, retorna erro
+        if (connectDB == null) {
+            return 3; // Erro de SQL (conexão)
+        }
 
-                int matricula;
-                try {
-                    // Tenta converter a Matrícula (usuário) para um número
-                    matricula = Integer.parseInt(enterUserNameField.getText().trim());
-                } catch (NumberFormatException e) {
-                    return 2; // Retorna 2 se a matrícula não for um número
-                }
+        // String de chamada da Stored Procedure 'login'
+        String querySqlUser = "{ CALL projeto_java_a3.login(?) }"; // A procedure só precisa da matrícula
 
-                cs.setInt(1, matricula); // Define o parâmetro de entrada (IN) da procedure
-                ResultSet rs = cs.executeQuery(); // Executa a consulta
+        // Try-with-resources para garantir o fechamento do CallableStatement (cs)
+        try (CallableStatement cs = connectDB.prepareCall(querySqlUser)) {
+
+            int matricula;
+            try {
+                // Tenta converter a Matrícula (usuário) para um número
+                // **Verificação .trim()**: Confirmado que .trim() já está sendo usado corretamente.
+                matricula = Integer.parseInt(enterUserNameField.getText().trim());
+            } catch (NumberFormatException e) {
+                return 2; // Retorna 2 se a matrícula não for um número
+            }
+
+            cs.setInt(1, matricula); // Define o parâmetro de entrada (IN) da procedure
+
+            try (ResultSet rs = cs.executeQuery()) { // Executa a consulta e garante que o ResultSet feche
 
                 // Verifica se o banco retornou um usuário com essa matrícula
                 if (rs.next()) {
@@ -229,6 +241,7 @@ public class LoginController implements Initializable {
                     );
 
                     // Agora, verifica o PIN (senha)
+                    // **Verificação .trim()**: Confirmado que .trim() já está sendo usado corretamente.
                     String senhaDigitada = enterPasswordField.getText().trim();
                     String hashArmazenado = rs.getString("pin"); // Pega o hash (PIN criptografado) do banco
 
@@ -240,13 +253,20 @@ public class LoginController implements Initializable {
                 } else {
                     return 1; // Retorna 1 se a matrícula (usuário) não foi encontrada no DB
                 }
+            } // ResultSet é fechado aqui
 
+        } catch (SQLException e) {
+            e.printStackTrace(); // Loga a exceção SQL no console
+            return 3; // Retorna 3 se der um erro de SQL
+        } finally {
+            // Garante que a conexão seja fechada
+            try {
+                if (connectDB != null && !connectDB.isClosed()) {
+                    connectDB.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                return 3; // Retorna 3 se der um erro de SQL
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     } // Fim do validateLogin()
 
@@ -255,63 +275,61 @@ public class LoginController implements Initializable {
      * Chamado após o login ser bem-sucedido.
      */
     public void TelaInicial() {
-            try {
+        try {
+            janelaInicio = new Stage();
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/inicio.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+            Parent root = fxmlLoader.load();
 
-                janelaInicio = new Stage();
-                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/inicio.fxml");
-                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                Parent root = fxmlLoader.load();
-
-                // 3. Carrega fontes personalizadas
-                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-                for (String fontFile : fonts) {
-                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
-                }
-
-                // 6. Configura a cena e o Stage para serem transparentes (sem borda)
-                Scene scene = new Scene(root);
-                scene.setFill(Color.TRANSPARENT);
-                janelaInicio.initStyle(StageStyle.TRANSPARENT);
-                janelaInicio.setScene(scene);
-
-                // 7. Adiciona ícone
-                URL logoUrl = getClass().getResource("/imagens/logo.png");
-                janelaInicio.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-                // 8. --- Bloco para arrastar a janela transparente ---
-                root.setOnMousePressed(event2 -> {
-                    xOffset = event2.getSceneX();
-                    yOffset = event2.getSceneY();
-                });
-                root.setOnMouseDragged(event2 -> {
-                    janelaInicio.setX(event2.getScreenX() - xOffset);
-                    janelaInicio.setY(event2.getScreenY() - yOffset);
-                });
-                // -------------------------------------------------
-
-                // 9. Carrega o CSS
-                URL cssUrl = getClass().getResource("/css/style.css");
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-
-                // 10. Configura e mostra a janela
-                janelaInicio.setTitle("Importar ordem de serviço");
-                janelaInicio.setResizable(false);
-                janelaInicio.show();
-
-                // (As linhas abaixo parecem repetidas, mas não causam erro)
-                janelaInicio.setTitle("Importar ordem de serviço");
-                janelaInicio.setResizable(false);
-                janelaInicio.setScene(scene);
-
-                // 11. Limpa a referência da janela quando ela for fechada
-                janelaInicio.setOnHidden(e -> janelaInicio = null);
-
-                janelaInicio.show();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            // 3. Carrega fontes personalizadas
+            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+            for (String fontFile : fonts) {
+                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
+
+            // 6. Configura a cena e o Stage para serem transparentes (sem borda)
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            janelaInicio.initStyle(StageStyle.TRANSPARENT);
+            janelaInicio.setScene(scene);
+
+            // 7. Adiciona ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaInicio.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // 8. --- Bloco para arrastar a janela transparente ---
+            root.setOnMousePressed(event2 -> {
+                xOffset = event2.getSceneX();
+                yOffset = event2.getSceneY();
+            });
+            root.setOnMouseDragged(event2 -> {
+                janelaInicio.setX(event2.getScreenX() - xOffset);
+                janelaInicio.setY(event2.getScreenY() - yOffset);
+            });
+            // -------------------------------------------------
+
+            // 9. Carrega o CSS
+            URL cssUrl = getClass().getResource("/css/style.css");
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+
+            // 10. Configura e mostra a janela
+            janelaInicio.setTitle("Importar ordem de serviço");
+            janelaInicio.setResizable(false);
+
+            // 11. Limpa a referência da janela quando ela for fechada
+            janelaInicio.setOnHidden(e -> janelaInicio = null);
+
+            janelaInicio.show();
+
+            // CORREÇÃO: Removidas linhas duplicadas que estavam aqui (após o .show())
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Em caso de falha ao abrir a tela principal, mostra um alerta
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro Crítico",
+                            "Não foi possível carregar a tela principal. Verifique o log de erros.")
+                    .showAndWait();
         }
     }
+}
 // Fim da classe LoginController

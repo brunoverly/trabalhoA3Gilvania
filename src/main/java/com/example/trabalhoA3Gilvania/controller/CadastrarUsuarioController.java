@@ -112,7 +112,8 @@ public class CadastrarUsuarioController implements Initializable {
         }
 
         // 3. Valida se os campos de PIN e Confirmação de PIN são iguais
-        if (!cadastroSenha.getText().equals(cadastroConfirmarSenha.getText())) {
+        // **CORREÇÃO**: Adicionado .trim() para evitar falhas na comparação por espaços
+        if (!cadastroSenha.getText().trim().equals(cadastroConfirmarSenha.getText().trim())) {
             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso","PIN informados não correspondem")
                     .showAndWait();
             return; // Interrompe a execução do método
@@ -128,10 +129,15 @@ public class CadastrarUsuarioController implements Initializable {
      */
     public void registerUser() {
         // Coleta os dados dos campos da interface
-        String nome = cadastroNome.getText();
-        int matricula = Integer.parseInt(cadastroMatricula.getText()); // Converte matrícula para inteiro
+        String nome = cadastroNome.getText().trim(); // .trim() é seguro para Strings
+
+        // **CORREÇÃO**: Adicionado .trim() antes da conversão numérica
+        int matricula = Integer.parseInt(cadastroMatricula.getText().trim());
+
         String cargo = cadastroComboBox.getValue();
-        int pin = Integer.parseInt(cadastroSenha.getText()); // Converte PIN para inteiro
+
+        // **CORREÇÃO**: Adicionado .trim() antes da conversão numérica
+        int pin = Integer.parseInt(cadastroSenha.getText().trim());
 
         // Criptografa o PIN usando BCrypt (gera um "hash")
         String hash = BCrypt.hashpw(String.valueOf(pin), BCrypt.gensalt(12));
@@ -206,16 +212,16 @@ public class CadastrarUsuarioController implements Initializable {
         boolean tipoValido = true;
         boolean tamanhoValido = true;
 
-        // Tenta converter o texto do PIN para um Inteiro
+        // **CORREÇÃO**: Adicionado .trim() antes de tentar a conversão numérica
         try {
-            Integer.parseInt(cadastroSenha.getText());
+            Integer.parseInt(cadastroSenha.getText().trim());
         } catch (Exception e) {
             // Se der erro (ex: contém letras), o tipo é inválido
             tipoValido = false;
         }
 
-        // Verifica se o comprimento (length) do texto é diferente de 6
-        if (cadastroSenha.getText().length() != 6) {
+        // **CORREÇÃO**: Adicionado .trim() antes de verificar o tamanho
+        if (cadastroSenha.getText().trim().length() != 6) {
             tamanhoValido = false;
         }
 
@@ -223,3 +229,4 @@ public class CadastrarUsuarioController implements Initializable {
         return tipoValido && tamanhoValido;
     }
 }
+

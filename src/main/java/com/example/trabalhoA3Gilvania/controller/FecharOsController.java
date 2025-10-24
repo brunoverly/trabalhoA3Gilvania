@@ -54,7 +54,7 @@ public class FecharOsController implements Initializable {
     @FXML private TableColumn<Item, String> consultTableItemStatus;
     @FXML private AnchorPane fecharAnchorPane; // Painel que contém as tabelas de resultado
 
-
+    // Constantes de Status
     private String statusItem1 = "Aguardando entrega";
     private String statusItem2 = "Recebido (parcial)";
     private String statusItem3 = "Recebido (integral)";
@@ -99,10 +99,11 @@ public class FecharOsController implements Initializable {
         Image fecharOsVoltarImage = new Image(fecharOsVoltarURL.toExternalForm());
         fecharOsVoltar.setImage(fecharOsVoltarImage);
 
-        // --- Configuração das colunas ---
+        // --- Configuração das colunas da tabela de Operações ---
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         //consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        // --- Configuração das colunas da tabela de Itens ---
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
@@ -111,6 +112,7 @@ public class FecharOsController implements Initializable {
         consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
         consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
 
+        // Define alinhamento centralizado para colunas
         constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
         consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
         consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
@@ -118,7 +120,7 @@ public class FecharOsController implements Initializable {
         consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
 
 
-        // --- Listas ---
+        // --- Configuração das Listas e Tabelas ---
         consultTableOperacao.setItems(todasOperacoes);
 
         // Lista filtrada de itens (atualiza quando muda a seleção da operação)
@@ -129,7 +131,7 @@ public class FecharOsController implements Initializable {
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldOp, novaOp) -> {
             itensFiltrados.clear();
             if (novaOp != null) {
-                // Mostra apenas os itens cuja operação corresponde à selecionada
+                // Mostra apenas os itens cujo ID da operação corresponde ao da operação selecionada
                 for (Item item : todosItens) {
                     if (item.getIdOperacao() == novaOp.getId()) {
                         itensFiltrados.add(item);
@@ -138,24 +140,15 @@ public class FecharOsController implements Initializable {
             }
         });
 
-        consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldOp, novaOp) -> {
-            itensFiltrados.clear();
-            if (novaOp != null) {
-                // Mostra apenas os itens cuja operação corresponde à selecionada
-                for (Item item : todosItens) {
-                    if (item.getIdOperacao() == novaOp.getId()) {
-                        itensFiltrados.add(item);
-                    }
-                }
-            }
-        });
+        // (Nota: Havia um listener duplicado aqui, foi removido na revisão)
 
-// 🔹 Seleciona automaticamente a primeira operação após carregar dados
+        // Listener para selecionar automaticamente a primeira operação após carregar dados
         consultTableOperacao.getItems().addListener((javafx.collections.ListChangeListener<Operacao>) change -> {
             if (!consultTableOperacao.getItems().isEmpty()) {
                 consultTableOperacao.getSelectionModel().selectFirst();
                 Operacao primeira = consultTableOperacao.getSelectionModel().getSelectedItem();
                 if (primeira != null) {
+                    // Filtra os itens para a primeira operação selecionada
                     itensFiltrados.clear();
                     for (Item item : todosItens) {
                         if (item.getIdOperacao() == primeira.getId()) {
@@ -167,17 +160,17 @@ public class FecharOsController implements Initializable {
         });
 
 
-
-        // Configuração visual
+        // Configuração visual de placeholders
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
-        // Callback de fechamento
+        // Configuração do Callback de Fechamento da Janela
         Platform.runLater(() -> {
             Stage stage = (Stage) fecharAnchorPane.getScene().getWindow();
+            // Define o que acontece quando a janela é fechada
             stage.setOnHidden(event -> {
                 if (listener != null) {
-                    listener.aoFecharJanela();
+                    listener.aoFecharJanela(); // Notifica a tela anterior
                 }
             });
         });
@@ -195,6 +188,7 @@ public class FecharOsController implements Initializable {
             consultVoltarButton.setCursor(Cursor.DEFAULT);
         });
 
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -237,9 +231,12 @@ public class FecharOsController implements Initializable {
             return; // Interrompe a ação
         }
 
+        // Pede confirmação ao usuário
         boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja encerrar esta ordem de serviço?");
         if (confirmar) {
-            String numeroOs = consultNumeroOs.getText();
+            // **CORREÇÃO**: Adicionado .trim() para limpar a entrada
+            String numeroOs = consultNumeroOs.getText().trim();
+
             // Try-with-resources para garantir o fechamento da conexão
             try (Connection connectDB = new DataBaseConection().getConection()) {
 
@@ -266,13 +263,18 @@ public class FecharOsController implements Initializable {
 
                 // 3. Trata o código de resultado
                 switch (resultadoEncerramento) {
-                    case 0 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada").showAndWait();
-                    case 1 ->
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem já se encontra encerrada").showAndWait();
-                    case 2 ->
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
-                    default ->
-                            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
+                    case 0:
+                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada").showAndWait();
+                        break;
+                    case 1:
+                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem já se encontra encerrada").showAndWait();
+                        break;
+                    case 2:
+                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
+                        break;
+                    default:
+                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
+                        break;
                 }
 
             } catch (SQLException e) {
@@ -286,7 +288,7 @@ public class FecharOsController implements Initializable {
             fecharAnchorPane.setVisible(false);
         }
         else{
-            return;
+            return; // Usuário clicou em "Cancelar" na confirmação
         }
     }
 
@@ -294,11 +296,12 @@ public class FecharOsController implements Initializable {
 
 
     /**
-     * Método de busca no Banco de Dados para *exibir* os dados da OS.
+     * Método de busca no Banco de Dados para *exibir* os dados da OS (antes de fechar).
      * Chama a Stored Procedure 'encerrar_os_dados'.
      */
     public void BuscarDB() {
-        String numeroOs = consultNumeroOs.getText();
+        // **CORREÇÃO**: Adicionado .trim() para limpar a entrada
+        String numeroOs = consultNumeroOs.getText().trim();
 
         // Try-with-resources para garantir o fechamento da conexão
         try (Connection connectDB = new DataBaseConection().getConection()) {
@@ -309,14 +312,14 @@ public class FecharOsController implements Initializable {
             boolean hasResults = cs.execute();
 
             // --- 1️⃣ Leitura do Primeiro ResultSet (Verificação) ---
-            // A procedure primeiro checa se a OS existe
+            // A procedure primeiro checa se a OS existe e está aberta
             if (hasResults) {
                 try (ResultSet rsResultado = cs.getResultSet()) {
                     if (rsResultado.next()) {
                         int resultado = rsResultado.getInt("resultado");
                         if (resultado == 0) {
-                            // Se resultado = 0, OS não encontrada
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada")
+                            // Se resultado = 0, OS não encontrada ou já encerrada
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada ou já encerrada")
                                     .showAndWait();
                             return; // Interrompe a execução (não há o que mostrar)
                         }
@@ -346,7 +349,7 @@ public class FecharOsController implements Initializable {
                         );
                         listaItens.add(item); // Adiciona na lista temporária
                     }
-                    // Atualiza a lista principal de itens (que está ligada à tabela)
+                    // Atualiza a lista principal de itens
                     todosItens.clear();
                     todosItens.addAll(listaItens);
                 }
@@ -370,8 +373,8 @@ public class FecharOsController implements Initializable {
                 }
             }
 
-            // (As tabelas são atualizadas automaticamente pois as listas 'todasOperacoes'
-            // e 'todosItens' estão vinculadas a elas desde o 'initialize')
+            // (As tabelas são atualizadas automaticamente pelos listeners
+            //  e data binding configurados no 'initialize')
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -382,14 +385,14 @@ public class FecharOsController implements Initializable {
         consultLabelOsBuscada.setVisible(true);
         fecharAnchorPane.setVisible(true);
 
-        consultLabelOsBuscada.setVisible(true);
-        fecharAnchorPane.setVisible(true);
+        // (Bloco duplicado removido na revisão)
 
-// 🔹 Garante que a primeira operação será selecionada e itens filtrados
+        // Garante que a primeira operação será selecionada e seus itens filtrados
         if (!todasOperacoes.isEmpty()) {
             consultTableOperacao.getSelectionModel().selectFirst();
             Operacao primeira = consultTableOperacao.getSelectionModel().getSelectedItem();
             if (primeira != null) {
+                // Filtra os itens para a primeira operação
                 ObservableList<Item> itensFiltrados = consultTableItem.getItems();
                 itensFiltrados.clear();
                 for (Item item : todosItens) {
@@ -408,6 +411,7 @@ public class FecharOsController implements Initializable {
      */
     public boolean verificarNumeroOS() {
         boolean retorno = true;
+        // isBlank() cobre nulo, "", " "
         if(consultNumeroOs == null || consultNumeroOs.getText().isBlank()) {
             alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe o número da ordem de serviço")
                     .showAndWait();
@@ -423,7 +427,7 @@ public class FecharOsController implements Initializable {
      * Classe de Modelo (POJO) estática para 'Item'.
      * Contém as propriedades JavaFX (SimpleStringProperty, etc.)
      * necessárias para o funcionamento do TableView de Itens.
-     * (Nota: Esta versão da classe Item não inclui 'idItem').
+     * (Nota: Esta versão da classe Item não inclui 'idItem', pois é apenas para exibição).
      */
     public static class Item {
         private SimpleStringProperty codItem;

@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 public class RemoverUsuarioController implements Initializable {
 
     // --- Injeção de Componentes FXML ---
-    // Estes campos são vinculados aos componentes definidos no arquivo .fxml
     @FXML private ImageView removerUserVoltarButtonImage;
     @FXML private ImageView remover2; // Imagem estática do usuário
     @FXML private Button removeCancelarButton;
@@ -75,6 +74,7 @@ public class RemoverUsuarioController implements Initializable {
             removeCancelarButton.setCursor(Cursor.DEFAULT);
         });
 
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) removeCancelarButton.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -105,7 +105,8 @@ public class RemoverUsuarioController implements Initializable {
         }
 
         // 2. Prepara a chamada da Stored Procedure
-        int matricula = Integer.parseInt(removeMatricula.getText());
+        // ✅ .trim() adicionado para garantir a conversão segura
+        int matricula = Integer.parseInt(removeMatricula.getText().trim());
         String procedureCall = "{ CALL projeto_java_a3.remover_usuario_dados(?) }";
 
         // 3. Conecta ao banco e executa a procedure
@@ -144,12 +145,13 @@ public class RemoverUsuarioController implements Initializable {
             }
 
         } catch (NumberFormatException e) {
-            // Este catch é para o caso de a matrícula ser válida (passar no matriculaValida)
-            // mas dar erro na segunda conversão (improvável)
+            // Este catch agora é menos provável devido ao .trim() e matriculaValida()
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao converter a matrícula.").showAndWait();
             e.printStackTrace();
         } catch (SQLException e) {
             // Captura erros de conexão ou da procedure
             e.printStackTrace();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro no banco de dados ao buscar usuário.").showAndWait();
         }
     } // Fim do removeBuscarMatriculaOnAction()
 
@@ -159,13 +161,14 @@ public class RemoverUsuarioController implements Initializable {
      * @return true se a matrícula não está em branco E é um número.
      */
     private boolean matriculaValida() {
-        // Verifica se o campo está vazio
+        // Verifica se o campo está vazio (isBlank já cobre espaços em branco)
         if (removeMatricula.getText().isBlank()) {
             return false;
         } else {
-            // Tenta converter o texto para um Inteiro
+            // Tenta converter o texto (com .trim()) para um Inteiro
             try {
-                int matricula = Integer.parseInt(removeMatricula.getText());
+                // ✅ .trim() adicionado para garantir a validação correta
+                int matricula = Integer.parseInt(removeMatricula.getText().trim());
                 return true; // Sucesso
             } catch (Exception e) {
                 return false; // Falha (ex: contém letras)
@@ -178,12 +181,19 @@ public class RemoverUsuarioController implements Initializable {
      * Pede confirmação e, se positivo, chama a procedure para deletar o usuário.
      */
     public void removeConfirmarButtonOnAction (ActionEvent event){
+        // Valida se os campos de dados estão preenchidos (evita remover usuário errado)
+        if(removeDadosMatricula.getText().isBlank()){
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Busque um usuário válido antes de remover.").showAndWait();
+            return;
+        }
+
         // 1. Pede confirmação ao usuário antes de prosseguir
         boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja remover este usuário?");
 
         if (confirmar) {
             // Se o usuário clicou "OK":
-            int matricula = Integer.parseInt(removeMatricula.getText());
+            // ✅ .trim() adicionado para garantir a conversão segura
+            int matricula = Integer.parseInt(removeMatricula.getText().trim());
 
             // 2. Prepara a chamada da Stored Procedure de remoção
             String procedureCall = "{ CALL projeto_java_a3.remover_usuario(?) }";
@@ -202,7 +212,6 @@ public class RemoverUsuarioController implements Initializable {
                         if (rs.next()) {
                             int resultado = rs.getInt("resultado");
 
-                            // (Nota: O código original cria o Alerta manualmente aqui)
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Aviso");
                             alert.setHeaderText(null);
@@ -216,7 +225,7 @@ public class RemoverUsuarioController implements Initializable {
                                 removeDadosCargo.setText("");
                                 removeDadosMatricula.setText("");
                             } else {
-                                // Se resultado = 0 (Não encontrado, embora devesse estar após a busca)
+                                // Se resultado = 0 (Não encontrado)
                                 alert.setContentText("Usuário não encontrado");
                             }
                             alert.showAndWait(); // Exibe o alerta de feedback

@@ -1,3 +1,8 @@
+/* ========================================================== */
+/* == CONFIGURAÇÃO GLOBAL E FONTES ==                         */
+/* ========================================================== */
+
+/* --- Configuração Raiz (Janela Principal) --- */
 .root {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
@@ -6,6 +11,7 @@
     -fx-border-radius: 7;
 }
 
+/* --- Definição da Fonte Padrão ("Poppins") --- */
 .root-pane,
 .text-field,
 .vbox,
@@ -18,6 +24,7 @@
     -fx-font-family: "Poppins";
 }
 
+/* --- Painel Raiz (Fundo e Borda Azul) --- */
 .root-pane {
     -fx-border-color: #3498db;
     -fx-border-width: 2.8;
@@ -26,6 +33,7 @@
     -fx-background-color: #f0f0f0;
 }
 
+/* --- Botão Padrão --- */
 .button {
     -fx-background-radius: 4;
     -fx-border-radius: 4;
@@ -35,6 +43,7 @@
     -fx-font-size: 11px;
 }
 
+/* --- Campo de Texto Padrão --- */
 .text-field {
     -fx-background-radius: 5;
     -fx-border-radius: 5;
@@ -42,6 +51,11 @@
     -fx-border-width: 0.7;
 }
 
+/* ========================================================== */
+/* == MENU LATERAL (TELA INICIAL) ==                          */
+/* ========================================================== */
+
+/* --- VBox do Menu (Fundo Escuro) --- */
 #inicioVbox {
     -fx-background-color: #264653;
     -fx-border-color: #264653;
@@ -50,6 +64,7 @@
     -fx-background-radius: 0 7 7 0;
 }
 
+/* --- Botões Dentro da VBox (Texto Branco) --- */
 .vbox .button {
     -fx-graphic-text-gap: 7;
     -fx-font-weight: bold;
@@ -58,6 +73,7 @@
     -fx-text-fill: white;
 }
 
+/* --- Estilo Base dos Botões do Menu (Transparentes) --- */
 #menuAddUser,
 #menuRemoveUser,
 #menuSair,
@@ -79,12 +95,13 @@
     -fx-border-radius: 0;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 7;
-    -fx-padding: 0 7 0 7; /* (Corrigido da última vez) */
+    -fx-padding: 0 7 0 7;
     -fx-border-width: 0;
     -fx-border-color: transparent;
     -fx-text-fill: white;
 }
 
+/* --- Efeito Hover (Mouse) dos Botões do Menu --- */
 #menuAddUser:hover,
 #menuRemoveUser:hover,
 #menuSair:hover,
@@ -108,6 +125,11 @@
     -fx-background-radius: 4;
 }
 
+/* ========================================================== */
+/* == CAMPOS DE TEXTO DESABILITADOS (VISUALIZAÇÃO) ==         */
+/* ========================================================== */
+
+/* --- Estilo para TextFields :disabled (usados para exibir dados) --- */
 .text-field:disabled {
     -fx-opacity: 1;
     -fx-text-fill: #888888;
@@ -122,6 +144,11 @@
     -fx-background-color: white;
 }
 
+/* ========================================================== */
+/* == ESTILOS GLOBAIS DE TABLEVIEW ==                         */
+/* ========================================================== */
+
+/* --- Tabela (Container) --- */
 .table-view {
     -fx-background-color: white;
     -fx-background-radius: 28;
@@ -131,27 +158,32 @@
     -fx-padding: 0;
 }
 
+/* --- Fundo interno da Tabela (transparente) --- */
 .table-view > .virtual-flow > .clipped-container > .sheet {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
 
+/* --- Fundo do Cabeçalho (Azul Escuro) --- */
 .table-view .column-header-background {
     -fx-background-color: #434A50;
     -fx-background-radius: 7 7 0 0;
     -fx-padding: 0;
 }
 
+/* --- Coluna do Cabeçalho (Altura) --- */
 .table-view .column-header {
     -fx-pref-height: 21px;
 }
 
+/* --- Cabeçalho e Preenchimento (transparentes) --- */
 .table-view .column-header,
 .table-view .filler {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
+/* --- Texto (Label) do Cabeçalho --- */
 .table-view .column-header .label {
     -fx-font-family: "Poppins";
     -fx-font-size: 9px;
@@ -160,6 +192,7 @@
     -fx-alignment: CENTER;
 }
 
+/* --- Célula Padrão da Tabela --- */
 .table-view .table-cell {
     -fx-font-family: "Poppins";
     -fx-font-weight: regular;
@@ -170,6 +203,7 @@
     -fx-text-fill: #14213d;
 }
 
+/* --- Linhas Alternadas (Zebradas) --- */
 .table-row-cell:odd .table-cell {
     -fx-background-color: #E3E3E3;
 }
@@ -178,13 +212,11 @@
     -fx-background-color: #ffffff;
 }
 
+/* --- Efeito Hover (Mouse) na Linha --- */
 .table-row-cell:hover .table-cell {
     -fx-background-color: rgba(38,70,83,0.2);
     -fx-text-fill: #000;
 }
-
-/* --- O BLOCO .table-cell:focused FOI REMOVIDO DAQUI --- */
-
 
 /* ========================================================== */
 /* == REGRAS DE SELEÇÃO DE TABELA (BASEADO NOS FXMLs) ==      */
@@ -206,7 +238,7 @@
 #pdfTableOperacao .table-row-cell:selected:focused,
 #consultTableOrdemServico .table-row-cell:selected:focused,
 #inicioTableView .table-row-cell:selected:focused {
-    -fx-background-color: #FCB944 !important; /* <-- COR ATUALIZADA */
+    -fx-background-color: #FCB944 !important; /* Laranja */
 }
 
 #consultTableOperacao .table-row-cell:selected .table-cell,
@@ -216,8 +248,8 @@
 #pdfTableOperacao .table-row-cell:selected .table-cell,
 #consultTableOrdemServico .table-row-cell:selected .table-cell,
 #inicioTableView .table-row-cell:selected .table-cell {
-    -fx-background-color: #FCB944 !important; /* <-- COR ATUALIZADA */
-    -fx-text-fill: #14213d !important; /* <-- TEXTO ATUALIZADO (para escuro) */
+    -fx-background-color: #FCB944 !important; /* Laranja */
+    -fx-text-fill: #14213d !important; /* Texto escuro */
 }
 
 
@@ -226,7 +258,7 @@
 #pdfTableItem .table-row-cell:selected .table-cell,
 #pdfTableItem .table-row-cell:focused .table-cell,
 #pdfTableItem .table-row-cell:selected:focused .table-cell {
-    -fx-text-fill: #14213d !important; /* Sua cor de texto normal */
+    -fx-text-fill: #14213d !important;
 }
 
 /* Força a LINHA (row-cell) a ser transparente quando selecionada/focada */
@@ -241,37 +273,33 @@
 /* Re-aplica seus estilos :odd e :even às CÉLULAS DENTRO da linha selecionada/focada */
 #pdfTableItem .table-row-cell:odd:selected .table-cell,
 #pdfTableItem .table-row-cell:odd:focused .table-cell {
-    -fx-background-color: #E3E3E3 !important; /* Sua cor :odd */
+    -fx-background-color: #E3E3E3 !important; /* Cor :odd */
 }
 
 #pdfTableItem .table-row-cell:even:selected .table-cell,
 #pdfTableItem .table-row-cell:even:focused .table-cell {
-    -fx-background-color: #ffffff !important; /* Sua cor :even */
+    -fx-background-color: #ffffff !important; /* Cor :even */
 }
 
 /* --- 3. EXCEÇÃO ADICIONAL: Resetar CheckBox em pdfTableItem --- */
 
-/* * Regra 3.1: Reseta a "caixa" do checkbox ao seu estado padrão */
+/* Regra 3.1: Reseta a "caixa" do checkbox ao seu estado padrão */
 #pdfTableItem .table-row-cell:selected .check-box .box,
 #pdfTableItem .table-row-cell:focused .check-box .box {
-    /* Reseta as cores de fundo para o padrão do tema */
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color !important;
-    /* Reseta os insets para o padrão do tema */
     -fx-background-insets: 0 0 -1 0, 0, 1, 2 !important;
-    /* Reseta o radius para o padrão do tema */
     -fx-background-radius: 3, 3, 2, 1 !important;
-    /* Garante que nenhuma borda extra seja aplicada */
     -fx-border-width: 0 !important;
     -fx-border-color: transparent !important;
 }
 
-/* * Regra 3.2: Garante que a "marca" (o visto) dentro da caixa não fique branca */
+/* Regra 3.2: Garante que a "marca" (o visto) dentro da caixa não fique branca */
 #pdfTableItem .table-row-cell:selected .check-box:selected .mark,
 #pdfTableItem .table-row-cell:focused .check-box:selected .mark {
-    -fx-background-color: #14213d !important; /* Usa a cor do seu texto normal */
+    -fx-background-color: #14213d !important; /* Cor do texto normal */
 }
 
-/* * Regra 3.3: Remove o "anel de foco" externo do CheckBox */
+/* Regra 3.3: Remove o "anel de foco" externo do CheckBox */
 #pdfTableItem .check-box:focused {
     -fx-focus-color: transparent !important;
     -fx-faint-focus-color: transparent !important;
@@ -282,7 +310,7 @@
 /* == FIM DAS REGRAS DE SELEÇÃO DE TABELA ==                 */
 /* ========================================================== */
 
-
+/* --- Split Pane (Divisor de Tabelas) --- */
 .split-pane {
     -fx-background-color: #e5e5e5;
     -fx-padding: 0;
@@ -294,6 +322,7 @@
     -fx-pref-width: 1.4px;
 }
 
+/* --- ScrollBar Vertical (Tabelas) --- */
 .table-view .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -308,6 +337,7 @@
     -fx-background-radius: 2;
 }
 
+/* --- ScrollBar Horizontal (Oculta) --- */
 .table-view .scroll-bar:horizontal {
     -fx-opacity: 0;
     -fx-max-height: 0;
@@ -315,6 +345,12 @@
     -fx-pref-height: 0;
 }
 
+/* ========================================================== */
+/* == ESTILOS ESPECÍFICOS (POR ID) ==                         */
+/* ========================================================== */
+
+/* --- Painel Raiz da Tela de Login (#rootPane) --- */
+/* (Esta é uma definição duplicada da classe .root, mas com borda e padding) */
 #rootPane {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
@@ -324,17 +360,20 @@
     -fx-padding: 7;
 }
 
+/* --- Classe para a Borda Azul Externa (Login) --- */
 #rootPane.outer-border {
     -fx-border-color: #3498db;
     -fx-border-width: 2.8;
 }
 
+/* --- Campos de Login (Texto Branco) --- */
 #enterUserNameField,
 #enterPasswordField {
     -fx-text-fill: white;
     -fx-prompt-text-fill: rgba(255,255,255,0.6);
 }
 
+/* --- Painéis Principais das Janelas (Fundo Branco Arredondado) --- */
 #removeUser,
 #register,
 #saidaItemAnchorPane,
@@ -344,12 +383,13 @@
 #fecharOsAnchorPane,
 #consultarOsPane,
 #menuPdf,
-#inicioPane{
+#inicioPane {
     -fx-background-color: white;
     -fx-background-radius: 17.5;
     -fx-border-radius: 17.5;
 }
 
+/* --- Efeito Hover (Scale) para Botões de Confirmação --- */
 #importSelecionarExcel:hover,
 #importFazerImport:hover,
 #consultBuscarOs:hover,
@@ -371,6 +411,7 @@
     -fx-text-fill: white !important;
 }
 
+/* --- Efeito Hover (Scale) para Painéis do Dashboard --- */
 #inicioPaneDash:hover,
 #inicioPaneTableView:hover,
 #inicioPaneMenu:hover {
@@ -378,27 +419,26 @@
     -fx-scale-y: 1.015;
 }
 
-/* Esta linha estava solta no final do seu CSS, adicionei de volta */
-/* Se "loadingPane" for um ID, deve ser #loadingPane */
-/* Se for uma classe, deve ser .loadingPane */
-/* .loadingPane {
+/* --- Painel de Loading (Comentado no original) --- */
+/*
+.loadingPane {
     -fx-background-color: rgba(255,255,255,0.7);
 }
 */
 
-/* ======================= */
-/* DatePicker estilizado    */
-/* ======================= */
+/* ========================================================== */
+/* == ESTILOS PARA DATEPICKER (Histórico) ==                  */
+/* ========================================================== */
 
-/* === DatePicker Principal === */
+/* --- DatePicker Principal --- */
 .date-picker {
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-font-family: "Poppins";
-    -fx-text-fill: #FCB944; /* cabeçalho laranja */
+    -fx-text-fill: #FCB944; /* Laranja */
 }
 
-/* === Linha inferior do TextField === */
+/* --- Linha inferior do Campo de Texto --- */
 .date-picker .text-field {
     -fx-background-color: transparent;
     -fx-border-width: 0 0 2px 0;
@@ -407,21 +447,21 @@
     -fx-padding: 3 0 3 0;
 }
 
-/* === Botão da seta / ícone do calendário === */
+/* --- Botão da Seta (Ícone Calendário) --- */
 .date-picker .arrow-button {
     -fx-background-color: transparent;
     -fx-padding: 0.2em;
-    -fx-shape: "M 0 0 L 8 8 L 16 0 Z";
+    -fx-shape: "M 0 0 L 8 8 L 16 0 Z"; /* (Forma de seta - pode não ser ideal) */
     -fx-scale-x: 1.5;
     -fx-scale-y: 1.5;
-    -fx-cursor: hand; /* transforma o cursor em mão */
+    -fx-cursor: hand;
 }
 
 .date-picker .arrow-button .arrow {
-    -fx-background-color: #FCB944; /* laranja */
+    -fx-background-color: #FCB944; /* Laranja */
 }
 
-/* === Popup do calendário === */
+/* --- Popup (Janela do Calendário) --- */
 .date-picker .popup {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -431,34 +471,36 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
 }
 
-/* === Cabeçalho do calendário (meses e setas) === */
+/* --- Cabeçalho do Calendário (Mês/Ano) --- */
 .date-picker .month-year-pane {
     -fx-background-color: white;
-    -fx-text-fill: #FCB944; /* laranja */
+    -fx-text-fill: #FCB944; /* Laranja */
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
 }
 
-/* === Dias do calendário === */
+/* --- Células dos Dias --- */
 .date-picker .day-cell {
-    -fx-text-fill: #434A50; /* dias continuam cinza escuro */
+    -fx-text-fill: #434A50;
     -fx-background-color: transparent;
 }
 
 .date-picker .day-cell:hover {
-    -fx-background-color: #e69900; /* laranja mais escuro ao passar o mouse */
+    -fx-background-color: #e69900; /* Laranja escuro no hover */
 }
 
 .date-picker .day-cell:selected {
-    -fx-background-color: #FCB944; /* laranja */
+    -fx-background-color: #FCB944; /* Laranja na seleção */
     -fx-text-fill: white;
 }
 
-/* === Nomes da semana === */
+/* --- Nomes da Semana (Seg, Ter, Qua...) --- */
 .date-picker .day-of-week {
-    -fx-text-fill: #FCB944; /* laranja */
+    -fx-text-fill: #FCB944; /* Laranja */
     -fx-font-weight: bold;
 }
+
+/* --- Definição duplicada de #rootPane (mantida como no original) --- */
 #rootPane {
     -fx-background-color: transparent; /* ou rgba(0,0,0,0) */
 }

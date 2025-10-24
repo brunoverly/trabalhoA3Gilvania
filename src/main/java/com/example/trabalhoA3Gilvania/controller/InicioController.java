@@ -121,6 +121,7 @@ public class InicioController implements Initializable {
     private ObservableList<Atualizacao> listaAtualizacoes = FXCollections.observableArrayList();
     FormsUtil alerta = new FormsUtil();
 
+    // Constantes de Status
     private String statusItem1 = "Aguardando entrega";
     private String statusItem2 = "Recebido (parcial)";
     private String statusItem3 = "Recebido (integral)";
@@ -141,20 +142,17 @@ public class InicioController implements Initializable {
     private List<Button> botoesDoMenu;
     private boolean menuEstaAberto = false;
 
-    // --- Constantes de Animação do Menu (Baseado no FXML CORRIGIDO) ---
-
-    // Este é o único valor que você deve alterar para ajustar o tamanho final
-    private final double LARGURA_ABERTA_PARENT = 160.0; // <<< AJUSTE O TAMANHO FINAL AQUI
+    // --- Constantes de Animação do Menu ---
+    // Ajuste o tamanho final do menu aqui
+    private final double LARGURA_ABERTA_PARENT = 160.0;
 
     // Valores do FXML (estado fechado)
-    // Assumindo que você está usando o FXML corrigido (com larguras de 56.0)
     private final double LARGURA_FECHADA_PARENT = 63.0; // (inicioPaneMenu prefWidth)
     private final double LARGURA_FECHADA_BG = 56.0;     // (menuBackgroundPane prefWidth)
     private final double LARGURA_FECHADA_VBOX = 56.0;   // (menuButtonVBox prefWidth)
     private final double LARGURA_LOGO = 52.0;           // (inicioLogo fitWidth)
 
-    // --- ATUALIZAÇÃO: Posições X da Logo ---
-    // Posição Fechada: O valor 7.0 que você indicou ser o centro visual
+    // Posição Fechada (LayoutX da Logo)
     private final double LOGO_LAYOUTX_FECHADO = 7.0;
 
     // Valores Calculados (estado aberto)
@@ -162,8 +160,7 @@ public class InicioController implements Initializable {
     private final double LARGURA_ABERTA_BG = LARGURA_ABERTA_PARENT - OFFSET_PARENT_BG;   // 160 - 7 = 153.0
     private final double LARGURA_ABERTA_VBOX = LARGURA_ABERTA_BG;
 
-    // --- ATUALIZAÇÃO: Posição X Aberta da Logo ---
-    // Posição Aberta: Centralizado na nova largura do fundo
+    // Posição Aberta (LayoutX da Logo)
     private final double LOGO_LAYOUTX_ABERTO = (LARGURA_ABERTA_BG - LARGURA_LOGO) / 2.0; // (153-52)/2 = 50.5
 
 
@@ -171,16 +168,10 @@ public class InicioController implements Initializable {
      * Método de inicialização, chamado automaticamente pelo JavaFX
      * após o FXML ser carregado.
      */
-
-/**
- * Método de inicialização, chamado automaticamente pelo JavaFX
- * após o FXML ser carregado.
- */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // --- 1. Carregamento das Imagens/Ícones ---
-        // (Seu código de carregamento de imagens original - INTACTO)
         URL inicio1URL = getClass().getResource("/imagens/inicio1.png");
         Image inicio1Img = new Image(inicio1URL.toExternalForm());
         inicio1.setImage(inicio1Img);
@@ -224,38 +215,36 @@ public class InicioController implements Initializable {
         Image inicio15Image = new Image(inicio15URL.toExternalForm());
         inicio15.setImage(inicio15Image);
 
-        // --- 2. Controle de Acesso (seu código original - INTACTO) ---
+        // --- 2. Controle de Acesso (Baseado no Cargo da Sessão) ---
         verificarUsuario();
 
         // --- 3. Configuração da Tabela de Atualizações ---
         inicioTableData.setCellValueFactory(new PropertyValueFactory<>("datahora"));
         inicioTableTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         inicioTableOs.setCellValueFactory(new PropertyValueFactory<>("os"));
-        inicioTableDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao")); // <-- CORRIGIDO
+        inicioTableDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         inicioTableUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
         inicioTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
 
+        // Define alinhamento das colunas
         inicioTableData.setStyle("-fx-alignment: CENTER;");
         inicioTableOs.setStyle("-fx-alignment: CENTER;");
         inicioTableUsuario.setStyle("-fx-alignment: CENTER;");
 
-
-
-
         inicioTableView.setItems(listaAtualizacoes);
-        inicioTableView.setSelectionModel(null);
+        inicioTableView.setSelectionModel(null); // Tabela apenas para visualização
 
-        // --- 4. Carregamento dos Dados (seu código original - INTACTO) ---
+        // --- 4. Carregamento dos Dados do Dashboard ---
         carregarAtualizacoes();
 
-        // --- 5. Configuração dos Labels de Boas-Vindas e Data (seu código original - INTACTO) ---
+        // --- 5. Configuração dos Labels de Boas-Vindas e Data ---
         LocalDate hoje = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
         String dataPorExtenso = hoje.format(formatter);
         inicioLabelBemVindo.setText("Bem vindo de volta, " + Sessao.getNome());
         inicioLabelData.setText(dataPorExtenso);
 
-        // --- 6. Efeitos de Hover (seu código original - INTACTO) ---
+        // --- 6. Efeitos de Hover no botão Fechar ---
         ImageView fecharImagem = (ImageView) inicioButtonFecharJanela.getGraphic();
         inicioButtonFecharJanela.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
@@ -268,11 +257,12 @@ public class InicioController implements Initializable {
             inicioButtonFecharJanela.setCursor(Cursor.DEFAULT);
         });
 
-        // --- 7. Configuração da Animação do Menu (ATUALIZADO) ---
-        menuButtonVBox.setAlignment(Pos.TOP_LEFT);
+        // --- 7. Configuração da Animação do Menu ---
+        menuButtonVBox.setAlignment(Pos.TOP_LEFT); // Alinha a VBox no topo
         VBox.setVgrow(menuButtonVBox, Priority.NEVER);
         menuButtonVBox.setFillWidth(true);
         menuButtonVBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
         // Adiciona TODOS os botões do menu à lista para tratamento unificado
         botoesDoMenu = Arrays.asList(
                 menuMenu,
@@ -281,36 +271,36 @@ public class InicioController implements Initializable {
                 menuConsultarRetiradas, menuConsultarSolicitacoes, menuPdf ,menuSair
         );
 
-        // ** ATUALIZAÇÃO: Força a posição correta da logo (ignora o 2.0 do FXML)
-        inicioLogo.setLayoutX(LOGO_LAYOUTX_FECHADO); // Usa o 7.0
+        // Força a posição inicial da logo para o estado fechado (7.0)
+        inicioLogo.setLayoutX(LOGO_LAYOUTX_FECHADO);
 
-        // =================================================================
-        // *** ATUALIZAÇÃO FEITA AQUI ***
-        // Alinha a VBox no topo. O 'spacing' do FXML cuidará do espaçamento.
-        // =================================================================
-
+        // Define o estilo inicial (fechado) para os botões
         definirEstiloBotoes(false); // Esconde textos e ajusta larguras
         menuEstaAberto = false;
 
-        // Aplica o "Clip" (Recorte)
+        // Aplica o "Clip" (Recorte) para manter as bordas arredondadas do menu
         Rectangle clip = new Rectangle();
-        // ** ATUALIZAÇÃO: O clipe agora recorta o 'menuBackgroundPane', não o 'inicioPaneMenu'
         clip.widthProperty().bind(menuBackgroundPane.widthProperty());
         clip.heightProperty().bind(menuBackgroundPane.heightProperty());
         clip.setArcWidth(42.0);  // Raio (21 * 2)
         clip.setArcHeight(42.0); // Raio (21 * 2)
-        // ** ATUALIZAÇÃO: O clipe agora é aplicado DIRETAMENTE no painel de fundo
+        // O clipe é aplicado DIRETAMENTE no painel de fundo
         menuBackgroundPane.setClip(clip);
 
-
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
         });
 
     } // Fim do initialize()
+
     /**
-     * Método auxiliar para aplicar efeito hover nos botões da janela
+     * Método auxiliar para aplicar efeito hover nos botões da janela.
+     * (Nota: Este helper não está sendo chamado no initialize,
+     * a lógica de hover foi aplicada manualmente no botão Fechar).
+     * @param botao O botão para aplicar o efeito.
+     * @param imagem A imagem dentro do botão.
      */
     private void setupHoverEffect(Button botao, ImageView imagem) {
         botao.setOnMouseEntered(e -> {
@@ -324,13 +314,10 @@ public class InicioController implements Initializable {
             botao.setCursor(Cursor.DEFAULT);
         });
     }
-// Fim do initialize()
-
 
     /**
      * Chamado pelo onAction do 'menuMenu'.
      * Controla a animação de expansão e retração do menu lateral.
-     * (ATUALIZADO)
      */
     @FXML
     private void menuMenuOnAction(ActionEvent event) {
@@ -341,7 +328,7 @@ public class InicioController implements Initializable {
         double targetWidthBackground = menuEstaAberto ? LARGURA_ABERTA_BG : LARGURA_FECHADA_BG;
         double targetWidthVBox = menuEstaAberto ? LARGURA_ABERTA_VBOX : LARGURA_FECHADA_VBOX;
 
-        // ** ATUALIZAÇÃO: Define a posição "alvo" da logo (Fechado: 7.0, Aberto: 50.5) **
+        // Define a posição "alvo" da logo (Fechado: 7.0, Aberto: 50.5)
         double targetLogoLayoutX = menuEstaAberto ? LOGO_LAYOUTX_ABERTO : LOGO_LAYOUTX_FECHADO;
 
         // Cria a animação de Timeline
@@ -356,9 +343,11 @@ public class InicioController implements Initializable {
         KeyFrame kf = new KeyFrame(Duration.millis(350), kvParent, kvBackground, kvVBox, kvLogo);
         timeline.getKeyFrames().add(kf);
 
+        // Se o menu estiver abrindo, define o estilo (mostrar texto) ANTES da animação
         if (menuEstaAberto) {
             definirEstiloBotoes(true);
         } else {
+            // Se estiver fechando, define o estilo (esconder texto) DEPOIS da animação
             timeline.setOnFinished(e -> {
                 definirEstiloBotoes(false);
             });
@@ -368,8 +357,10 @@ public class InicioController implements Initializable {
     }
 
     /**
-     * Método helper para definir o estilo de TODOS os botões do menu.
-     * (ATUALIZADO E CORRIGIDO - Única versão deste método)
+     * Método auxiliar para definir o estilo de TODOS os botões do menu,
+     * alternando entre o modo "aberto" (com texto) e "fechado" (só ícone).
+     *
+     * @param mostrar true para modo aberto, false para modo fechado.
      */
     private void definirEstiloBotoes(boolean mostrar) {
         // Define a nova largura que os botões devem ter
@@ -378,20 +369,20 @@ public class InicioController implements Initializable {
         // Define o alinhamento INTERNO do botão (Esquerda quando aberto, Centro quando fechado)
         Pos buttonAlignment = mostrar ? Pos.CENTER_LEFT : Pos.CENTER;
 
-        // Define o alinhamento da VBox (para centralizar os botões quando fechado)
+        // Define o alinhamento da VBox (para centralizar os botões verticalmente quando fechado)
         Pos vBoxAlignment = mostrar ? Pos.TOP_LEFT : Pos.CENTER; // Alinha no topo quando aberto
 
         // Define o display (Icone+Texto quando aberto, só Icone quando fechado)
         ContentDisplay display = mostrar ? ContentDisplay.LEFT : ContentDisplay.GRAPHIC_ONLY;
 
-        // ** ATUALIZAÇÃO: Define o Padding (espaçamento interno) **
+        // Define o Padding (espaçamento interno)
         // Adiciona 10px à esquerda quando aberto, 0 quando fechado
         Insets padding = mostrar ? new Insets(0, 0, 0, 10) : Insets.EMPTY;
 
         // Aplica o alinhamento na VBox pai
         menuButtonVBox.setAlignment(vBoxAlignment);
 
-        // Lista de textos (incluindo " Menu")
+        // Lista de textos (na ordem dos botões na lista 'botoesDoMenu')
         String[] textos = {
                 " Menu",
                 " Importar OS", " Consultar OS", " Fechar OS", " Solicitar Item",
@@ -399,6 +390,7 @@ public class InicioController implements Initializable {
                 " Cons. Retiradas", " Cons. Solicitações", "Gerar PDF"," Sair"
         };
 
+        // Aplica o estilo a cada botão
         for (int i = 0; i < botoesDoMenu.size(); i++) {
             Button btn = botoesDoMenu.get(i);
             String texto = mostrar ? textos[i] : "";
@@ -408,9 +400,7 @@ public class InicioController implements Initializable {
             btn.setAlignment(buttonAlignment);
             btn.setContentDisplay(display);
             btn.setGraphicTextGap(10);
-
-            // ** ATUALIZAÇÃO: Aplica o Padding **
-            btn.setPadding(padding);
+            btn.setPadding(padding); // Aplica o padding
         }
     }
 
@@ -426,24 +416,40 @@ public class InicioController implements Initializable {
             stage.close(); // Fecha a janela principal (encerra a aplicação)
         }
     }
+
+    /**
+     * Ação do botão "Maximizar".
+     * Alterna o estado da janela entre maximizado e normal.
+     */
     @FXML
     private void inicioButtonMaximizarOnAction(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
     }
 
+    /**
+     * Ação do botão "Minimizar".
+     * Minimiza (iconifica) a janela.
+     */
     @FXML
     private void inicioButtonMinimizarOnAction(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setIconified(true);
     }
 
+    /**
+     * Ação do botão "Consultar Retiradas".
+     * Abre a tela de histórico no modo "Retiradas".
+     */
     public void menuConsultarRetiradasOnAction(ActionEvent event){
-
         menuConsultarHistorico("Retiradas");
     }
-    public void menuConsultarSolicitacoesOnAction(ActionEvent event){
 
+    /**
+     * Ação do botão "Consultar Solicitações".
+     * Abre a tela de histórico no modo "Solicitações".
+     */
+    public void menuConsultarSolicitacoesOnAction(ActionEvent event){
         menuConsultarHistorico("Solicitações");
     }
 
@@ -485,8 +491,7 @@ public class InicioController implements Initializable {
                         String os = rs.getString("cod_os");
                         String descricao = rs.getString("descricao");
                         String usuario = String.valueOf(rs.getInt("matricula"));
-                        String codItem = rs.getString("cod_item"); // (Não usado na tabela)
-
+                        String codItem = rs.getString("cod_item");
 
                         // Adiciona um novo objeto 'Atualizacao' na lista (que atualiza a tabela)
                         listaAtualizacoes.add(new Atualizacao(datahoraFormatada, tipo, os, descricao, usuario, codItem));
@@ -595,7 +600,7 @@ public class InicioController implements Initializable {
             if(confirmacao){
                 Stage stage = (Stage) menuSair.getScene().getWindow();
                 stage.close(); // Fecha a janela do dashboard
-                Sessao.getCargo(); // (Esta linha parece não ter efeito, talvez fosse para limpar a sessão?)
+                // Sessao.getCargo(); // (Esta linha não tem efeito funcional)
                 Login(); // Abre a tela de Login novamente
             }
         }
@@ -669,19 +674,15 @@ public class InicioController implements Initializable {
             janelaImportarOs.setResizable(false);
             janelaImportarOs.show();
 
-            // (As linhas abaixo parecem repetidas, mas não causam erro)
-            janelaImportarOs.setTitle("Importar ordem de serviço");
-            janelaImportarOs.setResizable(false);
-            janelaImportarOs.setScene(scene);
+            // (Linhas duplicadas removidas)
 
             // 11. Limpa a referência da janela quando ela for fechada
             janelaImportarOs.setOnHidden(e -> janelaImportarOs = null);
 
-            janelaImportarOs.show();
-
             // 12. Foca o campo principal (melhoria de UX)
-            TextField tf = (TextField) root.lookup("#importNumeroOs");
-            if (tf != null) tf.requestFocus();
+            // (Nota: O FXML 'ImportarOs' não tem 'importNumeroOs', o botão é 'importSelecionarExcel')
+            Button btn = (Button) root.lookup("#importSelecionarExcel");
+            if (btn != null) btn.requestFocus();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -744,7 +745,7 @@ public class InicioController implements Initializable {
 
                 // 11. Foca o primeiro campo de entrada
                 TextField tf = (TextField) root.lookup("#cadastroNome");
-                tf.requestFocus();
+                if (tf != null) tf.requestFocus();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -761,8 +762,6 @@ public class InicioController implements Initializable {
      * Gerencia a instância da janela para evitar duplicatas.
      */
     public void RemoverUsuario() {
-        // (A lógica é idêntica à de CadastroUsuario(), apenas muda o FXML)
-
         // 1. Verifica se a janela já existe
         if (janelaRemoverUsuario == null) {
             janelaRemoverUsuario = new Stage();
@@ -813,7 +812,7 @@ public class InicioController implements Initializable {
 
                 // 11. Foca o campo de matrícula
                 TextField tf = (TextField) root.lookup("#removeMatricula");
-                tf.requestFocus();
+                if (tf != null) tf.requestFocus();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -847,12 +846,10 @@ public class InicioController implements Initializable {
 
             // Carregar CSS
             URL cssUrl = getClass().getResource("/css/style.css");
+            scene.getStylesheets().add(cssUrl.toExternalForm()); // Adiciona o CSS à cena
             // Adicionar o ícone
             URL logoUrl = getClass().getResource("/imagens/logo.png");
             stage.getIcons().add(new Image(logoUrl.toExternalForm()));
-
-            // (A linha abaixo está duplicada com a de baixo, mas não causa erro)
-            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
 
             // Configura Stage e Cena para transparentes (sem borda)
             stage.initStyle(StageStyle.TRANSPARENT);
@@ -948,8 +945,6 @@ public class InicioController implements Initializable {
      * Gerencia a instância da janela para evitar duplicatas.
      */
     public void ConsultarOs() {
-        // (Lógica idêntica aos outros métodos de abertura de janela)
-
         // 1. Verifica se a janela já existe
         if (janelaConsultarOs == null) {
             janelaConsultarOs = new Stage();
@@ -998,13 +993,16 @@ public class InicioController implements Initializable {
 
                 // 11. Foca o campo principal
                 TextField tf = (TextField) root.lookup("#consultNumeroOs");
-                tf.requestFocus();
+                if (tf != null) tf.requestFocus();
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            // Se já existe, traz para frente
+            if (janelaConsultarOs.isIconified()) janelaConsultarOs.setIconified(false);
+            janelaConsultarOs.toFront();
         }
-        // (Faltou o 'else { toFront() }' aqui, mas mantido como no original)
     }
 
     // Referência da janela "Consultar Item" (que é multifuncional)
@@ -1060,7 +1058,7 @@ public class InicioController implements Initializable {
 
             // 9. Pega o controller da nova janela
             ConsultarItemController controller = fxmlLoader.getController();
-            // 10. *** Lógica Principal: Passa o "modo" para o controller ***
+            // 10. Lógica Principal: Passa o "modo" para o controller
             controller.setModo(modo);
             // Pede ao controller para atualizar seu próprio título com base no modo
             controller.AtualizarTituloPorModo();
@@ -1079,7 +1077,7 @@ public class InicioController implements Initializable {
 
             // 12. Foca o campo principal
             TextField tf = (TextField) root.lookup("#consultNumeroOs");
-            tf.requestFocus();
+            if (tf != null) tf.requestFocus();
 
             // 13. Limpa a referência ao fechar
             janelaSolicitarItem.setOnHidden(event -> janelaSolicitarItem = null);
@@ -1088,10 +1086,14 @@ public class InicioController implements Initializable {
             e.printStackTrace();
         }
     } // Fim do menuSolcitarItem()
-    /// ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * Abre a janela "Consultar Histórico" (consultarHistorico.fxml) de forma multifuncional.
+     *
+     * @param modo O modo de operação: "Retiradas" ou "Solicitações".
+     */
     public void menuConsultarHistorico(String modo){
-        // 1. Se já existir, fecha a janela anterior para garantir que a nova abra com o modo correto
+        // 1. Se já existir, fecha a janela anterior
         if (janelaConsultarHistorico != null) {
             janelaConsultarHistorico.close();
             janelaConsultarHistorico = null;
@@ -1134,14 +1136,17 @@ public class InicioController implements Initializable {
 
             // 9. Pega o controller da nova janela
             ConsultarHistoricoController controller = fxmlLoader.getController();
-            // 10. *** Lógica Principal: Passa o "modo" para o controller ***
+            // 10. Lógica Principal: Passa o "modo" para o controller
             controller.setModo(modo);
             // Pede ao controller para atualizar seu próprio título com base no modo
             controller.AtualizarTituloPorModo();
+
+            // 11. Configura e mostra
             janelaConsultarHistorico.setTitle("Consultar Histórico");
             janelaConsultarHistorico.setResizable(false);
             janelaConsultarHistorico.show();
 
+            // 12. Limpa a referência ao fechar
             janelaConsultarHistorico.setOnHidden(event -> janelaConsultarHistorico = null);
 
         } catch (Exception e) {
@@ -1149,9 +1154,11 @@ public class InicioController implements Initializable {
         }
     }
 
+    /**
+     * Abre a janela de "Gerar PDF" (gerarPdf.fxml).
+     * Gerencia a instância da janela para evitar duplicatas.
+     */
     public void menuPdfOnAction() {
-        // (Lógica idêntica aos outros métodos de abertura de janela)
-
         // 1. Verifica se a janela já existe
         if (janelaGerarPdf == null) {
             janelaGerarPdf = new Stage();
@@ -1201,15 +1208,17 @@ public class InicioController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            // Se já existe, traz para frente
+            if (janelaGerarPdf.isIconified()) janelaGerarPdf.setIconified(false);
+            janelaGerarPdf.toFront();
         }
-        // (Faltou o 'else { toFront() }' aqui, mas mantido como no original)
     }
 
 
     /**
      * Classe de Modelo (POJO) interna para a Tabela de Atualizações (Logs).
-     * (Nota: O código original declara esta classe *dentro* de `InicioController`,
-     * mas não como `static`. Isso funciona, mas é incomum. Mantido como está.)
+     * (Nota: Declarada como não-estática, vinculada à instância de InicioController).
      */
     public class Atualizacao {
         private String datahora;

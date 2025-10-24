@@ -51,9 +51,9 @@ public class EntradaItemController implements Initializable {
     private String descricaoItem;
     private int qtdPedido;
     private int idOperacao;
-    private int qtdRecebidaParcial;
+    private int qtdRecebidaParcial; // Armazena a quantidade *já recebida* anteriormente
 
-
+    // Constantes de Status (usadas para lógica de negócio)
     private String statusItem1 = "Aguardando entrega";
     private String statusItem2 = "Recebido (parcial)";
     private String statusItem3 = "Recebido (integral)";
@@ -105,7 +105,7 @@ public class EntradaItemController implements Initializable {
         this.descricaoItem = descricaoItem;
     }
     public void setQtdPedido(int qtdPedido) {
-        this.qtdPedido = qtdPedido; // Converte int para String para o TextField
+        this.qtdPedido = qtdPedido;
     }
     public void setIdItem(int idItem) {
         this.idItem = idItem;
@@ -126,6 +126,7 @@ public class EntradaItemController implements Initializable {
         entradadCodItem.setText(codItem);
         entradaItemDescricao.setText(descricaoItem);
         entrdadaQtdPedido.setText(String.valueOf(qtdPedido));
+        // Exibe a quantidade que já foi recebida (para o usuário saber)
         entradaQtdRecebidaParcial.setText(String.valueOf((qtdRecebidaParcial)));
     }
 
@@ -171,6 +172,7 @@ public class EntradaItemController implements Initializable {
             entradaItemCancelar.setCursor(Cursor.DEFAULT);
         });
 
+        // Define o Stage principal na classe utilitária
         Platform.runLater(() -> {
             Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
@@ -199,23 +201,28 @@ public class EntradaItemController implements Initializable {
 
             // 2. Validação: Verifica se a quantidade é um número válido e se não excede o pedido
         } else if (!verificarValorDigitado()) {
-            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Valor informado é inválida ou excede a quantidade pedida")
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Valor informado é inválido ou excede a quantidade pedida")
                     .showAndWait();
         } else {
             // 3. Se passou nas validações, executa a lógica de banco de dados
-            int qtdRecebida = Integer.parseInt(entradaQtdRecebida.getText());
-            int qtdTotalRecebida = qtdRecebidaParcial + qtdRecebida; // 🔥 Soma a nova entrada com a parcial existente
+
+            // **CORREÇÃO**: Adicionado .trim() para evitar NumberFormatException
+            int qtdRecebida = Integer.parseInt(entradaQtdRecebida.getText().trim());
+            // Soma a nova entrada com a parcial existente
+            int qtdTotalRecebida = qtdRecebidaParcial + qtdRecebida;
             String localizacao = entradaLocalArmazenado.getText();
 
             // String de chamada da Stored Procedure
             String procedureCall = "{ CALL projeto_java_a3.atualizar_item_entrada(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
             String status;
             String statusAtualizacao;
+
+            // Define o status (Parcial ou Integral) baseado na soma
             if (qtdTotalRecebida < qtdPedido) {
-                status = statusItem2;
+                status = statusItem2; // Recebido (parcial)
                 statusAtualizacao = "Item recebido (Parcial) na base";
             } else {
-                status = statusItem3;
+                status = statusItem3; // Recebido (integral)
                 statusAtualizacao = "Item recebido (Integral) na base";
             }
 
@@ -223,16 +230,17 @@ public class EntradaItemController implements Initializable {
             try (Connection connectDB = new DataBaseConection().getConection();
                  CallableStatement cs = connectDB.prepareCall(procedureCall)) {
 
-                // Define os 8 parâmetros de entrada (IN) da procedure
+                // Define os 9 parâmetros de entrada (IN) da procedure
                 cs.setInt(1, idItem);                // p_id (ID do item a ser atualizado)
                 cs.setString(2, status);             // p_status (Novo status do item)
                 cs.setString(3, localizacao);        // p_localizacao (Onde foi guardado)
-                cs.setInt(4, qtdTotalRecebida);      // 🔥 Agora envia a soma total ao banco
+                cs.setInt(4, qtdTotalRecebida);      // p_qtd_recebida (Envia a SOMA total)
                 cs.setString(5, "Item");             // p_tipo (Para o log)
                 cs.setString(6, codOs);              // p_cod_os (Para o log)
                 cs.setString(7, statusAtualizacao); // p_descricao (Para o log)
                 cs.setInt(8, Sessao.getMatricula()); // p_matricula (Quem fez a operação)
-                cs.setString(9, codItem);
+                cs.setString(9, codItem);            // p_cod_item (Para o log)
+
                 // Executa a procedure
                 cs.execute();
 
@@ -254,12 +262,14 @@ public class EntradaItemController implements Initializable {
     }
 
     /**
-     * Método auxiliar para validar o campo "Quantidade Recebida".
+     * Método auxiliar para validar o campo "Quantidade Recebida" (entradaQtdRecebida).
+     * Verifica se é um número e se a soma (parcial + nova) não excede o pedido.
      * @return true se o valor for válido, false caso contrário.
      */
     public boolean verificarValorDigitado(){
-        // Verificação 1: Tenta converter a quantidade para um número inteiro.
+        // Verificação 1: Tenta converter a quantidade (nova) para um número inteiro.
         try{
+            // **CORREÇÃO**: Adicionado .trim() (embora já existisse no seu original)
             Integer.parseInt(entradaQtdRecebida.getText().trim());
         }
         catch(Exception e){
@@ -267,9 +277,16 @@ public class EntradaItemController implements Initializable {
             return false;
         }
 
-        // Verificação 2: Compara a quantidade pedida com a quantidade recebida.
-        // A quantidade recebida não pode ser maior que a pedida.
-        if((Integer.parseInt(entrdadaQtdPedido.getText())) < Integer.parseInt(entradaQtdRecebidaParcial.getText()) + Integer.parseInt(entradaQtdRecebida.getText().trim())){
+        // Verificação 2: Compara a quantidade pedida com a quantidade recebida (total).
+        // A quantidade total recebida não pode ser maior que a pedida.
+
+        // **CORREÇÃO**: Adicionado .trim() a todos os 'parseInt'
+        //              para garantir que leituras de TextFields sejam seguras.
+        int pedido = Integer.parseInt(entrdadaQtdPedido.getText().trim());
+        int parcial = Integer.parseInt(entradaQtdRecebidaParcial.getText().trim());
+        int nova = Integer.parseInt(entradaQtdRecebida.getText().trim());
+
+        if(pedido < (parcial + nova)){
             return false;
         }
 

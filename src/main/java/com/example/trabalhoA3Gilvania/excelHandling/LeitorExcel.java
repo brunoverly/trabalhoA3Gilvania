@@ -100,7 +100,7 @@ public class LeitorExcel {
             e.printStackTrace();
         }
 
-        // 🔹 1. Verifica ou Insere a Ordem de Serviço (OS)
+        // 1. Verifica ou Insere a Ordem de Serviço (OS)
         try {
             // Chama a procedure que verifica se a OS existe ou a insere
             String procVerificarOuInserirOS = "{CALL excel_verificar(?, ?, ?, ?)}";
@@ -130,10 +130,11 @@ public class LeitorExcel {
             return 0; // Retorna o código 0 (Erro na verificação/inserção da OS)
         }
 
-        // 🔹 2. Processa as linhas (Operações e Itens)
+        // 2. Processa as linhas (Operações e Itens)
         for (Row row : sheet) {
             if (row.getRowNum() == 0) continue; // Pula a linha 0 (cabeçalho)
 
+            // Lê os valores das células (assumindo que são String)
             String osString = row.getCell(1).getStringCellValue();
             // Ignora linhas que não sejam da OS selecionada pelo usuário
             if (!osString.equals(numeroOs)) continue;
@@ -142,8 +143,8 @@ public class LeitorExcel {
             int idOperacao = 0; // Armazena o ID da operação (nova ou existente)
 
             try {
-                // 🔹 2a. Inserir ou Buscar a Operação
-                // Verifica se esta operação já foi tratada *nesta importação*
+                // 2a. Inserir ou Buscar a Operação
+                // Verifica se esta operação já foi tratada *nesta importação* (cache local)
                 if (!operacoes.contains(operacaoString)) {
                     // Se não foi tratada, chama a procedure para inserir a operação
                     String sqlOperacao = "{CALL inserir_operacao(?, ?, ?)}";
@@ -169,8 +170,10 @@ public class LeitorExcel {
                     }
                 }
 
-                // 🔹 2b. Inserir o Item
+                // 2b. Inserir o Item
+                // Lê a quantidade (célula numérica)
                 int qtdPedido = (int) row.getCell(6).getNumericCellValue();
+
                 // Só insere o item se a operação foi encontrada/criada (id != 0)
                 // e se a quantidade pedida for maior que 0.
                 if (idOperacao != 0 && qtdPedido != 0) {
@@ -189,11 +192,12 @@ public class LeitorExcel {
                 // desfaz a transação inteira (rollback).
                 e.printStackTrace();
                 try { connetDB.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
-                throw new RuntimeException(e); // Lança o erro para o Controller (que trata a Task)
+                // Lança o erro para o Controller (que trata a Task)
+                throw new RuntimeException("Erro ao processar linha do Excel: " + e.getMessage(), e);
             }
         } // Fim do loop 'for (Row row : sheet)'
 
-        // 🔹 3. Commit Final
+        // 3. Commit Final
         // Se o loop terminou sem erros, confirma (commit) todas as
         // inserções de operações e itens no banco de dados.
         try {
