@@ -8,14 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="entradaItenAnchorPane" prefHeight="423.5" prefWidth="547.4" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.EntradaItemController">
+<AnchorPane fx:id="entradaItenAnchorPane" prefHeight="423.5" prefWidth="547.4" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.SolicitarItemController">
     <children>
-        <TextField fx:id="entradaQtdRecebida" layoutX="29.4" layoutY="254.8" prefHeight="24.5" promptText="Ex: 25" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 0; -fx-border-width: 0 0 2 0;">
-            <font>
-                <Font size="10.0" />
-            </font>
-        </TextField>
-        <TextField fx:id="entradaLocalArmazenado" layoutX="29.4" layoutY="320.6" prefHeight="24.5" prefWidth="189.7" promptText="Ex: Prateleira A1" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-border-width: 0 0 2 0; -fx-border-color: black;">
+        <TextField fx:id="solicitarItemQtd" layoutX="29.4" layoutY="254.8" prefHeight="24.5" promptText="Ex: 25" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 0; -fx-border-width: 0 0 2 0;">
             <font>
                 <Font size="10.0" />
             </font>
@@ -47,12 +42,7 @@
                 <Font size="11.0" />
             </font>
         </Label>
-        <Label layoutX="29.4" layoutY="233.8" text="Qtd. recebida agora" textFill="#434a50">
-            <font>
-                <Font size="11.0" />
-            </font>
-        </Label>
-        <Label layoutX="29.4" layoutY="288.9" text="Local armazenado" textFill="#434a50">
+        <Label layoutX="29.4" layoutY="233.8" text="Qtd. a solicitar" textFill="#434a50">
             <font>
                 <Font size="11.0" />
             </font>
@@ -97,7 +87,7 @@
                 <Font size="10.0" />
             </font>
         </TextField>
-        <Label alignment="CENTER" layoutX="16.1" layoutY="9.8" prefHeight="32.9" prefWidth="172.2" text="Entrada Item" textFill="#434a50">
+        <Label alignment="CENTER" layoutX="16.0" layoutY="10.0" prefHeight="33.0" prefWidth="196.0" text="Solicitar Item" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="25.2" />
             </font>
@@ -107,7 +97,17 @@
             <Font size="10.0" />
          </font>
       </TextField>
-      <Label layoutX="179.0" layoutY="178.0" text="Qtd. recebida parcial" textFill="#434a50">
+      <Label layoutX="179.0" layoutY="178.0" text="Qtd. recebida" textFill="#434a50">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <TextField fx:id="solicitarQtdSolicitadaAnteriormente" disable="true" layoutX="334.0" layoutY="199.0" prefHeight="24.5" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </TextField>
+      <Label layoutX="334.0" layoutY="178.0" text="Qtd. já solicitada" textFill="#434a50">
          <font>
             <Font size="11.0" />
          </font>

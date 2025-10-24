@@ -66,6 +66,23 @@ public class ImportarOsController implements Initializable {
     @FXML private AnchorPane importarOsTableViewItens;
     @FXML private ImageView importarOsVoltarImage;
 
+
+    private String statusItem1 = "Aguardando entrega";
+    private String statusItem2 = "Recebido (parcial)";
+    private String statusItem3 = "Recebido (integral)";
+    private String statusItem4 = "Solicitado (parcial)";
+    private String statusItem5 = "Solicitado (integral)";
+    private String statusItem6 = "Entregue (parcial)";
+    private String statusItem7 = "Entregue (integral)";
+    private String statusOrdemServico1 = "Aberta";
+    private String statusOrdemServico2 = "Em andamento";
+    private String statusOrdemServico3 = "Encerrada";
+    private String statusOperacao1 = "Em espera";
+    private String statusOperacao2 = "Item(s) solicitados";
+    private String statusOperacao3 = "Itens entregues (Parcial)";
+    private String statusOperacao4 = "Itens entregues (Integral)";
+
+
     // --- Campos Privados ---
     // Interface para callback (avisar a tela anterior para se atualizar)
     private OnFecharJanela listener;
@@ -112,6 +129,13 @@ public class ImportarOsController implements Initializable {
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
+
+        constulTabelCodOrdemServico.setStyle("-fx-alignment: CENTER;");
+        constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
+        consultTableDescricaoItem.setStyle("-fx-alignment: CENTER;");
+        consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableCodItem.setStyle("-fx-alignment: CENTER-LEFT;");
+        consultTableDescricaoItem.setStyle("-fx-alignment: CENTER-LEFT;");
 
         // Define a lista de dados principal para a tabela de OS
         consultTableOrdemServico.setItems(todasOrdensServico);
@@ -307,7 +331,13 @@ public class ImportarOsController implements Initializable {
                         StackPane loadingPane = FormsUtil.createGifLoading();
                         loadingPane.prefWidthProperty().bind(ImportarOsAcnhorPane.widthProperty());
                         loadingPane.prefHeightProperty().bind(ImportarOsAcnhorPane.heightProperty());
-                        loadingPane.setStyle("-fx-background-color: rgba(0,0,0,0.15);"); // Fundo semitransparente
+                        loadingPane.setStyle("""
+                        -fx-background-color: rgba(0,0,0,0.15);
+                        -fx-background-radius: 17.5;
+                        -fx-border-radius: 17.5;
+                        -fx-border-color: #c3c3c3;
+                        -fx-border-width: 1.2;
+                    """);
                         ImportarOsAcnhorPane.getChildren().add(loadingPane);
 
                         // 5. Cria a Task em background para o cadastro no DB
@@ -361,13 +391,13 @@ public class ImportarOsController implements Initializable {
                         thread.start();
 
                     } catch (Exception e) {
-                        Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR,"Erro", "Erro ao cadastrar a ordem de serviço").showAndWait());
+                        Platform.runLater(() -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao cadastrar a ordem de serviço").showAndWait());
                     }
                 }
             }
         }
-
-    } // Fim do importFazerImportOnAction()
+    }
+// Fim do importFazerImportOnAction()
 
     /**
      * Lê o arquivo Excel (usando Apache POI) e popula as listas

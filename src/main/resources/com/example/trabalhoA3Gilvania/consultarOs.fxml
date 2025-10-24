@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="consultarOsPane" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarOsController">
+<AnchorPane fx:id="consultarOsPane" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarOsController">
     <children>
         <TextField fx:id="consultNumeroOs" layoutX="37.0" layoutY="105.0" prefHeight="25.0" prefWidth="228.0" promptText="Ex: 765234" style="-fx-background-color: white; -fx-border-color: #434A50; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>
@@ -36,8 +36,8 @@
                             <children>
                                 <TableView fx:id="consultTableOperacao" layoutX="-115.0" layoutY="-102.0" prefHeight="280.0" prefWidth="204.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="70.0" text="Operação" />
-                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="133.0" text="Status" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="70.0" resizable="false" text="Operação" />
+                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="133.0" resizable="false" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -46,11 +46,11 @@
                             <children>
                                 <TableView fx:id="consultTableItem" layoutX="-11.0" layoutY="-107.0" prefHeight="277.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="88.0" text="Código do item" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="132.0" text="Descrição" />
-                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="66.0" text="Pedido" />
-                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="73.0" text="Recebido" />
-                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="198.0" text="Status" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="88.0" resizable="false" text="Código do item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="132.0" resizable="false" text="Descrição" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="66.0" resizable="false" text="Pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="73.0" resizable="false" text="Recebido" />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="198.0" resizable="false" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>

@@ -8,9 +8,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="saidaItemAnchorPane" prefHeight="423.5" prefWidth="547.4" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.SaidaItemController">
+<AnchorPane fx:id="saidaItemAnchorPane" prefHeight="423.5" prefWidth="547.4" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.SaidaItemController">
     <children>
-        <TextField fx:id="retirarMatriculaMecanico" layoutX="28.0" layoutY="326.9" prefHeight="24.5" prefWidth="130.2" promptText="Ex: 5675341" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+      <TextField fx:id="retiradaQtdRetirada" layoutX="28.0" layoutY="330.0" prefHeight="25.0" prefWidth="93.0" promptText="Ex: 21" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </TextField>
+        <TextField fx:id="retirarMatriculaMecanico" layoutX="151.0" layoutY="330.0" prefHeight="24.5" prefWidth="130.2" promptText="Ex: 5675341" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>
                 <Font size="10.0" />
             </font>
@@ -57,12 +62,12 @@
                 <Font size="11.2" />
             </font>
         </Label>
-        <Label layoutX="28.0" layoutY="301.0" text="Matrícula do responsavel pela retirada" textFill="#434a50">
+        <Label layoutX="151.0" layoutY="310.0" text="Matrícula do responsável pela retirada" textFill="#434a50">
             <font>
                 <Font name="System Bold" size="11.2" />
             </font>
         </Label>
-        <TextField fx:id="retirarQtdItemOs" disable="true" layoutX="28.0" layoutY="203.0" prefHeight="24.5" prefWidth="130.2" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+        <TextField fx:id="retirarQtdItemOs" disable="true" layoutX="28.0" layoutY="203.0" prefHeight="25.0" prefWidth="93.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>
                 <Font size="10.0" />
             </font>
@@ -107,12 +112,12 @@
                 <Font size="10.0" />
             </font>
         </TextField>
-        <Label layoutX="189.0" layoutY="182.0" text="Qtd. recebida" textFill="#434a50">
+        <Label layoutX="159.0" layoutY="182.6" text="Qtd. recebida" textFill="#434a50">
             <font>
                 <Font size="11.2" />
             </font>
         </Label>
-        <TextField fx:id="retirarQtdItemRecebida" disable="true" layoutX="189.0" layoutY="203.0" prefHeight="24.5" prefWidth="130.2" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+        <TextField fx:id="retirarQtdItemRecebida" disable="true" layoutX="159.0" layoutY="203.0" prefHeight="25.0" prefWidth="93.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
             <font>
                 <Font size="10.0" />
             </font>
@@ -122,5 +127,20 @@
                 <Font name="System Bold" size="25.2" />
             </font>
         </Label>
+      <Label layoutX="28.0" layoutY="310.0" text="Qtd. retirada" textFill="#434a50">
+         <font>
+            <Font name="System Bold" size="11.2" />
+         </font>
+      </Label>
+      <Label layoutX="284.0" layoutY="182.6" text="Qtd. já retirada" textFill="#434a50">
+         <font>
+            <Font size="11.2" />
+         </font>
+      </Label>
+      <TextField fx:id="retiradaQtdJaRetirada" disable="true" layoutX="284.0" layoutY="203.0" prefHeight="25.0" prefWidth="93.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0 0 2 0; -fx-border-radius: 0;">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </TextField>
     </children>
 </AnchorPane>

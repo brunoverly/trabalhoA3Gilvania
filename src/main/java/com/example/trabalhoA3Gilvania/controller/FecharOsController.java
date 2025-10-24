@@ -52,6 +52,23 @@ public class FecharOsController implements Initializable {
     @FXML private TableColumn<Item, String> consultTableItemStatus;
     @FXML private AnchorPane fecharAnchorPane; // Painel que contém as tabelas de resultado
 
+
+    private String statusItem1 = "Aguardando entrega";
+    private String statusItem2 = "Recebido (parcial)";
+    private String statusItem3 = "Recebido (integral)";
+    private String statusItem4 = "Solicitado (parcial)";
+    private String statusItem5 = "Solicitado (integral)";
+    private String statusItem6 = "Entregue (parcial)";
+    private String statusItem7 = "Entregue (integral)";
+    private String statusOrdemServico1 = "Aberta";
+    private String statusOrdemServico2 = "Em andamento";
+    private String statusOrdemServico3 = "Encerrada";
+    private String statusOperacao1 = "Em espera";
+    private String statusOperacao2 = "Item(s) solicitados";
+    private String statusOperacao3 = "Itens entregues (Parcial)";
+    private String statusOperacao4 = "Itens entregues (Integral)";
+
+
     // --- Listas de Dados para as Tabelas ---
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
     private ObservableList<Item> todosItens = FXCollections.observableArrayList();
@@ -179,49 +196,57 @@ public class FecharOsController implements Initializable {
             return; // Interrompe a ação
         }
 
-        String numeroOs = consultNumeroOs.getText();
+        boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", "Tem certeza que deseja encerrar esta ordem de serviço?");
+        if (confirmar) {
+            String numeroOs = consultNumeroOs.getText();
+            // Try-with-resources para garantir o fechamento da conexão
+            try (Connection connectDB = new DataBaseConection().getConection()) {
 
-        // Try-with-resources para garantir o fechamento da conexão
-        try (Connection connectDB = new DataBaseConection().getConection()) {
+                // 2. Chama a procedure 'encerrar_os' (que realiza a AÇÃO de fechar)
+                int resultadoEncerramento = 0;
+                try (CallableStatement csEncerrar = connectDB.prepareCall("{ CALL projeto_java_a3.encerrar_os(?, ?, ?, ?) }")) {
+                    // Define os parâmetros de entrada (IN)
+                    csEncerrar.setString(1, numeroOs);
+                    csEncerrar.setString(2, "Ordem de serviço"); // p_tipo (para log)
+                    csEncerrar.setString(3, "Ordem de serviço encerrada"); // p_descricao (para log)
+                    csEncerrar.setInt(4, Sessao.getMatricula()); // p_matricula (quem fechou)
 
-            // 2. Chama a procedure 'encerrar_os' (que realiza a AÇÃO de fechar)
-            int resultadoEncerramento = 0;
-            try (CallableStatement csEncerrar = connectDB.prepareCall("{ CALL projeto_java_a3.encerrar_os(?, ?, ?, ?) }")) {
-                // Define os parâmetros de entrada (IN)
-                csEncerrar.setString(1, numeroOs);
-                csEncerrar.setString(2, "Ordem de serviço"); // p_tipo (para log)
-                csEncerrar.setString(3, "Ordem de serviço encerrada"); // p_descricao (para log)
-                csEncerrar.setInt(4, Sessao.getMatricula()); // p_matricula (quem fechou)
-
-                // Executa a procedure e verifica se ela retornou um ResultSet
-                boolean hasRS = csEncerrar.execute();
-                if (hasRS) {
-                    try (ResultSet rs = csEncerrar.getResultSet()) {
-                        if (rs.next()) {
-                            // Captura o código de resultado retornado pela procedure
-                            resultadoEncerramento = rs.getInt("resultado");
+                    // Executa a procedure e verifica se ela retornou um ResultSet
+                    boolean hasRS = csEncerrar.execute();
+                    if (hasRS) {
+                        try (ResultSet rs = csEncerrar.getResultSet()) {
+                            if (rs.next()) {
+                                // Captura o código de resultado retornado pela procedure
+                                resultadoEncerramento = rs.getInt("resultado");
+                            }
                         }
                     }
                 }
+
+                // 3. Trata o código de resultado
+                switch (resultadoEncerramento) {
+                    case 0 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço não encontrada").showAndWait();
+                    case 1 ->
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem já se encontra encerrada").showAndWait();
+                    case 2 ->
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
+                    default ->
+                            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao conectar com banco de dados").showAndWait();
             }
 
-            // 3. Trata o código de resultado
-            switch (resultadoEncerramento) {
-                case 0 -> alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
-                case 1 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "OS já se encontra encerrada").showAndWait();
-                case 2 -> alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Ordem de serviço encerrada com sucesso").showAndWait();
-                default -> alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro desconhecido ao encerrar OS").showAndWait();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao conectar com banco de dados").showAndWait();
+            // 4. Limpa e esconde os campos/painéis após a tentativa de fechamento
+            consultNumeroOs.setText("");
+            consultLabelOsBuscada.setVisible(false);
+            fecharAnchorPane.setVisible(false);
         }
-
-        // 4. Limpa e esconde os campos/painéis após a tentativa de fechamento
-        consultNumeroOs.setText("");
-        consultLabelOsBuscada.setVisible(false);
-        fecharAnchorPane.setVisible(false);
+        else{
+            return;
+        }
     }
 
 

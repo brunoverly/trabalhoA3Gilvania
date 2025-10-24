@@ -36,6 +36,7 @@ import javafx.stage.StageStyle;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Controlador JavaFX para a tela "ConsultarItem.fxml".
@@ -70,7 +71,8 @@ public class ConsultarItemController implements Initializable{
 
     // --- Campos Privados ---
     private Stage janelaEntradaItem; // Referência para a janela (pop-up) de entrada
-    private Stage janelaSaidaItem;   // Referência para a janela (pop-up) de saída
+    private Stage janelaSaidaItem;
+    private Stage janelaSolicitarItem; // Referência para a janela (pop-up) de saída
 
     // Listas de dados para as tabelas
     private ObservableList<Operacao> todasOperacoes = FXCollections.observableArrayList();
@@ -89,6 +91,24 @@ public class ConsultarItemController implements Initializable{
     private String status;
     private int qtdRecebida;
     private int idOperacao;
+
+
+    private String statusItem1 = "Aguardando entrega";
+    private String statusItem2 = "Recebido (parcial)";
+    private String statusItem3 = "Recebido (integral)";
+    private String statusItem4 = "Solicitado (parcial)";
+    private String statusItem5 = "Solicitado (integral)";
+    private String statusItem6 = "Entregue (parcial)";
+    private String statusItem7 = "Entregue (integral)";
+
+    private String statusOrdemServico1 = "Aberta";
+    private String statusOrdemServico2 = "Em andamento";
+    private String statusOrdemServico3 = "Encerrada";
+    private String statusOperacao1 = "Em espera";
+    private String statusOperacao2 = "Item(s) solicitados";
+    private String statusOperacao3 = "Itens entregues (Parcial)";
+    private String statusOperacao4 = "Itens entregues (Integral)";
+
 
     // Callback para notificar a tela anterior quando esta for fechada
     private OnFecharJanela onFecharJanela;
@@ -212,14 +232,51 @@ public class ConsultarItemController implements Initializable{
         });
 
         // Configuração customizada das LINHAS da Tabela de Operações
+
         consultTableOperacao.setRowFactory(table -> {
-            TableRow<Operacao> row = new TableRow<>();
+                    TableRow<Operacao> row = new TableRow<>();
+
+                    // Cria o menu de contexto
+                    if (modo.equals("Entrada")) {
+                        ContextMenu contextMenu = new ContextMenu();
+                        MenuItem lancarEntradaTodos = new MenuItem("Lançar entrada para todos os itens");
+                        contextMenu.getItems().add(lancarEntradaTodos);
+
+                        // Define a ação do menu (chamará outro método que você vai criar)
+                        lancarEntradaTodos.setOnAction(event -> {
+                            Operacao selecionada = row.getItem();
+                            if (selecionada != null && modo.equals("Entrada")) {
+                                boolean confirmacao = alerta.criarAlertaConfirmacao("Confirmação",
+                                        "Ao prosseguir sera lançada entrada TOTAL para TODOS os itens pendentes da operação: '" + selecionada.getCodOperacao() + "'. Deseja continuar?");
+                                if (confirmacao) {
+                                    if (consultNumeroOs.getText().isBlank() || consultNumeroOs == null) {
+                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro",
+                                                        "Erro ao recuperar o numero da OS, tente procurar a ordem de serviço novamente")
+                                                .showAndWait();
+                                    } else {
+                                        lancarEntradaTodosItens(consultNumeroOs.getText());
+                                    }
+                                } else {
+                                    return;
+                                }
+                            }
+                        });
+
+
+                    // Só exibe o menu se a linha não estiver vazia
+                    row.contextMenuProperty().bind(
+                            Bindings.when(row.emptyProperty())
+                                    .then((ContextMenu) null)
+                                    .otherwise(contextMenu)
+                    );
+                }
+            // Clique normal
             row.setOnMouseClicked(event -> {
-                // Ação de clique simples (redundante com a de cima, mas garante)
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
                     consultItemTableViewItem.setVisible(true);
                 }
             });
+
             return row;
         });
 
@@ -242,6 +299,8 @@ public class ConsultarItemController implements Initializable{
                             .otherwise(contextMenu)  // Se cheia, mostra o menu configurado
             );
 
+
+
             // --- Ação de DUPLO CLIQUE na Tabela de Itens ---
             row.setOnMouseClicked(event -> {
                 // Verifica se foi um duplo clique primário em uma linha não vazia
@@ -256,77 +315,53 @@ public class ConsultarItemController implements Initializable{
                     int idOperacaoItemSelecionado = selecionado.getIdOperacao();
                     int qtdPedidoItemSelecionado = selecionado.getQtdPedido();
                     int idItemselecionado = selecionado.getIdItem();
+                    int qtdRecebida = selecionado.getQtdRecebida();
 
                     try {
                         if (modo == null) return; // Se o modo não foi definido, não faz nada
 
                         // --- Lógica de Solicitação (Mecânico) ---
                         // Trava para item "Aguardando entrega"
-                        if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
-                            System.out.println("teste 2");
-                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "O item selecionado ainda consta como 'Aguardando entrega', a solicitação só pode ser realizada quando o item estiver com status 'Recebido'")
+                        if (!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") && selecionado.getStatus().equals(statusItem1)) {
+                            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "A solicitação só pode ser realizada quando o item estiver com status 'Recebido parcial' ou 'Recebido integral'")
                                     .showAndWait();
                             return; // Interrompe
                         }
 
-                        // Permissão: Não-Aprovisionador, Modo "Solicitar", Status "Recebido"
-                        if (!Sessao.getCargo().equals("Aprovisionador")
-                                && modo.equals("Solicitar")
-                                && selecionado.getStatus().equals("Recebido")) {
-
+                        // Permissão: Não-Aprovisionador, Modo "Solicitar", Status "Recebido parcial" ou "Recebido integral"
+                        if (!Sessao.getCargo().equals("Aprovisionador") && modo.equals("Solicitar") &&
+                                (selecionado.getStatus().equals(statusItem2) || selecionado.getStatus().equals(statusItem3) || selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem6))) {
                             if (selecionado != null) {
-                                System.out.println("teste 1");
-                                String mensagem = "Deseja solicitar a entrega do item: '"+ selecionado.getDescricao() +"' na oficina?";
-                                boolean confirmacao = alerta.criarAlertaConfirmacao("Aviso", mensagem);
-
-                                if (confirmacao) {
-                                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
-                                                    "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
-                                            .showAndWait();
-
-                                    // Chama a procedure 'solicitar_item' no banco de dados
-                                    try (Connection connectDB = new DataBaseConection().getConection()) {
-                                        String sql = "CALL projeto_java_a3.solicitar_item(?, ?, ?, ?, ?)";
-                                        try (CallableStatement cs = connectDB.prepareCall(sql)) {
-                                            cs.setInt(1, selecionado.getIdItem());        // p_id
-                                            cs.setInt(2, selecionado.getIdOperacao());    // p_id_operacao
-                                            cs.setString(3, codOsItemSelecionado);        // p_cod_os
-                                            cs.setInt(4, Sessao.getMatricula());          // p_solicitado_por
-                                            cs.setInt(5, Sessao.getMatricula());          // p_matricula (para log)
-                                            cs.execute();
-                                        }
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                        e.getCause();
-                                        alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait();
-                                    }
-
-                                    // Atualiza a tela para refletir a mudança de status
-                                    BuscarDB(consultNumeroOs.getText());
-                                }
+                                SolicitarItem(codItemSelecionado, codOperacaoItemSelecionado, codOsItemSelecionado,
+                                        descricaoItemSelecionado, qtdPedidoItemSelecionado, idItemselecionado,
+                                        localizacao, status, qtdRecebida, idOperacaoItemSelecionado);
                             }
                         }
 
                         // --- Lógica de Entrada/Retirada (Admin/Aprovisionador) ---
                         // Permissão: Admin ou Aprovisionador, com status compatível
-                        if ((Sessao.getCargo().equals("Administrador") || Sessao.getCargo().equals("Aprovisionador")) &&
-                                (selecionado.getStatus().equals("Aguardando entrega") || selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina"))) {
+                        if (!Sessao.getCargo().equals("Mecânico")) {
 
                             // Verifica o "modo" da tela (definido na abertura)
                             switch (modo) {
                                 case "Entrada":
-                                    // Só pode dar entrada se estiver "Aguardando entrega"
-                                    if (selecionado.getStatus().equals("Aguardando entrega")) {
+                                    // Só pode dar entrada se estiver "Aguardando entrega" ou "Recebido parcial"
+                                    // Bloqueia se for "Recebido integral"
+                                    if (selecionado.getStatus().equals(statusItem1) || selecionado.getStatus().equals(statusItem2)) {
                                         // Abre a janela de Lançar Entrada
                                         LancarEntradaItem(codItemSelecionado, codOperacaoItemSelecionado,
                                                 codOsItemSelecionado, descricaoItemSelecionado,
-                                                qtdPedidoItemSelecionado, idItemselecionado,idOperacaoItemSelecionado);
+                                                qtdPedidoItemSelecionado, idItemselecionado, idOperacaoItemSelecionado, qtdRecebida);
+                                    } else if (selecionado.getStatus().equals(statusItem3)) {
+                                        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "O item já foi totalmente recebido e não pode ser lançado novamente.")
+                                                .showAndWait();
+                                        return;
                                     }
                                     break;
 
                                 case "Retirar":
-                                    // Só pode retirar se estiver "Solicitado" ou "Recebido"
-                                    if (selecionado.getStatus().equals("Solicitado na oficina") || selecionado.getStatus().equals("Recebido")) {
+                                    // Só pode retirar se estiver "Solicitado entrega parcial" ou "Solicitado entrega integral"
+                                    if (selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem5) || selecionado.getStatus().equals(statusItem6)) {
 
                                         // Busca dados atualizados (localização, etc.) antes de abrir a janela
                                         try (Connection connectDB = new DataBaseConection().getConection()) {
@@ -364,6 +399,70 @@ public class ConsultarItemController implements Initializable{
 
     } // Fim do método initialize()
 
+    private void lancarEntradaTodosItens(String os) {
+        Operacao operacaoSelecionada = consultTableOperacao.getSelectionModel().getSelectedItem();
+        if (operacaoSelecionada == null) {
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Nenhuma operação selecionada.").showAndWait();
+            return;
+        }
+
+        String codOperacaoSelecionada = operacaoSelecionada.getCodOperacao();
+
+        // 1. Pegar a lista de itens que serão atualizados.
+        // Usamos a 'itensFiltrados' que já mostra os itens da operação selecionada.
+        // Adicionamos um filtro extra para pegar APENAS os que estão "Aguardando entrega".
+        ObservableList<Item> itensParaAtualizar = itensFiltrados.stream()
+                .filter(item -> item.getStatus().equals(statusItem1))
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)); // Cria uma nova lista
+
+        if (itensParaAtualizar.isEmpty()) {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Não há itens 'Aguardando entrega' para esta operação.").showAndWait();
+            return;
+        }
+
+        // 2. Abre a conexão UMA VEZ, fora do loop
+        try (Connection conn = new DataBaseConection().getConection()) {
+            String sql = "{CALL lancar_entrada_itens_por_operacao(?, ?, ?, ?, ?, ?, ?, ?)}";
+
+            // 3. Faz o LOOP (para cada item da lista)
+            for (Item item : itensParaAtualizar) {
+
+                // 4. Prepara e executa a procedure PARA ESTE ITEM
+                try (CallableStatement stmt = conn.prepareCall(sql)) {
+
+                    // AGORA SIM você pode usar os dados do item:
+
+                    stmt.setInt(1, item.getIdItem()); // p_id <- USA O ID DO ITEM
+                    stmt.setString(2, os); // p_cod_os
+                    stmt.setString(3, codOperacaoSelecionada); // p_cod_operacao
+                    stmt.setString(4, statusItem3); // p_status
+                    stmt.setString(5, "Item"); // p_tipo
+
+                    // --- AQUI ESTÁ A SUA SOLUÇÃO ---
+                    stmt.setString(6, "Item recebido (Integral) na base"); // p_descricao
+
+                    stmt.setInt(7, Sessao.getMatricula()); // p_matricula
+
+                    // --- E AQUI ---
+                    stmt.setString(8, item.getCodItem()); // p_coditem
+
+                    stmt.execute();
+                }
+                // O 'try-with-resources' fecha o 'stmt' aqui
+            }
+            // O loop termina
+
+            // 5. Após o loop, atualiza a tela
+            BuscarDB(os);
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Sucesso",
+                    "Entrada lançada com sucesso para " + itensParaAtualizar.size() + " itens.").showAndWait();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            e.getCause();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado ao lançar entrada para todos os itens: " + e.getMessage()).showAndWait();
+        }
+    }
 
 
 
@@ -649,7 +748,7 @@ public class ConsultarItemController implements Initializable{
      * @param idItem Dados do item selecionado
      * @param idOperacao Dados do item selecionado
      */
-    public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, int idOperacao) throws Exception {
+    public void LancarEntradaItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, int idOperacao, int qtdRecebidaParcial) throws Exception {
         // Se a janela já estiver aberta, fecha a instância antiga
         if (janelaEntradaItem != null) {
             janelaEntradaItem.close();
@@ -708,6 +807,7 @@ public class ConsultarItemController implements Initializable{
             controller.setQtdPedido(qtdPedido);
             controller.setIdItem(idItem);
             controller.setIdOperacao(idOperacao);
+            controller.setqtdRecebidaParcial(qtdRecebidaParcial);
             controller.carregaDados(); // Chama o método do outro controller para ele popular os campos
 
             // Define o callback: Quando a janela 'EntradaItem' fechar,
@@ -800,7 +900,8 @@ public class ConsultarItemController implements Initializable{
             controller.setStatus(status);
             controller.setQtdRecebida(qtdRecebida);
             controller.setIdOperacao(idOperacao);
-            controller.carregaDados(); // Popula os campos da tela de saída
+            controller.carregaDados();
+            controller.buscarQtdRetida();// Popula os campos da tela de saída
 
             // Define o callback para atualizar esta tela quando a janela de saída fechar
             controller.setOnFecharJanela(new OnFecharJanela() {
@@ -816,9 +917,6 @@ public class ConsultarItemController implements Initializable{
             janelaSaidaItem.setScene(scene);
             janelaSaidaItem.show();
 
-            // Foca o campo de matrícula automaticamente
-            TextField tf = (TextField) root.lookup("#retirarMatriculaMecanico");
-            tf.requestFocus();
 
             // Limpa a referência da janela ao fechar
             janelaSaidaItem.setOnHidden(event -> janelaSaidaItem = null);
@@ -827,6 +925,92 @@ public class ConsultarItemController implements Initializable{
             e.printStackTrace();
         }
     }
+
+    public void SolicitarItem(String codItem, String codOperacao, String codOs, String descricaoItem, int qtdPedido, int idItem, String localizacao, String status, int qtdRecebida, int idOperacao) throws Exception {
+        // Garante que apenas uma janela de saída esteja aberta
+        if (janelaSolicitarItem != null) {
+            janelaSolicitarItem.close();
+            janelaSolicitarItem = null;
+        }
+
+        try {
+            // Carrega o FXML da janela de saída
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/solicitarItem.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+            Parent root = fxmlLoader.load();
+
+            janelaSolicitarItem = new Stage(); // Cria o novo Stage
+
+            // Carrega fontes
+            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+            for (String fontFile : fonts) {
+                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+            }
+
+            // Cena e Stage transparentes (sem borda)
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            janelaSolicitarItem.initStyle(StageStyle.TRANSPARENT);
+            janelaSolicitarItem.setScene(scene);
+
+            // Ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            janelaSolicitarItem.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+            // Habilita o arraste da janela
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+            root.setOnMouseDragged(event -> {
+                janelaSolicitarItem.setX(event.getScreenX() - xOffset);
+                janelaSolicitarItem.setY(event.getScreenY() - yOffset);
+            });
+
+            // Carrega CSS
+            URL cssUrl = getClass().getResource("/css/style.css");
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+
+            // Pega o controller da nova janela (SaidaItemController)
+            SolicitarItemController controller = fxmlLoader.getController();
+
+            // "Injeta" os dados do item no novo controller
+            controller.setCodItem(codItem);
+            controller.setCodOperacao(codOperacao);
+            controller.setCodOs(codOs);
+            controller.setDescricaoItem(descricaoItem);
+            controller.setQtdPedido(qtdPedido);
+            controller.setIdItem(idItem);
+            controller.setLocalizacao(localizacao);
+            controller.setStatus(status);
+            controller.setQtdRecebida(qtdRecebida);
+            controller.setIdOperacao(idOperacao);
+            controller.verificarDisponibilidadeItem();
+            controller.carregaDados(); // Popula os campos da tela de saída
+
+            // Define o callback para atualizar esta tela quando a janela de saída fechar
+            controller.setOnFecharJanela(new OnFecharJanela() {
+                @Override
+                public void aoFecharJanela() {
+                    BuscarDB(consultNumeroOs.getText());
+                }
+            });
+
+            // Configura e mostra a janela
+            janelaSolicitarItem.setTitle("Lançar entrega de item");
+            janelaSolicitarItem.setResizable(false);
+            janelaSolicitarItem.setScene(scene);
+            janelaSolicitarItem.show();
+
+
+            // Limpa a referência da janela ao fechar
+            janelaSolicitarItem.setOnHidden(event -> janelaSolicitarItem = null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Atualiza o Label (título) da janela com base no cargo do usuário e no "modo".
@@ -865,11 +1049,13 @@ public class ConsultarItemController implements Initializable{
         if (modo == null) return; // Se o modo não foi definido, não mostra menu
 
         Item selecionado = row.getItem(); // Pega o item da linha
+
+
         if (selecionado == null) return; // Se a linha estiver vazia, não mostra menu
 
         // --- Lógica de Solicitação (Mecânico ou outros) ---
         // 1. Modo "Solicitar" e item "Aguardando entrega"
-        if (modo.equals("Solicitar") && selecionado.getStatus().equals("Aguardando entrega")) {
+        if (modo.equals("Solicitar") && selecionado.getStatus().equals(statusItem1)) {
             MenuItem solicitarItem = new MenuItem("Requisitar item");
             contextMenu.getItems().add(solicitarItem);
 
@@ -881,37 +1067,18 @@ public class ConsultarItemController implements Initializable{
             });
         }
         // 2. Modo "Solicitar", status "Recebido" e usuário NÃO é Aprovisionador
-        else if (modo.equals("Solicitar") && (selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina")  )&& !Sessao.getCargo().equals("Aprovisionador")) {
+        else if (modo.equals("Solicitar") && (selecionado.getStatus().equals(statusItem2) || selecionado.getStatus().equals(statusItem3) || selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem6))&& !Sessao.getCargo().equals("Aprovisionador")) {
             MenuItem solicitarItem = new MenuItem("Requisitar item");
             contextMenu.getItems().add(solicitarItem);
 
             // Ação: Confirma e chama a procedure 'solicitar_item'
             solicitarItem.setOnAction(event -> {
-                String mensagem = "Deseja solicitar a entrega do item: '" + selecionado.getDescricao() + "' na oficina?";
-                boolean confirmar = alerta.criarAlertaConfirmacao("Confirmar", mensagem );
-
-                if (confirmar) {
-                    alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
-                                    "Requisitado a entrega do item: '" + selecionado.getDescricao() + "'")
-                            .showAndWait();
-
-                    // Bloco de chamada da Stored Procedure
-                    try (Connection connectDB = new DataBaseConection().getConection()) {
-                        String sql = "CALL projeto_java_a3.solicitar_item(?, ?, ?, ?, ?)";
-                        try (CallableStatement cs = connectDB.prepareCall(sql)) {
-                            cs.setInt(1, selecionado.getIdItem());        // p_id
-                            cs.setInt(2, selecionado.getIdOperacao());    // p_id_operacao
-                            cs.setString(3, consultNumeroOs.getText());        // p_cod_os
-                            cs.setInt(4, Sessao.getMatricula());          // p_solicitado_por
-                            cs.setInt(5, Sessao.getMatricula());          // p_matricula (para log)
-                            cs.execute();
-                        }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    // Atualiza a tabela principal
-                    BuscarDB(consultNumeroOs.getText());
+                try {
+                    SolicitarItem(selecionado.getCodItem(), selecionado.getCodOperacao(), consultNumeroOs.getText(),
+                            selecionado.getDescricao(), selecionado.getQtdPedido(), selecionado.getIdItem(),
+                            localizacao, status, selecionado.getQtdRecebida(), selecionado.getIdOperacao());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             });
         }
@@ -920,7 +1087,7 @@ public class ConsultarItemController implements Initializable{
         // 3. Usuário NÃO é Mecânico (ou seja, Admin ou Aprovisionador)
         else if (!Sessao.getCargo().equals("Mecânico")) {
             // 3a. Modo "Entrada" e status "Aguardando entrega"
-            if (modo.equals("Entrada") && selecionado.getStatus().equals("Aguardando entrega")) {
+            if (modo.equals("Entrada") && (selecionado.getStatus().equals(statusItem1) || selecionado.getStatus().equals(statusItem4))){
                 MenuItem lancarEntrada = new MenuItem("Lançar entrada");
                 contextMenu.getItems().add(lancarEntrada);
 
@@ -934,7 +1101,8 @@ public class ConsultarItemController implements Initializable{
                                 selecionado.getDescricao(),
                                 selecionado.getQtdPedido(),
                                 selecionado.getIdItem(),
-                                selecionado.getIdOperacao()
+                                selecionado.getIdOperacao(),
+                                selecionado.getQtdRecebida()
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -943,7 +1111,7 @@ public class ConsultarItemController implements Initializable{
             }
 
             // 3b. Modo "Retirar" e status "Recebido" ou "Solicitado"
-            else if (modo.equals("Retirar") && (selecionado.getStatus().equals("Recebido") || selecionado.getStatus().equals("Solicitado na oficina") )) {
+            else if (modo.equals("Retirar") && (selecionado.getStatus().equals(statusItem4) || selecionado.getStatus().equals(statusItem5) || selecionado.getStatus().equals(statusItem6))) {
                 MenuItem lancarSaida = new MenuItem("Lançar retirada");
                 contextMenu.getItems().add(lancarSaida);
 

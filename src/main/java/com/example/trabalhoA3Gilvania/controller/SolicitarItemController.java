@@ -1,25 +1,28 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
+
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
-
-// Importações de classes do JavaFX
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
 
-// Importações padrão do Java
 import java.net.URL;
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
@@ -27,7 +30,7 @@ import java.util.ResourceBundle;
  * Esta tela funciona como um pop-up para registrar o recebimento (entrada)
  * de um item específico no estoque.
  */
-public class EntradaItemController implements Initializable {
+public class SolicitarItemController implements Initializable {
 
     // --- Injeção de Componentes FXML ---
     @FXML private Button entradaItemCancelar;
@@ -35,10 +38,11 @@ public class EntradaItemController implements Initializable {
     @FXML private TextField entradaQtdRecebidaParcial;
     @FXML private TextField entradadCodItem;
     @FXML private TextField entrdadaQtdPedido;
-    @FXML private TextField entradaLocalArmazenado; // Campo para o usuário preencher
+    @FXML private TextField solicitarItemQtd; // Campo para o usuário preencher
     @FXML private TextField entradaCodOperacao;
     @FXML private TextField entradaItemDescricao;
-    @FXML private TextField entradaQtdRecebida;    // Campo para o usuário preencher
+    @FXML private TextField entradaQtdRecebida;
+    @FXML private TextField solicitarQtdSolicitadaAnteriormente;// Campo para o usuário preencher
     @FXML private ImageView entradaItemVoltarButtonImage;
 
     // --- Campos Privados ---
@@ -51,8 +55,15 @@ public class EntradaItemController implements Initializable {
     private String descricaoItem;
     private int qtdPedido;
     private int idOperacao;
-    private int qtdRecebidaParcial;
+    private int qtdRecebida;
+    private int qtdDisponivel;
+    private int qtdJaSolicitada;
 
+    // Interface usada como "callback" para notificar a tela anterior quando esta fechar.
+    private OnFecharJanela listener;
+
+    // Instância da classe utilitária para exibir pop-ups de alerta
+    FormsUtil alerta = new FormsUtil();
 
     private String statusItem1 = "Aguardando entrega";
     private String statusItem2 = "Recebido (parcial)";
@@ -70,13 +81,6 @@ public class EntradaItemController implements Initializable {
     private String statusOperacao4 = "Itens entregues (Integral)";
 
 
-    // Interface usada como "callback" para notificar a tela anterior quando esta fechar.
-    private OnFecharJanela listener;
-
-    // Instância da classe utilitária para exibir pop-ups de alerta
-    FormsUtil alerta = new FormsUtil();
-
-
     /**
      * Define o "ouvinte" (listener/callback) que será acionado quando esta janela for fechada.
      * @param listener A implementação da interface (geralmente vinda da tela anterior).
@@ -89,8 +93,8 @@ public class EntradaItemController implements Initializable {
     // --- Setters para Injeção de Dados ---
     // Estes métodos são chamados pelo controller anterior para passar os dados
     // do item que será recebido.
-    public void setqtdRecebidaParcial(int qtdRecebidaParcial) {
-        this.qtdRecebidaParcial = qtdRecebidaParcial;
+    public void setQtdRecebida(int qtdRecebida) {
+        this.qtdRecebida = qtdRecebida;
     }
     public void setCodItem(String codItem) {
         this.codItem = codItem;
@@ -126,7 +130,7 @@ public class EntradaItemController implements Initializable {
         entradadCodItem.setText(codItem);
         entradaItemDescricao.setText(descricaoItem);
         entrdadaQtdPedido.setText(String.valueOf(qtdPedido));
-        entradaQtdRecebidaParcial.setText(String.valueOf((qtdRecebidaParcial)));
+        entradaQtdRecebidaParcial.setText(String.valueOf((qtdRecebida)));
     }
 
     /**
@@ -187,65 +191,90 @@ public class EntradaItemController implements Initializable {
      * Valida os dados e, se corretos, chama a procedure de atualização no banco.
      */
     public void entradaItemConfirmarOnAction() {
-        // 1. Validação: Verifica se os campos de entrada estão em branco
-        if ((entradaLocalArmazenado.getText().isBlank()) || (entradaQtdRecebida.getText().isBlank())) {
-            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Informe a quantidade recebida e local armazenado")
-                    .showAndWait();
+        int qtdSolicitada;
+        try {
+            qtdSolicitada = Integer.parseInt(solicitarItemQtd.getText().trim());
+        } catch (NumberFormatException e) {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
+                    "Valor informado é inválido").showAndWait();
+            return;
+        }
 
-            // 2. Validação: Verifica se a quantidade é um número válido e se não excede o pedido
-        } else if (!verificarValorDigitado()) {
-            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Valor informado é inválida ou excede a quantidade pedida")
-                    .showAndWait();
-        } else {
-            // 3. Se passou nas validações, executa a lógica de banco de dados
-            int qtdRecebida = Integer.parseInt(entradaQtdRecebida.getText());
-            int qtdTotalRecebida = qtdRecebidaParcial + qtdRecebida; // 🔥 Soma a nova entrada com a parcial existente
-            String localizacao = entradaLocalArmazenado.getText();
-
-            // String de chamada da Stored Procedure
-            String procedureCall = "{ CALL projeto_java_a3.atualizar_item_entrada(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
-            String status;
-            String statusAtualizacao;
-            if (qtdTotalRecebida < qtdPedido) {
-                status = statusItem2;
-                statusAtualizacao = "Item recebido (Parcial) na base";
-            } else {
-                status = statusItem3;
-                statusAtualizacao = "Item recebido (Integral) na base";
+            // 2️⃣ Verifica se a quantidade solicitada é válida
+            if (qtdSolicitada <= 0 || qtdSolicitada > qtdDisponivel) {
+                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
+                                "Quantidade inválida ou maior que a disponível para retirada: (" + qtdDisponivel + ")")
+                        .showAndWait();
+                return;
             }
 
-            // Try-with-resources para garantir o fechamento da conexão e statement
-            try (Connection connectDB = new DataBaseConection().getConection();
-                 CallableStatement cs = connectDB.prepareCall(procedureCall)) {
+            // 3️⃣ Define status padronizado do item
+            String statusItem = (qtdSolicitada < qtdPedido) ? statusItem4: statusItem5;
 
-                // Define os 8 parâmetros de entrada (IN) da procedure
-                cs.setInt(1, idItem);                // p_id (ID do item a ser atualizado)
-                cs.setString(2, status);             // p_status (Novo status do item)
-                cs.setString(3, localizacao);        // p_localizacao (Onde foi guardado)
-                cs.setInt(4, qtdTotalRecebida);      // 🔥 Agora envia a soma total ao banco
-                cs.setString(5, "Item");             // p_tipo (Para o log)
-                cs.setString(6, codOs);              // p_cod_os (Para o log)
-                cs.setString(7, statusAtualizacao); // p_descricao (Para o log)
-                cs.setInt(8, Sessao.getMatricula()); // p_matricula (Quem fez a operação)
-                cs.setString(9, codItem);
-                // Executa a procedure
-                cs.execute();
+            // 4️⃣ Comentário para a tabela de atualizações
+            String comentarioAtualizacao = (qtdSolicitada < qtdPedido)
+                    ? "Item solicitado (Parcial - QTD: " + qtdSolicitada + ")"
+                    : "Item solicitado (Integral)";
 
-                // Mostra mensagem de sucesso
-                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Item atualizado com sucesso")
-                        .showAndWait();
+            String statusOperacao = statusOperacao2;
 
-                // Fecha a janela de "Entrada de Item"
-                Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
-                stage.close(); // Isso também acionará o callback 'setOnHidden'
+            // 5️⃣ Chama a procedure 'solicitar_item' para registrar a solicitação
+            String sqlSolicitar = "CALL projeto_java_a3.solicitar_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (Connection connectDB = new DataBaseConection().getConection()){
+                 CallableStatement csSolicitar = connectDB.prepareCall(sqlSolicitar);
+
+                csSolicitar.setInt(1, idItem);                     // p_id
+                csSolicitar.setInt(2, idOperacao);                 // p_id_operacao
+                csSolicitar.setString(3, codOs);                   // p_cod_os
+                csSolicitar.setInt(4, Sessao.getMatricula());      // p_solicitado_por
+                csSolicitar.setInt(5, Sessao.getMatricula());      // p_matricula (para log)
+                csSolicitar.setString(6, statusItem);             // p_status_item
+                csSolicitar.setString(7, statusOperacao);         // p_status_operacao
+                csSolicitar.setString(8, codItem);                // p_cod_item
+                csSolicitar.setInt(9, qtdSolicitada);             // p_qtd_solicitada
+                csSolicitar.setString(10, "Operação");            // p_tipo (comentário)
+                csSolicitar.setString(11, comentarioAtualizacao); // p_descricao da atualizacao
+                csSolicitar.execute();
 
             } catch (SQLException e) {
-                // Trata erros de banco de dados
                 e.printStackTrace();
-                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao atualizar item")
-                        .showAndWait();
+                alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado").showAndWait();
             }
+
+        alerta.criarAlerta(Alert.AlertType.INFORMATION, "Sucesso",
+                    "Item atualizado com sucesso").showAndWait();
+
+            // Fecha a janela
+            Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
+            stage.close();
+    }
+
+    public void verificarDisponibilidadeItem() {
+        try (Connection connectDB = new DataBaseConection().getConection()) {
+
+            qtdDisponivel = 0;
+            qtdJaSolicitada = 0;
+
+            String sqlVerificacao = "{CALL projeto_java_a3.verificar_disponibilidade_item(?)}";
+
+            try (CallableStatement csVerificar = connectDB.prepareCall(sqlVerificacao)) {
+                csVerificar.setInt(1, idItem);
+
+                try (ResultSet rs = csVerificar.executeQuery()) {
+                    if (rs.next()) {
+                        qtdDisponivel = rs.getInt("qtd_disponivel");
+                        qtdJaSolicitada = rs.getInt("qtd_solicitada"); // ✅ pega a quantidade já solicitada
+                    }
+                }
+            }
+
+            solicitarQtdSolicitadaAnteriormente.setText(String.valueOf(qtdJaSolicitada));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 
     /**
@@ -255,7 +284,7 @@ public class EntradaItemController implements Initializable {
     public boolean verificarValorDigitado(){
         // Verificação 1: Tenta converter a quantidade para um número inteiro.
         try{
-            Integer.parseInt(entradaQtdRecebida.getText().trim());
+            Integer.parseInt(solicitarItemQtd.getText().trim());
         }
         catch(Exception e){
             // Se falhar (ex: "abc"), o valor é inválido.
@@ -264,7 +293,7 @@ public class EntradaItemController implements Initializable {
 
         // Verificação 2: Compara a quantidade pedida com a quantidade recebida.
         // A quantidade recebida não pode ser maior que a pedida.
-        if((Integer.parseInt(entrdadaQtdPedido.getText())) < Integer.parseInt(entradaQtdRecebidaParcial.getText()) + Integer.parseInt(entradaQtdRecebida.getText().trim())){
+        if(Integer.parseInt(entradaQtdRecebidaParcial.getText()) < Integer.parseInt(solicitarItemQtd.getText().trim())){
             return false;
         }
 
@@ -272,4 +301,9 @@ public class EntradaItemController implements Initializable {
         return true;
     }
 
+    public void setLocalizacao(String localizacao) {
+    }
+
+    public void setStatus(String status) {
+    }
 }

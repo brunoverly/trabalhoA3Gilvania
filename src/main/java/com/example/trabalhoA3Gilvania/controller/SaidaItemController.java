@@ -12,15 +12,28 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 // Importações padrão do Java
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import com.example.trabalhoA3Gilvania.PdfRetiradaItens;
+import com.example.trabalhoA3Gilvania.PdfRetiradaItens.Item;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Controlador JavaFX para a tela "saidaItem.fxml".
@@ -30,22 +43,22 @@ import java.util.ResourceBundle;
 public class SaidaItemController implements Initializable {
 
     // --- Injeção de Componentes FXML ---
-    // Estes campos são vinculados aos componentes definidos no arquivo .fxml
     @FXML private Button retirarCancelButton;
     @FXML private TextField retiraraCodOs;
     @FXML private TextField retirarCodOperacao;
     @FXML private TextField retirarCodItem;
+    @FXML private TextField retiradaQtdRetirada;
     @FXML private TextField retirarDescricaoItem;
     @FXML private TextField retirarQtdItemOs; // Quantidade do pedido original
     @FXML private TextField retirarQtdItemRecebida; // Quantidade já recebida no estoque
     @FXML private TextField retirarStatusItem;
     @FXML private TextField retirarLocalItem;
+    @FXML private TextField retiradaQtdJaRetirada;
+    @FXML private TextField solicitarQtdSolicitadaAnteriormente;
     @FXML private TextField retirarMatriculaMecanico; // Campo para o usuário preencher
     @FXML private ImageView retiradaVoltarButtonImage;
 
     // --- Campos Privados ---
-    // Estas variáveis armazenam os dados que são "injetados"
-    // pelo controller que abriu esta janela (ex: ConsultarItemController).
     private int idItem;
     private String codItem;
     private String codOperacao;
@@ -56,95 +69,69 @@ public class SaidaItemController implements Initializable {
     private String status;
     private int qtdRecebida;
     private int idOperacao;
+    private int qtdSolcitada;
+    private int matriculaSolicitador;
 
+    private String statusItem1 = "Aguardando entrega";
+    private String statusItem2 = "Recebido (parcial)";
+    private String statusItem3 = "Recebido (integral)";
+    private String statusItem4 = "Solicitado (parcial)";
+    private String statusItem5 = "Solicitado (integral)";
+    private String statusItem6 = "Entregue (parcial)";
+    private String statusItem7 = "Entregue (integral)";
+    private String statusOrdemServico1 = "Aberta";
+    private String statusOrdemServico2 = "Em andamento";
+    private String statusOrdemServico3 = "Encerrada";
+    private String statusOperacao1 = "Em espera";
+    private String statusOperacao2 = "Item(s) solicitados";
+    private String statusOperacao3 = "Itens entregues (Parcial)";
+    private String statusOperacao4 = "Itens entregues (Integral)";
 
-    // Instância da classe utilitária para exibir pop-ups de alerta
     FormsUtil alerta = new FormsUtil();
-    // Interface usada como "callback" para notificar a tela anterior quando esta fechar.
     private OnFecharJanela listener;
 
-    /**
-     * Define o "ouvinte" (listener/callback) que será acionado quando esta janela for fechada.
-     * @param listener A implementação da interface (geralmente vinda da tela anterior).
-     */
     public void setOnFecharJanela(OnFecharJanela listener) {
         this.listener = listener;
     }
 
-    // --- Setters para Injeção de Dados ---
-    // Estes métodos são chamados pelo controller anterior para passar os dados
-    // do item que será retirado.
-    public void setCodItem(String codItem) {
-        this.codItem = codItem;
-    }
-    public void setCodOperacao(String codOperacao) {
-        this.codOperacao = codOperacao;
-    }
-    public void setCodOs(String codOs) {
-        this.codOs = codOs;
-    }
-    public void setDescricaoItem(String descricaoItem) {
-        this.descricaoItem = descricaoItem;
-    }
-    public void setQtdPedido(int qtdPedido) {
-        this.qtdPedido = String.valueOf(qtdPedido); // Converte int para String para o TextField
-    }
-    public void setIdItem(int idItem) {
-        this.idItem = idItem;
-    }
-    public void setLocalizacao(String localizacao){this.localizacao = localizacao;}
-    public void setStatus(String status){this.status = status;}
-    public void setQtdRecebida(int qtdRecebida){this.qtdRecebida = qtdRecebida;}
-    public void setIdOperacao(int idOperacao){this.idOperacao = idOperacao;}
+    public void setCodItem(String codItem) { this.codItem = codItem; }
+    public void setCodOperacao(String codOperacao) { this.codOperacao = codOperacao; }
+    public void setCodOs(String codOs) { this.codOs = codOs; }
+    public void setDescricaoItem(String descricaoItem) { this.descricaoItem = descricaoItem; }
+    public void setQtdPedido(int qtdPedido) { this.qtdPedido = String.valueOf(qtdPedido); }
+    public void setIdItem(int idItem) { this.idItem = idItem; }
+    public void setLocalizacao(String localizacao){ this.localizacao = localizacao; }
+    public void setStatus(String status){ this.status = status; }
+    public void setQtdRecebida(int qtdRecebida){ this.qtdRecebida = qtdRecebida; }
+    public void setIdOperacao(int idOperacao){ this.idOperacao = idOperacao; }
 
-    /**
-     * Método de inicialização, chamado automaticamente pelo JavaFX.
-     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Carrega a imagem "close.png" para o botão de voltar/cancelar
         URL retiradaVoltarButtonImageURL = getClass().getResource("/imagens/close.png");
         Image retiradaVoltarButtonImageImagem = new Image(retiradaVoltarButtonImageURL.toExternalForm());
         retiradaVoltarButtonImage.setImage(retiradaVoltarButtonImageImagem);
 
-        // --- Configuração do Callback de Fechamento ---
-        // Usa Platform.runLater para garantir que a cena (scene) e a janela (stage)
-        // já existam antes de tentar acessá-las.
         Platform.runLater(() -> {
             Stage stage = (Stage) retiraraCodOs.getScene().getWindow();
-
-            // Adiciona um listener para QUANDO a janela for FECHADA
-            // (seja pelo "X" do sistema ou pelo stage.close())
             stage.setOnHidden(event -> {
                 if (listener != null) {
-                    // 🔔 Chama o método da interface (o "callback")
-                    listener.aoFecharJanela(); // Isso avisa a tela anterior para se atualizar
+                    listener.aoFecharJanela();
                 }
             });
         });
 
-        // --- Efeitos de Hover (mouse) no Botão Cancelar ---
         ImageView fecharImagem = (ImageView) retirarCancelButton.getGraphic();
-
-        // Ao entrar com o mouse: aumenta o ícone e muda o cursor
         retirarCancelButton.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
             fecharImagem.setScaleY(1.2);
             retirarCancelButton.setCursor(Cursor.HAND);
         });
-
-        // Ao sair com o mouse: retorna ao normal
         retirarCancelButton.setOnMouseExited(e -> {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             retirarCancelButton.setCursor(Cursor.DEFAULT);
         });
-    } // Fim do initialize()
+    }
 
-    /**
-     * Pega os dados armazenados nas variáveis privadas (definidas pelos setters)
-     * e os exibe nos campos de texto (TextFields) da interface.
-     * Este método é chamado pelo controller anterior logo após "injetar" os dados.
-     */
     public void carregaDados(){
         retiraraCodOs.setText(codOs);
         retirarCodOperacao.setText(codOperacao);
@@ -156,77 +143,196 @@ public class SaidaItemController implements Initializable {
         retirarLocalItem.setText(localizacao);
     }
 
-    /**
-     * Ação do botão "Cancelar".
-     * Fecha a janela (Stage) atual.
-     */
     public void retirarCancelButtonOnAction(ActionEvent event){
         Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
-        stage.close(); // Ao fechar, o 'stage.setOnHidden' (do initialize) será acionado
+        stage.close();
     }
 
-    /**
-     * Ação do botão "Confirmar".
-     * Valida a matrícula do mecânico e chama a procedure de atualização no banco.
-     */
-    public void retirarConfirmarButtonOnAction(){
-        // 1. Validação: Verifica se a matrícula do mecânico está em branco
-        if((retirarMatriculaMecanico.getText().isBlank())){
-            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso","Informe a matrícula a quem foi entregue")
-                    .showAndWait();
-            return; // Interrompe a execução
-        }
-
-        // 2. Validação: Verifica se a matrícula é um número válido
+    public boolean validarQtdRetirada(){
         try{
-            // Apenas tenta converter, não usa o valor
-            int converNumero = Integer.parseInt(retirarMatriculaMecanico.getText().trim());
+            int converNumero = Integer.parseInt(retiradaQtdRetirada.getText().trim());
         }
         catch (Exception e){
-            // Se falhar (ex: "abc"), mostra alerta e interrompe
-            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "Informe a matrícula uma matrícula válida")
-                    .showAndWait();
+            return false;
+        }
+        if(Integer.parseInt(retiradaQtdRetirada.getText().trim()) <= 0){
+            return false;
+        }
+        else if(Integer.parseInt(retiradaQtdRetirada.getText().trim()) > qtdRecebida){
+            return false;
+        }
+        return true;
+    }
+
+    public void buscarQtdRetida(){
+        int qtdJaRetirada = 0;
+        String sql = "{CALL projeto_java_a3.somar_retiradas_item(?)}";
+
+        try (Connection conn = new DataBaseConection().getConection();
+             CallableStatement cs = conn.prepareCall(sql)) {
+
+            cs.setInt(1, idItem);
+            boolean temResultado = cs.execute();
+
+            // Primeiro result set: total_retirado
+            if (temResultado) {
+                try (ResultSet rs = cs.getResultSet()) {
+                    if (rs.next()) {
+                        qtdJaRetirada = rs.getInt("total_retirado");
+                        retiradaQtdJaRetirada.setText(String.valueOf(qtdJaRetirada));
+                    }
+                }
+            }
+
+            // Próximo result set: qtd_solicitada e solicitado_por
+            if (cs.getMoreResults()) {
+                try (ResultSet rs2 = cs.getResultSet()) {
+                    if (rs2.next()) {
+                        qtdSolcitada = rs2.getInt("qtd_solicitada");
+                        matriculaSolicitador = rs2.getInt("solicitador_por");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao carregar quantidade já retirada").showAndWait();
+        }
+    }
+
+
+    public void retirarConfirmarButtonOnAction() {
+        if (retirarMatriculaMecanico.getText().isBlank()) {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
+                    "Informe a matrícula a quem foi entregue").showAndWait();
             return;
         }
 
-        // 3. Lógica de Banco de Dados
-        // Try-with-resources para garantir o fechamento da conexão (conn) e statement (stmt)
-        try (Connection conn = new DataBaseConection().getConection()) {
-            // String de chamada da Stored Procedure
-            String sql = "CALL projeto_java_a3.atualizar_item_saida(?, ?, ?, ?, ?, ?, ?, ?)";
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                // Define os 8 parâmetros de entrada (IN) da procedure
-                stmt.setInt(1, idItem);        // p_id_item
-                stmt.setString(2, codOperacao);  // p_cod_operacao
-                stmt.setString(3, "Item");       // p_tipo (Para o log)
-                stmt.setString(4, codOs);        // p_cod_os (Para o log)
-                stmt.setInt(5, Integer.parseInt(retirarMatriculaMecanico.getText())); // p_entregue_a (Matrícula do Mecânico)
-                stmt.setInt(6, Sessao.getMatricula()); // p_entregue_por (Matrícula do Aprovisionador/Admin)
-                stmt.setString(7, "Item entregue na oficina"); // p_descricao (Para o log)
-                stmt.setInt(8, Sessao.getMatricula()); // p_matricula (Quem executou a ação)
-
-                stmt.execute(); // Executa a procedure
-
-                // Mostra alerta de sucesso
-                alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso", "Registro atualizado com sucesso").showAndWait();
-            }
-        } catch (SQLException e) {
-            // Trata erros de SQL (conexão, procedure, etc.)
-            throw new RuntimeException(e);
+        if (!validarQtdRetirada()) {
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
+                    "Quantidade de retirada inválida ou maior que a quantidade disponível").showAndWait();
+            return;
         }
 
-        // 4. Fechamento da Janela
-        Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
+        try {
+            Integer.parseInt(retirarMatriculaMecanico.getText().trim());
+        } catch (NumberFormatException e) {
+            alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
+                    "Informe uma matrícula válida").showAndWait();
+            return;
+        }
 
-        // 🔔 (Esta parte foi removida no seu código original, mas mantida no initialize)
-        // (O callback 'setOnHidden' do initialize() será responsável por
-        //  notificar a tela anterior quando a janela fechar)
-        // if (listener != null) {
-        //     listener.aoFecharJanela();
-        // }
+        try (Connection conn = new DataBaseConection().getConection()) {
+            int qtdRetirada = Integer.parseInt(retiradaQtdRetirada.getText().trim());
+            int qtdJaRetirada = retiradaQtdJaRetirada.getText().isBlank() ? 0 : Integer.parseInt(retiradaQtdJaRetirada.getText().trim());
+            int qtdPedidoInt = Integer.parseInt(qtdPedido);
 
-        // Fecha a janela
-        stage.close();
-    } // Fim do retirarConfirmarButtonOnAction()
-} // Fim da classe
+            String statusItem;
+            String statusOperacao;
+            int totalRetirado = qtdJaRetirada + qtdRetirada;
+
+            if (totalRetirado >= qtdPedidoInt) {
+                statusItem = statusItem7; // Entregue (integral)
+                statusOperacao = statusOperacao4; // Itens entregues (Integral)
+            } else {
+                statusItem = statusItem6; // Entregue (parcial)
+                statusOperacao = statusOperacao3; // Itens entregues (Parcial)
+            }
+
+            String descricaoLog = statusOperacao;
+
+            String sql = "{CALL projeto_java_a3.atualizar_item_saida(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+            int numeroRegistroPdf = 0; // ID do registro_pdf
+            int idRetirada = 0;        // ID da retirada
+
+            try (CallableStatement cs = conn.prepareCall(sql)) {
+                cs.setInt(1, idItem);
+                cs.setString(2, codOperacao);
+                cs.setString(3, "Item");
+                cs.setString(4, codOs);
+                cs.setInt(5, Integer.parseInt(retirarMatriculaMecanico.getText())); // emitido_para
+                cs.setInt(6, Sessao.getMatricula()); // emitido_por
+                cs.setString(7, descricaoLog);
+                cs.setInt(8, Sessao.getMatricula());
+                cs.setString(9, codItem);
+                cs.setInt(10, qtdRetirada);
+                cs.setString(11, statusItem);
+
+                boolean hasResult = cs.execute();
+                if (hasResult) {
+                    try (ResultSet rs = cs.getResultSet()) {
+                        if (rs.next()) {
+                            idRetirada = rs.getInt("id_retirada");
+                            numeroRegistroPdf = rs.getInt("id_pdf"); // pega o novo ID da tabela registro_pdf
+                        }
+                    }
+                }
+            }
+
+            // Alerta de sucesso na retirada
+            alerta.criarAlerta(Alert.AlertType.INFORMATION, "Aviso",
+                    "Retirada cadastrada com sucesso").showAndWait();
+
+            // Montar a lista de itens para o PDF
+            List<Item> listaItensPdf = new ArrayList<>();
+            Item itemPdf = new Item(
+                    codOs,
+                    codOperacao,
+                    codItem,
+                    descricaoItem,
+                    String.valueOf(qtdSolcitada),
+                    String.valueOf(qtdRetirada),
+                    String.valueOf(matriculaSolicitador)
+            );
+            listaItensPdf.add(itemPdf);
+
+            // Preparar pasta Desktop/Retiradas
+            String userDesktop = System.getProperty("user.home") + "/Desktop/Retiradas";
+            File pastaRetiradas = new File(userDesktop);
+            if (!pastaRetiradas.exists()) {
+                pastaRetiradas.mkdirs();
+            }
+
+            // Nome do arquivo
+            String nomeArquivo = "Retirada_" + retirarMatriculaMecanico.getText() + "_" + numeroRegistroPdf + ".pdf";
+            String caminhoPdf = pastaRetiradas.getAbsolutePath() + "/" + nomeArquivo;
+
+            LocalDate hoje = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
+            String dataPorExtenso = hoje.format(formatter);
+
+            // Gerar PDF
+            PdfRetiradaItens.gerarPdf(
+                    caminhoPdf,
+                    String.valueOf(numeroRegistroPdf),
+                    dataPorExtenso,
+                    Sessao.getNome(),
+                    "Almoxarife",
+                    listaItensPdf,
+                    Sessao.getNome(),
+                    "Matr: " + retirarMatriculaMecanico.getText().trim()
+            );
+
+            // Abrir PDF em nova thread para não travar a interface
+            new Thread(() -> {
+                try {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(new File(caminhoPdf));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+            // Fechar janela automaticamente
+            Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
+            stage.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

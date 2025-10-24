@@ -10,19 +10,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.net.URL;
 
-public class SaidaItemScreen extends Application {
+public class GerarPdfScreen extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
 
     @Override
     public void start(Stage stage) {
-
         try {
             // Carregar FXML
-            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/saidaItem.fxml");
+            URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/gerarPdf.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
             Parent root = fxmlLoader.load();
 
@@ -32,7 +32,7 @@ public class SaidaItemScreen extends Application {
                 Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
             }
 
-            // Aplicar estilo de borda arredondada com fundo branco
+            // Aplicar estilo arredondado ao root
             root.setStyle("-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white;");
 
             // Criar cena transparente
@@ -62,15 +62,17 @@ public class SaidaItemScreen extends Application {
             URL cssUrl = getClass().getResource("/css/style.css");
             scene.getStylesheets().add(cssUrl.toExternalForm());
 
-            // Configurar stage
-            stage.setTitle("Lançar retirada de item");
+            // Mostrar Stage
+            stage.setTitle("Consultar ordem de serviço");
             stage.setResizable(false);
             stage.show();
 
+            // Focar no TextField
+            TextField tf = (TextField) root.lookup("#consultNumeroOs");
+            if (tf != null) tf.requestFocus();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

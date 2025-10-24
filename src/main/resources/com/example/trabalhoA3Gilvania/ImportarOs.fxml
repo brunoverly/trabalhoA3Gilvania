@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ImportarOsAcnhorPane" prefHeight="490.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
+<AnchorPane fx:id="ImportarOsAcnhorPane" prefHeight="490.0" prefWidth="700.0" style="-fx-background-color: white; -fx-background-radius: 17.5; -fx-border-radius: 17.5;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ImportarOsController">
     <children>
         <Button fx:id="importSelecionarExcel" contentDisplay="CENTER" layoutX="449.0" layoutY="80.0" mnemonicParsing="false" onAction="#importSelecionarExcelOnAction" prefHeight="25.0" prefWidth="144.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Selecionar arquivo" textFill="#434a50">
             <font>
@@ -48,7 +48,7 @@
                             <children>
                                 <TableView fx:id="consultTableOrdemServico" prefHeight="277.0" prefWidth="188.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="99.0" text="Ordem" />
+                                        <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="99.0" resizable="false" text="Ordem" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -57,7 +57,7 @@
                             <children>
                                 <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="292.0" prefWidth="106.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" prefWidth="97.0" text="Operação" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" prefWidth="97.0" resizable="false" text="Operação" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -66,9 +66,9 @@
                             <children>
                                 <TableView fx:id="consultTableItem" prefHeight="277.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="119.0" text="Cod. Item" />
-                                        <TableColumn fx:id="consultTablePedidoItem" prefWidth="84.66668701171875" text="Pedido" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="224.33331298828125" text="Descrição" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="119.0" resizable="false" text="Cod. Item" />
+                                        <TableColumn fx:id="consultTablePedidoItem" prefWidth="84.66668701171875" resizable="false" text="Pedido" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="224.33331298828125" resizable="false" text="Descrição" />
                                     </columns>
                                 </TableView>
                             </children>

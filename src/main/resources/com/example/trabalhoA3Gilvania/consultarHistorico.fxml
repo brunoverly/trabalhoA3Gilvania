@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="consultarOsPane" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.ConsultarHistoricoController">
+    <children>
+        <Label layoutX="37.0" layoutY="68.0" text="Selecione o intervalo a ser filtrado" textFill="#434a50">
+            <font>
+                <Font size="17.0" />
+            </font>
+        </Label>
+        <AnchorPane fx:id="historicoAnchoTable" layoutX="38.0" layoutY="144.0" prefHeight="292.0" prefWidth="707.0" style="-fx-background-color: white;">
+            <children>
+                    <TableView fx:id="historicoTableView" prefHeight="284.0" prefWidth="722.0">
+                        <columns>
+                            <TableColumn fx:id="historicoTableColumnData" prefWidth="106.0" resizable="false" text="Data" />
+                            <TableColumn fx:id="historicoTableColumnOs" prefWidth="89.0" resizable="false" text="OS" />
+                            <TableColumn fx:id="historicoTableColumnOperacao" minWidth="0.0" prefWidth="83.0" resizable="false" text="Operação" />
+                            <TableColumn fx:id="historicoTableColumnCodItem" prefWidth="86.0" resizable="false" text="Cod. item" />
+                            <TableColumn fx:id="historicoTableColumnQtdItem" prefWidth="62.0" resizable="false" text="Qtd." />
+                  <TableColumn fx:id="historicoTableColumnDescricaoItem" prefWidth="191.0" resizable="false" text="Descrição" />
+                  <TableColumn fx:id="historicoTableColumnMatricula" prefWidth="104.0" resizable="false" text="Matrícula" />
+                        </columns>
+                    </TableView>
+            </children>
+        </AnchorPane>
+        <Button fx:id="historicoCloseButton" layoutX="34.0" layoutY="436.0" mnemonicParsing="false" onAction="#historicoCloseButtonOnAction" prefHeight="33.0" prefWidth="60.0" style="-fx-background-color: trasnparent;" textFill="#14213d">
+            <font>
+                <Font name="System Bold" size="10.0" />
+            </font>
+            <graphic>
+                <ImageView fx:id="historicoCloseImage" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../imagens/close.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label fx:id="consultLabelOsBuscada" alignment="CENTER" contentDisplay="CENTER" layoutX="37.0" layoutY="135.0" prefHeight="13.0" prefWidth="627.0" visible="false">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label fx:id="historicoTitulo" layoutX="37.0" layoutY="21.0" text="Consultar histórico de retirada" textFill="#434a50">
+            <font>
+                <Font name="System Bold" size="31.0" />
+            </font>
+        </Label>
+      <DatePicker fx:id="historicoDataInicio" editable="true" layoutX="94.0" layoutY="106.0" prefHeight="24.0" prefWidth="120.0" />
+      <Label layoutX="41.0" layoutY="107.0" prefHeight="21.0" prefWidth="47.0" text="Início" textFill="#434a50">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="232.0" layoutY="108.0" prefHeight="21.0" prefWidth="73.0" text="Término" textFill="#434a50">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+        <Button fx:id="historicoConsultar" layoutX="460.0" layoutY="107.0" mnemonicParsing="false" onAction="#historicoConsultarOnAction" prefHeight="25.0" prefWidth="81.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
+            <font>
+                <Font name="Verdana Bold" size="10.0" />
+            </font>
+        </Button>
+      <DatePicker fx:id="historicoDataFim" editable="true" layoutX="315.0" layoutY="107.0" prefHeight="24.0" prefWidth="120.0" />
+    </children>
+</AnchorPane>

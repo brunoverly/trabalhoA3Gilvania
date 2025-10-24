@@ -14,6 +14,9 @@ module com.example.trabalhoA3Gilvania {
     requires org.apache.poi.ooxml;
     requires mysql.connector.j;
     requires jbcrypt;
+    requires kernel;
+    requires layout;
+    requires io;
 
     opens com.example.trabalhoA3Gilvania to javafx.fxml;
     exports com.example.trabalhoA3Gilvania;

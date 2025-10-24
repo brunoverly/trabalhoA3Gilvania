@@ -7,120 +7,296 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="inicioPane" prefHeight="582.4" prefWidth="872.2" style="-fx-background-color: #f1f1f1; -fx-background-radius: 17.5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
+<AnchorPane fx:id="inicioPane" prefHeight="582.0" prefWidth="802.0" style="-fx-background-color: #f1f1f1; -fx-background-radius: 17.5;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.InicioController">
     <children>
-        <AnchorPane layoutX="1.4" prefHeight="582.4" prefWidth="872.2">
-            <children>
-                <Pane fx:id="inicioPaneMenu" layoutX="16.1" layoutY="62.3" prefHeight="363.3" prefWidth="126.0" style="-fx-background-color: #434A50; -fx-background-radius: 21 21 21 21;">
+        <BorderPane prefHeight="582.0" prefWidth="800.0" style="-fx-background-color: transparent; -fx-background-radius: 17.5;">
+            <center>
+                <AnchorPane prefHeight="582.0" prefWidth="737.0" BorderPane.alignment="CENTER">
                     <children>
-                        <VBox layoutX="10.5" layoutY="17.5" prefHeight="326.2" prefWidth="103.6" style="-fx-background-color: #434A50; -fx-background-radius: 21 21 21 21;" styleClass="vbox" stylesheets="@../../../css/style.css">
+                        <AnchorPane layoutX="33.0" layoutY="48.0" prefHeight="238.0" prefWidth="675.0" style="-fx-background-color: white; -fx-background-radius: 21;" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="48.0">
                             <children>
-                                <Button fx:id="menuImportarOs" blendMode="SRC_ATOP" mnemonicParsing="false" onAction="#menuImportarOsOnAction" prefHeight="30.8" prefWidth="135.1" style="-fx-background-color: #434A50;" stylesheets="@../../../css/style.css" text="Importar" textFill="WHITE">
+                                <Pane prefHeight="140.0" prefWidth="182.0" style="-fx-background-color: C2C6CA; -fx-background-radius: 28;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="36.0" AnchorPane.rightAnchor="472.0" AnchorPane.topAnchor="80.0" />
+                                <Label prefHeight="24.5" prefWidth="99.4" text="ABERTAS" textFill="#434a50" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="535.0" AnchorPane.topAnchor="90.0">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="inicioLabelOsAbertas" contentDisplay="CENTER" layoutX="46.0" layoutY="125.0" prefHeight="88.0" prefWidth="163.0" text="50" textFill="#434a50" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="472.0" AnchorPane.topAnchor="130.0">
+                                    <font>
+                                        <Font name="System Bold" size="50.4" />
+                                    </font>
+                                </Label>
+
+                                <Pane prefHeight="140.0" prefWidth="182.0" style="-fx-background-color: FCB944; -fx-background-radius: 28;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="254.0" AnchorPane.rightAnchor="254.0" AnchorPane.topAnchor="80.0" />
+                                <Label prefHeight="25.0" prefWidth="163.0" text="EM ANDAMENTO" textFill="#434a50" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="263.0" AnchorPane.rightAnchor="254.0" AnchorPane.topAnchor="90.0">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="inicioLabelOsEmAndamento" contentDisplay="CENTER" prefHeight="88.0" prefWidth="163.0" text="50" textFill="#434a50" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="263.0" AnchorPane.rightAnchor="254.0" AnchorPane.topAnchor="130.0">
+                                    <font>
+                                        <Font name="System Bold" size="50.4" />
+                                    </font>
+                                </Label>
+
+                                <Pane prefHeight="140.0" prefWidth="182.0" style="-fx-background-color: #434A50; -fx-background-radius: 28;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="472.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="80.0" />
+                                <Label prefHeight="25.0" prefWidth="151.0" text="ENCERRADAS" textFill="WHITE" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="481.0" AnchorPane.rightAnchor="48.0" AnchorPane.topAnchor="90.0">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="inicioLabelOsEncerrada" contentDisplay="CENTER" prefHeight="88.0" prefWidth="163.0" text="50" textFill="WHITE" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="481.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="130.0">
+                                    <font>
+                                        <Font name="System Bold" size="50.4" />
+                                    </font>
+                                </Label>
+
+                                <Label fx:id="inicioLabelData" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="427.0" prefHeight="23.0" prefWidth="200.0" text="Domingo, 27 de Abril de 2025    " textFill="#434a50" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="427.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="Tahoma" size="9.8" />
+                                    </font>
+                                </Label>
+                                <Label contentDisplay="CENTER" prefHeight="27.0" prefWidth="108.0" stylesheets="@../../../css/style.css" text="Dashboard  |" textFill="#434a50" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="Tahoma Bold" size="16.8" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="inicioLabelBemVindo" prefHeight="29.0" prefWidth="231.0" text="Welcome back Bruno!" textFill="#434a50" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="Tahoma" size="9.8" />
+                                    </font>
+                                </Label>
+                                <Label contentDisplay="CENTER" prefHeight="26.0" prefWidth="138.0" stylesheets="@../../../css/style.css" text="Ordens de Serviço" textFill="#434a50" AnchorPane.bottomAnchor="164.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="50.0">
+                                    <font>
+                                        <Font name="Tahoma" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </AnchorPane>
+
+                        <AnchorPane layoutY="297.0" prefHeight="275.0" prefWidth="680.0" style="-fx-background-color: white; -fx-background-radius: 21;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="297.0">
+                            <children>
+                                <TableView fx:id="inicioTableView" prefHeight="272.0" prefWidth="632.0" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
+                                    <columns>
+                                        <TableColumn fx:id="inicioTableData" editable="false" prefWidth="107.0" resizable="false" sortable="false" text="Data hora" />
+                                        <TableColumn fx:id="inicioTableTipo" editable="false" prefWidth="102.0" resizable="false" text="Tipo" />
+                                        <TableColumn fx:id="inicioTableOs" editable="false" minWidth="0.0" prefWidth="78.0" resizable="false" text="OS" />
+                                        <TableColumn fx:id="inicioTableCodItem" editable="false" minWidth="0.0" prefWidth="84.0" resizable="false" text="Cod. item" />
+                                        <TableColumn fx:id="inicioTableDescricao" editable="false" prefWidth="214.0" resizable="false" text="Descrição" />
+                                        <TableColumn fx:id="inicioTableUsuario" editable="false" prefWidth="71.0" resizable="false" text="Úsuario" />
+                                    </columns>
+                                </TableView>
+                                <Label contentDisplay="CENTER" prefHeight="20.3" prefWidth="168.0" text="Últimas atualizações" textFill="#434a50" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </AnchorPane>
+
+                        <Button fx:id="inicioButtonFecharJanela" layoutX="690.0" layoutY="14.0" mnemonicParsing="false" onAction="#inicioButtonFecharJanelaOnAction" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 28; -fx-padding: 0; -fx-background-color: transparent;" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="10.0">
+                            <graphic>
+                                <ImageView fx:id="inicioImagemFechar" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../../../../../../Downloads/close2.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="inicioButtonMaximizar" disable="true" layoutX="690.0" layoutY="15.0" mnemonicParsing="false" onAction="#inicioButtonMaximizarOnAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 28; -fx-padding: 0; -fx-background-color: transparent;" visible="false" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="10.0">
+                            <graphic>
+                                <ImageView fx:id="inicioImagemMaximizar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../../../../../../Downloads/2.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="inicioButtonMinimizar" disable="true" layoutX="660.0" layoutY="15.0" mnemonicParsing="false" onAction="#inicioButtonMinimizarOnAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 28; -fx-padding: 0; -fx-background-color: transparent;" visible="false" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="10.0">
+                            <graphic>
+                                <ImageView fx:id="inicioImagemMinimizar" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../../../../../../Downloads/compress.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+
+                    </children>
+                </AnchorPane>
+            </center>
+            <left>
+                <Pane fx:id="inicioPaneMenu" prefHeight="513.0" prefWidth="63.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+                    <children>
+                        <Pane fx:id="menuBackgroundPane" layoutX="5.0" layoutY="49.0" prefHeight="524.0" prefWidth="56.0" style="-fx-background-color: #434A50; -fx-background-radius: 21;">
+                            <children>
+                                <ImageView fx:id="inicioLogo" fitHeight="42.0" fitWidth="52.0" layoutX="7.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../imagens/logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </Pane>
+
+                        <VBox fx:id="menuButtonVBox" fillWidth="true" layoutX="5.0" layoutY="127.0" prefHeight="344.0" prefWidth="56.0" spacing="8.0" stylesheets="@../../../css/style.css">
+                            <children>
+
+                                <Button fx:id="menuMenu" blendMode="SRC_ATOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#menuMenuOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio1" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio11" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../imagens/inicio26.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+
+                                <Button fx:id="menuImportarOs" blendMode="SRC_ATOP" mnemonicParsing="false" onAction="#menuImportarOsOnAction" prefWidth="56.0" textFill="WHITE">
+                                    <font>
+                                        <Font name="Verdana Bold" size="10.5" />
+                                    </font>
+                                    <graphic>
+                                        <ImageView fx:id="inicio1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../imagens/importar1.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuConsultOs" mnemonicParsing="false" onAction="#menuConsultOsOnAction" prefHeight="37.8" prefWidth="139.3" style="-fx-background-color: #434A50;" text="Consultar" textFill="WHITE">
+                                <Button fx:id="menuConsultOs" mnemonicParsing="false" onAction="#menuConsultOsOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio2" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio2" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../imagens/remover1.png" />
+                                                <Image url="@../../../imagens/inicio23.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuCloseOs" mnemonicParsing="false" onAction="#menuCloseOsOnAction" prefHeight="33.6" prefWidth="139.3" style="-fx-background-color: #434A50;" text="Encerrar" textFill="WHITE">
+                                <Button fx:id="menuCloseOs" mnemonicParsing="false" onAction="#menuCloseOsOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio3" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio3" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../imagens/fechar1.png" />
+                                                <Image url="@../../../imagens/inicio24.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuSolcitarItem" mnemonicParsing="false" onAction="#menuSolcitarItemOnAction" prefHeight="36.4" prefWidth="139.3" style="-fx-background-color: #434A50;" text="Solicitar" textFill="WHITE">
+                                <Button fx:id="menuSolcitarItem" mnemonicParsing="false" onAction="#menuSolcitarItemOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio9" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicioSolcitarItem" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../imagens/inicio9.png" />
+                                                <Image url="@../../../imagens/inicio25.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuEntradaItem" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" prefHeight="35.0" prefWidth="134.4" style="-fx-background-color: #434A50;" text="Entrada" textFill="WHITE">
+                                <Button fx:id="menuEntradaItem" mnemonicParsing="false" onAction="#menuEntradaItemOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio4" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio4" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../imagens/entrada1.png" />
+                                                <Image url="@../../../imagens/inicio22.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuRetiradaItem" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" prefHeight="37.1" prefWidth="134.4" style="-fx-background-color: #434A50;" text="Retirada" textFill="WHITE">
+                                <Button fx:id="menuRetiradaItem" mnemonicParsing="false" onAction="#menuRetiradaItemOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio5" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio5" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../imagens/entrega1.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuAddUser" mnemonicParsing="false" onAction="#menuAddUserOnAction" prefHeight="33.6" prefWidth="134.4" style="-fx-background-color: #434A50;" text="Cadastrar" textFill="WHITE">
+                                <Button fx:id="menuAddUser" mnemonicParsing="false" onAction="#menuAddUserOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio6" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio6" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../imagens/cadastro1.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuRemoveUser" mnemonicParsing="false" onAction="#menuRemoveUserOnAction" prefHeight="36.4" prefWidth="138.6" style="-fx-background-color: #434A50;" text="Remover" textFill="WHITE">
+                                <Button fx:id="menuRemoveUser" mnemonicParsing="false" onAction="#menuRemoveUserOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio7" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio7" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../imagens/remover3.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="menuSair" mnemonicParsing="false" onAction="#menuSairOnAction" prefHeight="40.6" prefWidth="135.8" style="-fx-background-color: #434A50;" text="Sair" textFill="WHITE">
+                                <Button fx:id="menuConsultarRetiradas" mnemonicParsing="false" onAction="#menuConsultarRetiradasOnAction" prefWidth="56.0" textFill="WHITE">
+                                    <font>
+                                        <Font size="10.5" />
+                                    </font>
+                                    <graphic>
+                                        <ImageView fx:id="inicioConsultarRetiradas" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../imagens/menu20.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="menuConsultarSolicitacoes" mnemonicParsing="false" onAction="#menuConsultarSolicitacoesOnAction" prefWidth="56.0" textFill="WHITE">
                                     <font>
                                         <Font name="Verdana Bold" size="10.5" />
                                     </font>
                                     <graphic>
-                                        <ImageView fx:id="inicio8" fitHeight="28.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="inicio10" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../imagens/menu21.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="menuPdf" layoutX="10.0" layoutY="328.0" mnemonicParsing="false" onAction="#menuPdfOnAction" prefWidth="56.0" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-background-radius: 0;" textFill="WHITE">
+                                    <font>
+                                        <Font name="Verdana Bold" size="10.5" />
+                                    </font>
+                                    <graphic>
+                                        <ImageView fx:id="inicio15" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../imagens/pdf.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="menuSair" mnemonicParsing="false" onAction="#menuSairOnAction" prefWidth="56.0" textFill="WHITE">
+                                    <font>
+                                        <Font name="Verdana Bold" size="10.5" />
+                                    </font>
+                                    <graphic>
+                                        <ImageView fx:id="inicio8" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../imagens/inicio8.png" />
                                             </image>
@@ -131,114 +307,7 @@
                         </VBox>
                     </children>
                 </Pane>
-
-                <Pane fx:id="inicioPaneTableView" layoutX="164.5" layoutY="259.7" prefHeight="310.8" prefWidth="651.7" style="-fx-background-color: white; -fx-background-radius: 21 21 21 21;">
-                    <children>
-                        <TableView fx:id="inicioTableView" layoutX="10.0" layoutY="32.0" prefHeight="272.0" prefWidth="632.0" stylesheets="@../../../css/style.css">
-                            <columns>
-                                <TableColumn fx:id="inicioTableData" prefWidth="121.6" text="Data hora" />
-                                <TableColumn fx:id="inicioTableTipo" prefWidth="126.0" text="Tipo" />
-                                <TableColumn fx:id="inicioTableOs" minWidth="0.0" prefWidth="87.6666259765625" text="OS" />
-                                <TableColumn fx:id="inicioTableDescricao" prefWidth="218.33331298828125" text="Descrição" />
-                                <TableColumn fx:id="inicioTableUsuario" prefWidth="79.0" text="Úsuario" />
-                            </columns>
-                        </TableView>
-                    </children>
-                </Pane>
-
-                <!-- Borda do dashboard corrigida -->
-                <Pane fx:id="inicioPaneDash" layoutX="164.5" layoutY="12.6" prefHeight="234.5" prefWidth="651.7" style="-fx-background-color: #ffffff; -fx-background-radius: 28;">
-                    <children>
-                        <Pane layoutX="21.0" layoutY="71.4" prefHeight="140.0" prefWidth="181.3" style="-fx-background-color: C2C6CA; -fx-background-radius: 28;" />
-                        <Pane layoutX="231.0" layoutY="71.4" prefHeight="140.0" prefWidth="181.3" style="-fx-background-color: FCB944; -fx-background-radius: 28;" />
-                        <Pane layoutX="442.4" layoutY="71.4" prefHeight="140.0" prefWidth="181.3" style="-fx-background-color: #434A50; -fx-background-radius: 28;" />
-                    </children>
-                </Pane>
-
-                <Label alignment="CENTER" layoutX="16.1" layoutY="12.6" prefHeight="40.6" prefWidth="126.0" style="-fx-background-color: #434A50; -fx-background-radius: 21 21 21 21;" textFill="WHITE">
-                    <font>
-                        <Font name="Tahoma Bold" size="16.8" />
-                    </font>
-                    <graphic>
-                        <ImageView fx:id="inicioLogo" fitHeight="34.3" fitWidth="116.9" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../imagens/brand.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Label>
-
-                <Pane fx:id="inicioPanelInvisivel" layoutX="165.9" layoutY="14.0" prefHeight="280.0" prefWidth="712.6" style="-fx-background-color: transparent;">
-                    <children>
-                        <Label fx:id="inicioLabelData" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="383.0" layoutY="9.0" prefHeight="29.0" prefWidth="231.0" text="Domingo, 27 de Abril de 2025    " textFill="#434a50">
-                            <font>
-                                <Font name="Tahoma" size="9.8" />
-                            </font>
-                        </Label>
-                        <Label layoutX="453.6" layoutY="90.3" prefHeight="24.5" prefWidth="115.5" text="ENCERRADAS" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="16.8" />
-                            </font>
-                        </Label>
-                        <Label fx:id="inicioLabelOsEncerrada" contentDisplay="CENTER" layoutX="448.7" layoutY="112.7" prefHeight="89.5" prefWidth="174.3" text="50" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="50.4" />
-                            </font>
-                        </Label>
-                        <Label contentDisplay="CENTER" layoutX="22.0" layoutY="9.0" prefHeight="26.6" prefWidth="275.1" stylesheets="@../../../css/style.css" text="Dashboard  |" textFill="#434a50">
-                            <font>
-                                <Font name="Tahoma Bold" size="16.8" />
-                            </font>
-                        </Label>
-                        <Label fx:id="inicioLabelBemVindo" layoutX="135.0" layoutY="9.0" prefHeight="29.0" prefWidth="231.0" text="Welcome back Bruno!" textFill="#434a50">
-                            <font>
-                                <Font name="Tahoma" size="9.8" />
-                            </font>
-                        </Label>
-                        <Label contentDisplay="CENTER" layoutX="23.1" layoutY="44.8" prefHeight="14.0" prefWidth="275.1" stylesheets="@../../../css/style.css" text="Ordens de Serviço" textFill="#434a50">
-                            <font>
-                                <Font name="Tahoma" size="14.0" />
-                            </font>
-                        </Label>
-                        <Label contentDisplay="CENTER" layoutX="15.4" layoutY="254.8" prefHeight="20.3" prefWidth="168.0" text="Últimas atualizações" textFill="#434a50">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="28.7" layoutY="90.3" prefHeight="24.5" prefWidth="99.4" text="ABERTAS" textFill="#434a50">
-                            <font>
-                                <Font name="Tahoma Bold" size="16.8" />
-                            </font>
-                        </Label>
-                        <Label fx:id="inicioLabelOsAbertas" contentDisplay="CENTER" layoutX="28.7" layoutY="113.4" prefHeight="87.5" prefWidth="174.3" text="50" textFill="#434a50">
-                            <font>
-                                <Font name="System Bold" size="50.4" />
-                            </font>
-                        </Label>
-                        <Label fx:id="inicioLabelOsEmAndamento" contentDisplay="CENTER" layoutX="235.9" layoutY="102.2" prefHeight="98.7" prefWidth="174.3" text="50" textFill="#434a50">
-                            <font>
-                                <Font name="System Bold" size="50.4" />
-                            </font>
-                        </Label>
-                        <Label layoutX="241.5" layoutY="90.3" prefHeight="24.5" prefWidth="144.9" text="EM ANDAMENTO" textFill="#434a50">
-                            <font>
-                                <Font name="System Bold" size="16.8" />
-                            </font>
-                        </Label>
-                    </children>
-                </Pane>
-
-                <Button fx:id="inicioButtonFecharJanela" layoutX="822.5" layoutY="14.0" mnemonicParsing="false" onAction="#inicioButtonFecharJanelaOnAction" prefHeight="30.8" prefWidth="34.3" style="-fx-background-radius: 28; -fx-background-color: transparent;">
-                    <graphic>
-                        <ImageView fx:id="inicioImagemFechar" fitHeight="34.3" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../imagens/close.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-
-            </children>
-        </AnchorPane>
+            </left>
+        </BorderPane>
     </children>
 </AnchorPane>
