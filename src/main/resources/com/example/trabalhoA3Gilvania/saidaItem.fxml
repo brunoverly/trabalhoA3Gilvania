@@ -34,7 +34,7 @@
         </Button>
         <Button fx:id="retirarConfirmarButton" layoutX="422.1" layoutY="370.3" mnemonicParsing="false" onAction="#retirarConfirmarButtonOnAction" prefHeight="24.5" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Confirmar" textFill="#434a50">
             <font>
-                <Font name="Verdana Bold" size="10.5" />
+                <Font name="System Bold" size="10.5" />
             </font>
         </Button>
         <Label layoutX="28.0" layoutY="70.0" prefHeight="11.2" prefWidth="121.8" text="Ordem de serviço" textFill="#434a50">

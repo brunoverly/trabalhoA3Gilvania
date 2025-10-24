@@ -67,7 +67,7 @@
       </Label>
         <Button fx:id="historicoConsultar" layoutX="460.0" layoutY="107.0" mnemonicParsing="false" onAction="#historicoConsultarOnAction" prefHeight="25.0" prefWidth="81.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Consultar" textFill="#434a50">
             <font>
-                <Font name="Verdana Bold" size="10.0" />
+                <Font name="System Bold" size="10.0" />
             </font>
         </Button>
       <DatePicker fx:id="historicoDataFim" editable="true" layoutX="315.0" layoutY="107.0" prefHeight="24.0" prefWidth="120.0" />

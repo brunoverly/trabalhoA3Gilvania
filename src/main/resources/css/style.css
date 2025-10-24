@@ -359,6 +359,8 @@
 #cadastrarButton:hover,
 #removeConfirmarButton:hover,
 #removeBuscarMatricula:hover,
+#historicoConsultar:hover,
+#pdfGerarPdfButton:hover,
 #loginButton:hover {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
@@ -383,3 +385,77 @@
     -fx-background-color: rgba(255,255,255,0.7);
 }
 */
+
+/* ======================= */
+/* DatePicker estilizado    */
+/* ======================= */
+
+/* === DatePicker Principal === */
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-family: "Poppins";
+    -fx-text-fill: #FCB944; /* cabeçalho laranja */
+}
+
+/* === Linha inferior do TextField === */
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: black;
+    -fx-border-radius: 0;
+    -fx-padding: 3 0 3 0;
+}
+
+/* === Botão da seta / ícone do calendário === */
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0.2em;
+    -fx-shape: "M 0 0 L 8 8 L 16 0 Z";
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #FCB944; /* laranja */
+}
+
+/* === Popup do calendário === */
+.date-picker .popup {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+/* === Cabeçalho do calendário (meses e setas) === */
+.date-picker .month-year-pane {
+    -fx-background-color: white;
+    -fx-text-fill: #FCB944; /* laranja */
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+}
+
+/* === Dias do calendário === */
+.date-picker .day-cell {
+    -fx-text-fill: #434A50; /* dias continuam cinza escuro */
+    -fx-background-color: transparent;
+}
+
+.date-picker .day-cell:hover {
+    -fx-background-color: #e69900; /* laranja mais escuro ao passar o mouse */
+}
+
+.date-picker .day-cell:selected {
+    -fx-background-color: #FCB944; /* laranja */
+    -fx-text-fill: white;
+}
+
+/* === Nomes da semana === */
+.date-picker .day-of-week {
+    -fx-text-fill: #FCB944; /* laranja */
+    -fx-font-weight: bold;
+}
+

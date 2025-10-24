@@ -84,7 +84,7 @@
         </Label>
       <Button fx:id="pdfGerarPdfButton" layoutX="694.0" layoutY="439.0" mnemonicParsing="false" onAction="#pdfGerarPdfButtonOnAction" prefHeight="25.0" prefWidth="81.0" style="-fx-background-color: FCB944; -fx-background-radius: 0;" text="Gerar PDF" textFill="#434a50">
          <font>
-            <Font name="Verdana Bold" size="10.0" />
+            <Font name="System Bold" size="10.0" />
          </font>
       </Button>
     </children>
