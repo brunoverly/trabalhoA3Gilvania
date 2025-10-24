@@ -2,6 +2,7 @@ package com.example.trabalhoA3Gilvania.controller;
 
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -65,6 +66,11 @@ public class CadastrarUsuarioController implements Initializable {
             fecharImagem.setScaleX(1.0); // Retorna a escala X ao normal
             fecharImagem.setScaleY(1.0); // Retorna a escala Y ao normal
             cadastrarCancelButton.setCursor(Cursor.DEFAULT); // Retorna o cursor ao padrão
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) cadastrarCancelButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
         });
     }
 

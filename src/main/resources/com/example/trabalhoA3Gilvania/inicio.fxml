@@ -81,14 +81,14 @@
 
                         <AnchorPane layoutY="297.0" prefHeight="275.0" prefWidth="680.0" style="-fx-background-color: white; -fx-background-radius: 21;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="297.0">
                             <children>
-                                <TableView fx:id="inicioTableView" prefHeight="272.0" prefWidth="632.0" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
+                                <TableView fx:id="inicioTableView" editable="true" prefHeight="272.0" prefWidth="632.0" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
                                     <columns>
                                         <TableColumn fx:id="inicioTableData" editable="false" prefWidth="107.0" resizable="false" sortable="false" text="Data hora" />
-                                        <TableColumn fx:id="inicioTableTipo" editable="false" prefWidth="102.0" resizable="false" text="Tipo" />
-                                        <TableColumn fx:id="inicioTableOs" editable="false" minWidth="0.0" prefWidth="78.0" resizable="false" text="OS" />
-                                        <TableColumn fx:id="inicioTableCodItem" editable="false" minWidth="0.0" prefWidth="84.0" resizable="false" text="Cod. item" />
-                                        <TableColumn fx:id="inicioTableDescricao" editable="false" prefWidth="214.0" resizable="false" text="Descrição" />
-                                        <TableColumn fx:id="inicioTableUsuario" editable="false" prefWidth="71.0" resizable="false" text="Úsuario" />
+                                        <TableColumn fx:id="inicioTableTipo" editable="false" prefWidth="102.0" resizable="false" sortable="false" text="Tipo" />
+                                        <TableColumn fx:id="inicioTableOs" editable="false" minWidth="0.0" prefWidth="78.0" resizable="false" sortable="false" text="OS" />
+                                        <TableColumn fx:id="inicioTableCodItem" editable="false" minWidth="0.0" prefWidth="84.0" resizable="false" sortable="false" text="Cod. item" />
+                                        <TableColumn fx:id="inicioTableDescricao" editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Descrição" />
+                                        <TableColumn fx:id="inicioTableUsuario" editable="false" prefWidth="85.0" resizable="false" sortable="false" text="Úsuario" />
                                     </columns>
                                 </TableView>
                                 <Label contentDisplay="CENTER" prefHeight="20.3" prefWidth="168.0" text="Últimas atualizações" textFill="#434a50" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">

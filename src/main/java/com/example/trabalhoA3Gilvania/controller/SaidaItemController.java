@@ -130,6 +130,13 @@ public class SaidaItemController implements Initializable {
             fecharImagem.setScaleY(1.0);
             retirarCancelButton.setCursor(Cursor.DEFAULT);
         });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) retirarCancelButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
+
+
     }
 
     public void carregaDados(){

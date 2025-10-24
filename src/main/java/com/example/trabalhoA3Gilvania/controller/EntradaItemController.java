@@ -170,6 +170,11 @@ public class EntradaItemController implements Initializable {
             fecharImagem.setScaleY(1.0);
             entradaItemCancelar.setCursor(Cursor.DEFAULT);
         });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) entradaItemCancelar.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
     } // Fim do initialize()
 
 

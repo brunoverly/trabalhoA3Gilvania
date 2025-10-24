@@ -7,6 +7,7 @@ import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 
 // Importações de classes do JavaFX
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -63,6 +64,8 @@ public class ConsultarItemController implements Initializable{
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
     @FXML private TableColumn<Item, String> consultTableItemStatus;
+    @FXML private TableColumn<Item, String> consultTableItemSolicitado;
+    @FXML private TableColumn<Item, String> consultTableItemEntregue;
     @FXML private AnchorPane consultItemSplitPane;
     @FXML private AnchorPane consultItenTableViewOperacao;
     @FXML private AnchorPane consultItemTableViewItem;
@@ -168,7 +171,7 @@ public class ConsultarItemController implements Initializable{
         // --- Configuração das Colunas das Tabelas ---
         // Vincula as colunas da Tabela de Operações às propriedades da classe 'Operacao'
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
-        consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        //consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         // Vincula as colunas da Tabela de Itens às propriedades da classe 'Item'
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -176,6 +179,18 @@ public class ConsultarItemController implements Initializable{
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
         consultTableRecebidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdRecebida"));
         consultTableItemStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
+        consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
+
+
+        constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
+        consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
+        consultTableItemEntregue.setStyle("-fx-alignment: CENTER;");
+
+
+
 
         // Define um texto padrão para tabelas vazias (aqui, vazio)
         consultTableOperacao.setPlaceholder(new Label(""));
@@ -462,6 +477,11 @@ public class ConsultarItemController implements Initializable{
             e.getCause();
             alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Erro inesperado ao lançar entrada para todos os itens: " + e.getMessage()).showAndWait();
         }
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
     }
 
 
@@ -543,7 +563,9 @@ public class ConsultarItemController implements Initializable{
                                     rsItens.getString("descricao"),
                                     rsItens.getInt("qtd_pedido"),
                                     rsItens.getInt("qtd_recebida"),
-                                    rsItens.getString("status")
+                                    rsItens.getString("status"),
+                                    rsItens.getInt("qtd_solicitada"),
+                                    rsItens.getInt("qtd_retirada")
                             );
                             listaItens.add(item); // Adiciona o item na lista temporária
                         }
@@ -552,7 +574,6 @@ public class ConsultarItemController implements Initializable{
             }
 
             // --- Leitura do Segundo ResultSet (Operações) ---
-            // Verifica se há mais resultados (o segundo SELECT da procedure)
             if (cs.getMoreResults()) {
                 try (ResultSet rsOperacoes = cs.getResultSet()) {
                     while (rsOperacoes.next()) {
@@ -567,18 +588,31 @@ public class ConsultarItemController implements Initializable{
             }
 
             // --- Atualização das Tabelas ---
-            // Limpa os dados antigos e adiciona os novos (atualiza a 'todosItens')
             todosItens.clear();
             todosItens.addAll(listaItens);
 
-            // Define os itens na tabela de operações (atualiza a 'todasOperacoes')
             consultTableOperacao.setItems(listaOperacao);
 
             // Torna os painéis visíveis
             consultItenTableViewOperacao.setVisible(true);
             consultarItemSplitPane.setVisible(true);
-            // Esconde a tabela de itens até uma operação ser selecionada
-            consultItemTableViewItem.setVisible(false);
+
+            // Se houver operações, seleciona a primeira automaticamente
+            if (!listaOperacao.isEmpty()) {
+                Operacao primeiraOperacao = listaOperacao.get(0);
+                consultTableOperacao.getSelectionModel().select(primeiraOperacao);
+
+                // Atualiza o filtro da tabela de itens para mostrar apenas os itens da primeira operação
+                String codOperacaoSelecionada = primeiraOperacao.getCodOperacao().trim();
+                itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
+                        item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
+
+                // Mostra a tabela de itens
+                consultItemTableViewItem.setVisible(true);
+            } else {
+                // Se não houver operações, esconde a tabela de itens
+                consultItemTableViewItem.setVisible(false);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -601,13 +635,15 @@ public class ConsultarItemController implements Initializable{
         private SimpleIntegerProperty qtdPedido;
         private SimpleIntegerProperty qtdRecebida;
         private SimpleStringProperty status;
+        private SimpleIntegerProperty qtdSolicitado;
+        private SimpleIntegerProperty qtdEntregue;
 
 
         public Item() {
         }
 
         // Construtor principal
-        public Item(int idItem, String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status) {
+        public Item(int idItem, String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status, int qtdSolicitado, int qtdEntregue) {
             this.idItem = new SimpleIntegerProperty(idItem);
             this.codItem = new SimpleStringProperty(codItem);
             this.idOperacao = new SimpleIntegerProperty(idOperacao);
@@ -616,6 +652,8 @@ public class ConsultarItemController implements Initializable{
             this.qtdPedido = new SimpleIntegerProperty(qtdPedido);
             this.qtdRecebida = new SimpleIntegerProperty(qtdRecebida);
             this.status = new SimpleStringProperty(status);
+            this.qtdSolicitado = new SimpleIntegerProperty(qtdSolicitado);
+            this.qtdEntregue = new SimpleIntegerProperty(qtdEntregue);
         }
 
         // --- Getters ---
@@ -669,6 +707,12 @@ public class ConsultarItemController implements Initializable{
         public void setStatus(String status) {
             this.status.set(status);
         }
+        public int getQtdSolicitado() {
+            return qtdSolicitado.get();
+        }
+        public int getQtdEntregue() {
+            return qtdEntregue.get();
+        }
 
         // --- Métodos Property (Necessários para o TableView) ---
         public SimpleStringProperty codItemProperty() {
@@ -685,6 +729,12 @@ public class ConsultarItemController implements Initializable{
         }
         public SimpleStringProperty statusProperty() {
             return status;
+        }
+        public void setQtdSolicitado(int qtdSolicitado) {
+            this.qtdSolicitado.set(qtdSolicitado);
+        }
+        public void setQtdEntregue(int qtdEntregue) {
+            this.qtdEntregue.set(qtdEntregue);
         }
     }
 

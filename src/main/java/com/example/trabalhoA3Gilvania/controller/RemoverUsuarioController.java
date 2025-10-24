@@ -5,6 +5,7 @@ import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
 
 // Importações de classes do JavaFX
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -72,6 +73,11 @@ public class RemoverUsuarioController implements Initializable {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             removeCancelarButton.setCursor(Cursor.DEFAULT);
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) removeCancelarButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
         });
     }
 

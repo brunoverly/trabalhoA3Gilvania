@@ -21,13 +21,13 @@
             <children>
                     <TableView fx:id="historicoTableView" prefHeight="284.0" prefWidth="722.0">
                         <columns>
-                            <TableColumn fx:id="historicoTableColumnData" prefWidth="106.0" resizable="false" text="Data" />
-                            <TableColumn fx:id="historicoTableColumnOs" prefWidth="89.0" resizable="false" text="OS" />
-                            <TableColumn fx:id="historicoTableColumnOperacao" minWidth="0.0" prefWidth="83.0" resizable="false" text="Operação" />
-                            <TableColumn fx:id="historicoTableColumnCodItem" prefWidth="86.0" resizable="false" text="Cod. item" />
-                            <TableColumn fx:id="historicoTableColumnQtdItem" prefWidth="62.0" resizable="false" text="Qtd." />
-                  <TableColumn fx:id="historicoTableColumnDescricaoItem" prefWidth="191.0" resizable="false" text="Descrição" />
-                  <TableColumn fx:id="historicoTableColumnMatricula" prefWidth="104.0" resizable="false" text="Matrícula" />
+                            <TableColumn fx:id="historicoTableColumnData" prefWidth="106.0" resizable="false" sortable="false" text="Data" />
+                            <TableColumn fx:id="historicoTableColumnOs" prefWidth="89.0" resizable="false" sortable="false" text="OS" />
+                            <TableColumn fx:id="historicoTableColumnOperacao" minWidth="0.0" prefWidth="83.0" resizable="false" sortable="false" text="Operação" />
+                            <TableColumn fx:id="historicoTableColumnCodItem" prefWidth="86.0" resizable="false" sortable="false" text="Cod. item" />
+                            <TableColumn fx:id="historicoTableColumnQtdItem" prefWidth="62.0" resizable="false" sortable="false" text="Qtd." />
+                  <TableColumn fx:id="historicoTableColumnDescricaoItem" prefWidth="191.0" resizable="false" sortable="false" text="Descrição" />
+                  <TableColumn fx:id="historicoTableColumnMatricula" prefWidth="104.0" resizable="false" sortable="false" text="Matrícula" />
                         </columns>
                     </TableView>
             </children>

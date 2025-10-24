@@ -118,12 +118,9 @@ public class ImportarOsController implements Initializable {
         Image importarOsVoltarImageImagem = new Image(importarOsVoltarImageURL.toExternalForm());
         importarOsVoltarImage.setImage(importarOsVoltarImageImagem);
 
-        // Trava o campo de texto do caminho (apenas visualização)
         importOsPathField.setDisable(true);
         importOsPathField.setFocusTraversable(false);
 
-        // --- Configuração das Colunas das Tabelas ---
-        // Vincula as colunas às propriedades das classes de modelo (Item, Operacao, OrdemServico)
         constulTabelCodOrdemServico.setCellValueFactory(new PropertyValueFactory<>("codOrdemServico"));
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
@@ -137,41 +134,34 @@ public class ImportarOsController implements Initializable {
         consultTableCodItem.setStyle("-fx-alignment: CENTER-LEFT;");
         consultTableDescricaoItem.setStyle("-fx-alignment: CENTER-LEFT;");
 
-        // Define a lista de dados principal para a tabela de OS
         consultTableOrdemServico.setItems(todasOrdensServico);
-
-        // Inicia as tabelas de operação e item vazias
         consultTableOperacao.setItems(FXCollections.observableArrayList());
         consultTableItem.setItems(FXCollections.observableArrayList());
 
-        // Permite a seleção de linhas na tabela de operações
         consultTableOperacao.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         consultTableOperacao.setFocusTraversable(true);
 
-        // --- Listener de Seleção (Tabela Ordem de Serviço) ---
-        // Filtra a tabela de OPERAÇÕES com base na OS selecionada.
+        // --- Listener: seleção de OS ---
         consultTableOrdemServico.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, selectedOS) -> {
                     if (selectedOS != null) {
-                        // 1. Filtra a lista 'todasOperacoes'
                         ObservableList<Operacao> operacoesFiltradas = todasOperacoes.filtered(
-                                op -> todosItens.stream() // Verifica se a operação...
-                                        .anyMatch(item -> item.getCodOperacao().equals(op.getCodOperacao()) // ...existe na lista de itens...
-                                                && item.getCodOs().equals(selectedOS.getCodOrdemServico())) // ...e pertence à OS selecionada.
+                                op -> todosItens.stream()
+                                        .anyMatch(item -> item.getCodOperacao().equals(op.getCodOperacao())
+                                                && item.getCodOs().equals(selectedOS.getCodOrdemServico()))
                         );
-                        consultTableOperacao.setItems(operacoesFiltradas); // Atualiza a tabela de operações
-
-                        // 2. Reseta a seleção da tabela de operações
+                        consultTableOperacao.setItems(operacoesFiltradas);
                         consultTableOperacao.getSelectionModel().clearSelection();
-
-                        // 3. Limpa a tabela de itens
                         consultTableItem.getItems().clear();
 
-                        // 4. Exibe/esconde painéis
-                        importarOsTableViewOperacao.setVisible(true); // Mostra tabela de operações
-                        importarOsTableViewItens.setVisible(false);   // Esconde tabela de itens
+                        importarOsTableViewOperacao.setVisible(true);
+                        importarOsTableViewItens.setVisible(false);
+
+                        // 🔹 NOVO: pré-seleciona a primeira operação automaticamente
+                        if (!operacoesFiltradas.isEmpty()) {
+                            consultTableOperacao.getSelectionModel().selectFirst();
+                        }
                     } else {
-                        // Se nenhuma OS for selecionada, limpa e esconde tudo
                         consultTableOperacao.setItems(FXCollections.observableArrayList());
                         consultTableItem.setItems(FXCollections.observableArrayList());
                         importarOsTableViewOperacao.setVisible(false);
@@ -180,45 +170,33 @@ public class ImportarOsController implements Initializable {
                 }
         );
 
-        // --- Listener de Seleção (Tabela Operação) ---
-        // Filtra a tabela de ITENS com base na Operação (e OS) selecionada.
+        // --- Listener: seleção de Operação ---
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, selectedOperacao) -> {
                     if (selectedOperacao != null) {
-                        // Pega a OS que já está selecionada
                         OrdemServico osSelecionada = consultTableOrdemServico.getSelectionModel().getSelectedItem();
                         if (osSelecionada != null) {
-                            // 1. Filtra a lista 'todosItens'
                             ObservableList<Item> itensFiltrados = todosItens.filtered(
-                                    item -> item.getCodOs().equals(osSelecionada.getCodOrdemServico()) && // Pertence à OS
-                                            item.getCodOperacao().equals(selectedOperacao.getCodOperacao()) // Pertence à Operação
+                                    item -> item.getCodOs().equals(osSelecionada.getCodOrdemServico())
+                                            && item.getCodOperacao().equals(selectedOperacao.getCodOperacao())
                             );
-
-                            // 2. Atualiza a tabela de itens e a visibilidade
                             consultTableItem.setItems(itensFiltrados);
                             importarOsTableViewItens.setVisible(!itensFiltrados.isEmpty());
                         }
                     } else {
-                        // Se nenhuma operação for selecionada, limpa a tabela de itens
                         consultTableItem.setItems(FXCollections.observableArrayList());
                         importarOsTableViewItens.setVisible(false);
                     }
                 }
         );
 
-        // --- Callback de Fechamento da Janela ---
-        // Garante que a tela anterior será notificada (para se atualizar)
         Platform.runLater(() -> {
             Stage stage = (Stage) importOsAnchorPanelTable.getScene().getWindow();
-            // Listener acionado quando a janela é fechada (pelo 'X' ou stage.close())
             stage.setOnHidden(event -> {
-                if (listener != null) {
-                    listener.aoFecharJanela(); // 🔔 Chama o callback
-                }
+                if (listener != null) listener.aoFecharJanela();
             });
         });
 
-        // --- Efeitos de Hover (mouse) no botão Voltar ---
         ImageView fecharImagem = (ImageView) importVoltar.getGraphic();
         importVoltar.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
@@ -230,7 +208,14 @@ public class ImportarOsController implements Initializable {
             fecharImagem.setScaleY(1.0);
             importVoltar.setCursor(Cursor.DEFAULT);
         });
-    } // Fim do initialize()
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) importSelecionarExcel.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
+
+    }
+// Fim do initialize()
 
 
     /**
@@ -408,81 +393,84 @@ public class ImportarOsController implements Initializable {
      */
     public void PreviewTable(File fileSelected) {
         try {
-            // DataFormatter ajuda a ler todas as células como String, evitando erros de tipo
             DataFormatter formatter = new DataFormatter();
-
-            // Limpa as listas de dados da pré-visualização anterior
             todasOrdensServico.clear();
             todasOperacoes.clear();
             todosItens.clear();
 
-            // @Cleanup (do Lombok) garante que 'file.close()' será chamado
-            // mesmo se ocorrer um erro, similar a um try-with-resources.
             @Cleanup FileInputStream file = new FileInputStream(fileSelected);
-            Workbook workbook = new XSSFWorkbook(file); // Abre o arquivo .xlsx
-
-            // Seleciona a primeira aba (índice 0)
+            Workbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(0);
 
-            // Itera sobre todas as linhas da planilha
             for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue; // Pula a linha 0 (cabeçalho)
+                if (row.getRowNum() == 0) continue;
 
-                // Lê os valores das colunas específicas
-                String osString = formatter.formatCellValue(row.getCell(1)); // Coluna B (OS)
-                String operacaoString = formatter.formatCellValue(row.getCell(2)); // Coluna C (Operação)
-                String codItem = row.getCell(4).getStringCellValue(); // Coluna E (Cód. Item)
-                String descricaoItem = row.getCell(5).getStringCellValue(); // Coluna F (Descrição)
-                int qtdItem = (int) row.getCell(6).getNumericCellValue(); // Coluna G (Qtd)
+                String osString = formatter.formatCellValue(row.getCell(1));
+                String operacaoString = formatter.formatCellValue(row.getCell(2));
+                String codItem = row.getCell(4).getStringCellValue();
+                String descricaoItem = row.getCell(5).getStringCellValue();
+                int qtdItem = (int) row.getCell(6).getNumericCellValue();
 
-                // 1. Adiciona Ordem de Serviço (apenas se for nova)
-                // Verifica se a OS já existe na lista 'todasOrdensServico'
                 boolean existeOrdemServico = todasOrdensServico.stream()
                         .anyMatch(op -> op.getCodOrdemServico().equals(osString));
-                if (!existeOrdemServico) {
-                    OrdemServico ordemServicoItem = new OrdemServico(osString);
-                    todasOrdensServico.add(ordemServicoItem);
-                }
+                if (!existeOrdemServico) todasOrdensServico.add(new OrdemServico(osString));
 
-                // 2. Adiciona o Item (incluindo a OS a que pertence)
                 Item item = new Item(codItem, operacaoString, descricaoItem, qtdItem, osString);
-                if (item.getQtdPedido() != 0) { // Só adiciona se a quantidade não for zero
-                    todosItens.add(item);
-                }
+                if (item.getQtdPedido() != 0) todosItens.add(item);
 
-                // 3. Adiciona Operação (apenas se for nova)
-                // Verifica se a operação já existe na lista 'todasOperacoes'
                 boolean existeOperacao = todasOperacoes.stream()
                         .anyMatch(op -> op.getCodOperacao().equals(operacaoString));
-                if (!existeOperacao) {
-                    Operacao operacao = new Operacao(operacaoString);
-                    todasOperacoes.add(operacao);
-                }
+                if (!existeOperacao) todasOperacoes.add(new Operacao(operacaoString));
             }
         } catch (Exception e) {
-            // 🔹 Erro na leitura: Notifica o usuário e limpa a UI
-            // Deve ser feito via Platform.runLater, pois este método roda em background
             Platform.runLater(() -> {
                 alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso",
                                 "Erro ao tentar ler o arquivo, certifique que o arquivo selecionado segue o modelo de importação")
                         .showAndWait();
-
-                importOsPathField.setText(""); // Limpa o caminho do arquivo
-                // Esconde os painéis de resultado
+                importOsPathField.setText("");
                 importarOsTableViewOrdem.setVisible(false);
                 importarOsTableViewOperacao.setVisible(false);
                 importarOsTableViewItens.setVisible(false);
             });
-            return; // Interrompe a execução do método (PreviewTable)
+            return;
         }
 
-        // 🔹 Sucesso na leitura: Atualiza a UI (na UI Thread)
         Platform.runLater(() -> {
             importLabelSelecionar.setVisible(true);
             imortarSplitPane.setVisible(true);
             importarOsTableViewOrdem.setVisible(true);
+
+            // 🔹 NOVO: pré-seleciona automaticamente a primeira OS e sua primeira operação
+            if (!todasOrdensServico.isEmpty()) {
+                consultTableOrdemServico.getSelectionModel().selectFirst();
+                OrdemServico primeiraOS = consultTableOrdemServico.getSelectionModel().getSelectedItem();
+
+                if (primeiraOS != null) {
+                    ObservableList<Operacao> operacoesFiltradas = todasOperacoes.filtered(
+                            op -> todosItens.stream()
+                                    .anyMatch(item -> item.getCodOperacao().equals(op.getCodOperacao())
+                                            && item.getCodOs().equals(primeiraOS.getCodOrdemServico()))
+                    );
+                    consultTableOperacao.setItems(operacoesFiltradas);
+
+                    if (!operacoesFiltradas.isEmpty()) {
+                        consultTableOperacao.getSelectionModel().selectFirst();
+                        Operacao primeiraOperacao = consultTableOperacao.getSelectionModel().getSelectedItem();
+
+                        if (primeiraOperacao != null) {
+                            ObservableList<Item> itensFiltrados = todosItens.filtered(
+                                    item -> item.getCodOs().equals(primeiraOS.getCodOrdemServico())
+                                            && item.getCodOperacao().equals(primeiraOperacao.getCodOperacao())
+                            );
+                            consultTableItem.setItems(itensFiltrados);
+                            importarOsTableViewItens.setVisible(!itensFiltrados.isEmpty());
+                        }
+                    }
+                }
+            }
         });
-    } // Fim do PreviewTable()
+    }
+// Fim do PreviewTable()
 
 
     /**

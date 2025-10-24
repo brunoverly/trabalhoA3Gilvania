@@ -21,14 +21,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane; // Usado para o GIF de loading
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-
-// Importações padrão do Java
 import java.net.URL;
 import javafx.scene.image.Image;
 import org.mindrot.jbcrypt.BCrypt; // Importa a biblioteca para criptografia (verificar PIN)
-
 import java.sql.*;
 import java.util.ResourceBundle;
+
 
 /**
  * Controlador JavaFX para a tela "login.fxml".
@@ -97,6 +95,11 @@ public class LoginController implements Initializable {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             loginButtonFechar.setCursor(Cursor.DEFAULT);
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
         });
 
     } // Fim do initialize()

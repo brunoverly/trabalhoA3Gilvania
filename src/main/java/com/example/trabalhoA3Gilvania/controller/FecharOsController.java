@@ -46,6 +46,8 @@ public class FecharOsController implements Initializable {
     @FXML private TableColumn<Operacao, String> constulTabelCodOperacao;
     @FXML private TableColumn<Operacao, String> consultTableOperacaoStatus;
     @FXML private TableColumn<Item, String> consultTableCodItem;
+    @FXML private TableColumn<Item, String> consultTableItemSolicitado;
+    @FXML private TableColumn<Item, String> consultTableItemEntregue;
     @FXML private TableColumn<Item, String> consultTableDescricaoItem;
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
@@ -92,74 +94,113 @@ public class FecharOsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Carrega a imagem "close.png" para o botão de voltar
+        // Carrega imagem do botão voltar
         URL fecharOsVoltarURL = getClass().getResource("/imagens/close.png");
         Image fecharOsVoltarImage = new Image(fecharOsVoltarURL.toExternalForm());
         fecharOsVoltar.setImage(fecharOsVoltarImage);
 
-        // O código comentado abaixo foi mantido como estava
-        // URL fechar2ImageURL = getClass().getResource("/imagens/close.png");
-        //Image fechar2Image = new Image(fechar2ImageURL.toExternalForm());
-        //fechar2.setImage(fechar2Image);
-
-
-        // --- Configuração das Colunas das Tabelas ---
-        // Vincula as colunas da Tabela de Operações às propriedades da classe 'Operacao'
+        // --- Configuração das colunas ---
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
-        consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        //consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // Vincula as colunas da Tabela de Itens às propriedades da classe 'Item'
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
         consultTableRecebidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdRecebida"));
         consultTableItemStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
+        consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
+
+        constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
+        consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableItemEntregue.setStyle("-fx-alignment: CENTER;");
+        consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
 
 
-        // --- Configuração das Tabelas ---
-        // Vincula as listas de dados (ObservableLists) às suas respectivas TableViews
+        // --- Listas ---
         consultTableOperacao.setItems(todasOperacoes);
-        consultTableItem.setItems(todosItens);
 
-        // Desabilita a seleção nas tabelas. Elas são apenas para visualização.
-        consultTableOperacao.setSelectionModel(null);
-        consultTableItem.setSelectionModel(null);
+        // Lista filtrada de itens (atualiza quando muda a seleção da operação)
+        ObservableList<Item> itensFiltrados = FXCollections.observableArrayList();
+        consultTableItem.setItems(itensFiltrados);
 
-        // Define um texto padrão para tabelas vazias (aqui, vazio)
+        // Listener: filtra os itens conforme a operação selecionada
+        consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldOp, novaOp) -> {
+            itensFiltrados.clear();
+            if (novaOp != null) {
+                // Mostra apenas os itens cuja operação corresponde à selecionada
+                for (Item item : todosItens) {
+                    if (item.getIdOperacao() == novaOp.getId()) {
+                        itensFiltrados.add(item);
+                    }
+                }
+            }
+        });
+
+        consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldOp, novaOp) -> {
+            itensFiltrados.clear();
+            if (novaOp != null) {
+                // Mostra apenas os itens cuja operação corresponde à selecionada
+                for (Item item : todosItens) {
+                    if (item.getIdOperacao() == novaOp.getId()) {
+                        itensFiltrados.add(item);
+                    }
+                }
+            }
+        });
+
+// 🔹 Seleciona automaticamente a primeira operação após carregar dados
+        consultTableOperacao.getItems().addListener((javafx.collections.ListChangeListener<Operacao>) change -> {
+            if (!consultTableOperacao.getItems().isEmpty()) {
+                consultTableOperacao.getSelectionModel().selectFirst();
+                Operacao primeira = consultTableOperacao.getSelectionModel().getSelectedItem();
+                if (primeira != null) {
+                    itensFiltrados.clear();
+                    for (Item item : todosItens) {
+                        if (item.getIdOperacao() == primeira.getId()) {
+                            itensFiltrados.add(item);
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+        // Configuração visual
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
-        // --- Configuração do Callback de Fechamento ---
-        // Usa Platform.runLater para garantir que a cena e a janela já existam
+        // Callback de fechamento
         Platform.runLater(() -> {
             Stage stage = (Stage) fecharAnchorPane.getScene().getWindow();
-
-            // Adiciona um listener para QUANDO a janela for FECHADA
             stage.setOnHidden(event -> {
                 if (listener != null) {
-                    // 🔔 chama o método da interface (o "callback")
-                    listener.aoFecharJanela(); // Isso avisa a tela anterior para se atualizar
+                    listener.aoFecharJanela();
                 }
             });
         });
 
-        // --- Efeitos de Hover (mouse) no botão de Voltar ---
+        // Efeitos hover no botão voltar
         ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
-
-        // Ao entrar com o mouse: aumenta o ícone e muda o cursor
         consultVoltarButton.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
             fecharImagem.setScaleY(1.2);
             consultVoltarButton.setCursor(Cursor.HAND);
         });
-
-        // Ao sair com o mouse: retorna ao normal
         consultVoltarButton.setOnMouseExited(e -> {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             consultVoltarButton.setCursor(Cursor.DEFAULT);
         });
-    } // Fim do initialize()
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
+    }
+// Fim do initialize()
 
     /**
      * Ação do botão "Buscar" (lupa).
@@ -299,7 +340,9 @@ public class FecharOsController implements Initializable {
                                 rsItens.getString("descricao"),
                                 rsItens.getInt("qtd_pedido"),
                                 rsItens.getInt("qtd_recebida"),
-                                rsItens.getString("status")
+                                rsItens.getString("status"),
+                                rsItens.getInt("qtd_solicitada"),
+                                rsItens.getInt("qtd_retirada")
                         );
                         listaItens.add(item); // Adiciona na lista temporária
                     }
@@ -338,6 +381,24 @@ public class FecharOsController implements Initializable {
         // Se a busca foi bem-sucedida, exibe o painel de resultados
         consultLabelOsBuscada.setVisible(true);
         fecharAnchorPane.setVisible(true);
+
+        consultLabelOsBuscada.setVisible(true);
+        fecharAnchorPane.setVisible(true);
+
+// 🔹 Garante que a primeira operação será selecionada e itens filtrados
+        if (!todasOperacoes.isEmpty()) {
+            consultTableOperacao.getSelectionModel().selectFirst();
+            Operacao primeira = consultTableOperacao.getSelectionModel().getSelectedItem();
+            if (primeira != null) {
+                ObservableList<Item> itensFiltrados = consultTableItem.getItems();
+                itensFiltrados.clear();
+                for (Item item : todosItens) {
+                    if (item.getIdOperacao() == primeira.getId()) {
+                        itensFiltrados.add(item);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -372,13 +433,15 @@ public class FecharOsController implements Initializable {
         private SimpleIntegerProperty qtdPedido;
         private SimpleIntegerProperty qtdRecebida;
         private SimpleStringProperty status;
+        private SimpleIntegerProperty qtdSolicitado;
+        private SimpleIntegerProperty qtdEntregue;
 
         // Construtor vazio
         public Item() {
         }
 
         // Construtor principal
-        public Item(String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status) {
+        public Item(String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status, int qtdSolicitado, int qtdEntregue) {
             this.codItem = new SimpleStringProperty(codItem);
             this.idOperacao = new SimpleIntegerProperty(idOperacao);
             this.codOperacao = new SimpleStringProperty(codOperacao);
@@ -386,6 +449,8 @@ public class FecharOsController implements Initializable {
             this.qtdPedido = new SimpleIntegerProperty(qtdPedido);
             this.qtdRecebida = new SimpleIntegerProperty(qtdRecebida);
             this.status = new SimpleStringProperty(status);
+            this.qtdSolicitado = new SimpleIntegerProperty(qtdSolicitado);
+            this.qtdEntregue = new SimpleIntegerProperty(qtdEntregue);
         }
 
         // --- Getters (usados pelos PropertyValueFactory) ---
@@ -410,6 +475,12 @@ public class FecharOsController implements Initializable {
         public String getStatus() {
             return status.get();
         }
+        public int getQtdSolicitado() {
+            return qtdSolicitado.get();
+        }
+        public int getQtdEntregue() {
+            return qtdEntregue.get();
+        }
 
         // --- Setters ---
         public void setCodItem(String codItem) {
@@ -433,6 +504,12 @@ public class FecharOsController implements Initializable {
         public void setStatus(String status) {
             this.status.set(status);
         }
+        public void setQtdSolicitado(int qtdSolicitado) {
+            this.qtdSolicitado.set(qtdSolicitado);
+        }
+        public void setQtdEntregue(int qtdEntregue) {
+            this.qtdEntregue.set(qtdEntregue);
+        }
 
         // --- Métodos property() (Necessários para o TableView) ---
         public SimpleStringProperty codItemProperty() {
@@ -449,6 +526,12 @@ public class FecharOsController implements Initializable {
         }
         public SimpleStringProperty statusProperty() {
             return status;
+        }
+        public SimpleIntegerProperty qtdSolicitadoProperty() {
+            return qtdSolicitado;
+        }
+        public SimpleIntegerProperty qtdEntregueProperty() {
+            return qtdEntregue;
         }
     } // Fim da classe Item
 

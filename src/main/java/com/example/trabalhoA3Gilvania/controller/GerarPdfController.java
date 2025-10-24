@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -25,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
+
 import java.io.File;
 import java.net.URL;
 import java.sql.CallableStatement;
@@ -48,6 +50,7 @@ public class GerarPdfController implements Initializable {
     @FXML private Button consultVoltarButton;
     @FXML private Button pdfGerarPdfButton;
     @FXML private ImageView voltarImage;
+    @FXML Label pdfLabel;
 
     @FXML private TableView<Item> pdfTableItem;
     @FXML private TableView<Operacao> pdfTableOperacao;
@@ -87,11 +90,20 @@ public class GerarPdfController implements Initializable {
         pdfColumnRetirado.setCellValueFactory(new PropertyValueFactory<>("qtdRetirada"));
         pdfColumnMatricula.setCellValueFactory(new PropertyValueFactory<>("matriculaSolicitador"));
 
+        pdfColumnOs.setStyle("-fx-alignment: CENTER;");
+        pdfColumnOperacao.setStyle("-fx-alignment: CENTER;");
+        pdfColumnSolicitado.setStyle("-fx-alignment: CENTER;");
+        pdfColumnRetirado.setStyle("-fx-alignment: CENTER;");
+        pdfColumnMatricula.setStyle("-fx-alignment: CENTER;");
+
+
         // --- Inicializa tabelas ---
         pdfTableOs.setItems(listaOs);
         pdfTableOperacao.setItems(listaOperacoes);
         itensFiltrados = new FilteredList<>(listaItens, item -> false);
         pdfTableItem.setItems(itensFiltrados);
+
+
 
         // --- Configura coluna de seleção (declarada no FXML) ---
         if (pdfColumnCheck != null) {
@@ -179,6 +191,43 @@ public class GerarPdfController implements Initializable {
 
         // --- Carrega dados ao abrir ---
         carregarDados();
+
+        Platform.runLater(() -> {
+            // Se existir pelo menos uma OS, seleciona a primeira
+            if (!listaOs.isEmpty()) {
+                pdfTableOs.getSelectionModel().select(0);
+                OrdemServico primeiraOs = listaOs.get(0);
+
+                // Se existir pelo menos uma operação dessa OS, seleciona a primeira
+                FilteredList<Operacao> operacoesFiltradas = new FilteredList<>(listaOperacoes, op ->
+                        op.getCodOs() != null && op.getCodOs().equals(primeiraOs.getCodOs()));
+                pdfTableOperacao.setItems(operacoesFiltradas);
+
+                if (!operacoesFiltradas.isEmpty()) {
+                    pdfTableOperacao.getSelectionModel().select(0);
+                    Operacao primeiraOperacao = operacoesFiltradas.get(0);
+
+                    // Atualiza o filtro dos itens para mostrar apenas os da primeira operação
+                    itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
+                            item.getCodOperacao().equals(primeiraOperacao.getCodOperacao()));
+                    setItensVisible(true);
+                }
+            }
+        });
+
+
+        Platform.runLater(() -> {
+            if (pdfLabel != null) {
+                pdfLabel.requestFocus();
+            }
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
+
+
     }
 
     private void setOperacoesVisible(boolean visible) {

@@ -30,27 +30,28 @@
         </Button>
         <AnchorPane fx:id="consultarOsAnchorPane" layoutX="94.0" layoutY="144.0" prefHeight="310.0" prefWidth="627.0" style="-fx-background-color: white;">
             <children>
-                <SplitPane fx:id="consultarOsSplitPane" dividerPositions="0.2777777777777778" layoutX="-5.0" layoutY="36.0" prefHeight="279.0" prefWidth="745.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="-66.0" AnchorPane.rightAnchor="-52.0" AnchorPane.topAnchor="-5.0">
+                <SplitPane fx:id="consultarOsSplitPane" dividerPositions="0.11305518169582772" layoutX="-5.0" layoutY="36.0" prefHeight="279.0" prefWidth="745.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="-66.0" AnchorPane.rightAnchor="-52.0" AnchorPane.topAnchor="-5.0">
                     <items>
-                        <AnchorPane fx:id="consultarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="210.0" style="-fx-background-color: transparent;" visible="false">
+                        <AnchorPane fx:id="consultarOsTableViewOperacao" minHeight="0.0" minWidth="0.0" prefHeight="284.0" prefWidth="143.0" style="-fx-background-color: transparent;">
                             <children>
-                                <TableView fx:id="consultTableOperacao" layoutX="-115.0" layoutY="-102.0" prefHeight="280.0" prefWidth="204.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableOperacao" layoutX="-115.0" layoutY="-102.0" prefHeight="284.0" prefWidth="81.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="70.0" resizable="false" text="Operação" />
-                                        <TableColumn fx:id="consultTableOperacaoStatus" prefWidth="133.0" resizable="false" text="Status" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" minWidth="8.0" prefWidth="81.0" resizable="false" sortable="false" text="Operação" />
                                     </columns>
                                 </TableView>
                             </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="consultarOsTableViewItens" minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="236.0" style="-fx-background-color: transparent;" visible="false">
+                        <AnchorPane fx:id="consultarOsTableViewItens" minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="236.0" style="-fx-background-color: transparent;">
                             <children>
                                 <TableView fx:id="consultTableItem" layoutX="-11.0" layoutY="-107.0" prefHeight="277.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="88.0" resizable="false" text="Código do item" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="132.0" resizable="false" text="Descrição" />
-                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="66.0" resizable="false" text="Pedido" />
-                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="73.0" resizable="false" text="Recebido" />
-                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="198.0" resizable="false" text="Status" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="89.0" resizable="false" sortable="false" text="Cod. Item" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="163.0" resizable="false" sortable="false" text="Descrição" />
+                                        <TableColumn fx:id="consultTablePedidoItem" minWidth="0.0" prefWidth="61.0" resizable="false" sortable="false" text="Pedido" />
+                                        <TableColumn fx:id="consultTableRecebidoItem" prefWidth="68.0" resizable="false" sortable="false" text="Receb." />
+                              <TableColumn fx:id="consultTableItemSolicitado" prefWidth="59.0" resizable="false" sortable="false" text="Solic." />
+                              <TableColumn fx:id="consultTableItemEntregue" prefWidth="65.0" resizable="false" sortable="false" text="Entreg." />
+                                        <TableColumn fx:id="consultTableItemStatus" prefWidth="150.0" resizable="false" sortable="false" text="Status" />
                                     </columns>
                                 </TableView>
                             </children>

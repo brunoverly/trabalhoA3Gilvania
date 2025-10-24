@@ -7,12 +7,13 @@ import com.example.trabalhoA3Gilvania.OnFecharJanela;
 import com.example.trabalhoA3Gilvania.Sessao;
 
 // Importações de classes do JavaFX
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,8 +31,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -241,6 +240,14 @@ public class InicioController implements Initializable {
         inicioTableDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao")); // <-- CORRIGIDO
         inicioTableUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
         inicioTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
+
+        inicioTableData.setStyle("-fx-alignment: CENTER;");
+        inicioTableOs.setStyle("-fx-alignment: CENTER;");
+        inicioTableUsuario.setStyle("-fx-alignment: CENTER;");
+
+
+
+
         inicioTableView.setItems(listaAtualizacoes);
         inicioTableView.setSelectionModel(null);
 
@@ -290,7 +297,10 @@ public class InicioController implements Initializable {
         });
 
         // --- 7. Configuração da Animação do Menu (ATUALIZADO) ---
-
+        menuButtonVBox.setAlignment(Pos.TOP_LEFT);
+        VBox.setVgrow(menuButtonVBox, Priority.NEVER);
+        menuButtonVBox.setFillWidth(true);
+        menuButtonVBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
         // Adiciona TODOS os botões do menu à lista para tratamento unificado
         botoesDoMenu = Arrays.asList(
                 menuMenu,
@@ -319,6 +329,12 @@ public class InicioController implements Initializable {
         clip.setArcHeight(42.0); // Raio (21 * 2)
         // ** ATUALIZAÇÃO: O clipe agora é aplicado DIRETAMENTE no painel de fundo
         menuBackgroundPane.setClip(clip);
+
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) inicioButtonFecharJanela.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
 
     } // Fim do initialize()
     /**

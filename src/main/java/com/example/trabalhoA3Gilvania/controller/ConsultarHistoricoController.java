@@ -5,6 +5,7 @@ package com.example.trabalhoA3Gilvania.controller;
 import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
 import com.example.trabalhoA3Gilvania.Sessao;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -116,7 +117,20 @@ public class ConsultarHistoricoController implements Initializable {
         historicoTableColumnQtdItem.setCellValueFactory(new PropertyValueFactory<>("qtdItem"));
         historicoTableColumnDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricaoItem"));
         historicoTableColumnMatricula.setCellValueFactory(new PropertyValueFactory<>("entregue_por"));
+
+        historicoTableColumnOs.setStyle("-fx-alignment: CENTER;");
+        historicoTableColumnOperacao.setStyle("-fx-alignment: CENTER;");
+        historicoTableColumnQtdItem.setStyle("-fx-alignment: CENTER;");
+        historicoTableColumnMatricula.setStyle("-fx-alignment: CENTER;");
+
+
+
         historicoTableView.setItems(listabuscada);
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) historicoCloseButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
     }
 
     @FXML

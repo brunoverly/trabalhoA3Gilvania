@@ -48,7 +48,7 @@
                             <children>
                                 <TableView fx:id="consultTableOrdemServico" prefHeight="277.0" prefWidth="188.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="99.0" resizable="false" text="Ordem" />
+                                        <TableColumn fx:id="constulTabelCodOrdemServico" prefWidth="99.0" resizable="false" sortable="false" text="Ordem" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -57,18 +57,18 @@
                             <children>
                                 <TableView fx:id="consultTableOperacao" layoutY="6.0" prefHeight="292.0" prefWidth="106.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="constulTabelCodOperacao" prefWidth="97.0" resizable="false" text="Operação" />
+                                        <TableColumn fx:id="constulTabelCodOperacao" prefWidth="97.0" resizable="false" sortable="false" text="Operação" />
                                     </columns>
                                 </TableView>
                             </children>
                         </AnchorPane>
                         <AnchorPane fx:id="importarOsTableViewItens" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="460.0" style="-fx-background-color: white;" visible="false">
                             <children>
-                                <TableView fx:id="consultTableItem" prefHeight="277.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="consultTableItem" editable="true" prefHeight="277.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="consultTableCodItem" prefWidth="119.0" resizable="false" text="Cod. Item" />
-                                        <TableColumn fx:id="consultTablePedidoItem" prefWidth="84.66668701171875" resizable="false" text="Pedido" />
-                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="224.33331298828125" resizable="false" text="Descrição" />
+                                        <TableColumn fx:id="consultTableCodItem" prefWidth="119.0" resizable="false" sortable="false" text="Cod. Item" />
+                                        <TableColumn fx:id="consultTablePedidoItem" prefWidth="84.66668701171875" resizable="false" sortable="false" text="Pedido" />
+                                        <TableColumn fx:id="consultTableDescricaoItem" prefWidth="224.33331298828125" resizable="false" sortable="false" text="Descrição" />
                                     </columns>
                                 </TableView>
                             </children>

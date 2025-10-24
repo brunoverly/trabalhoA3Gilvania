@@ -5,6 +5,7 @@ import com.example.trabalhoA3Gilvania.DataBaseConection;
 import com.example.trabalhoA3Gilvania.FormsUtil;
 
 // Importações de classes do JavaFX
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -43,6 +44,8 @@ public class ConsultarOsController implements Initializable {
     @FXML private TableColumn<Operacao, String> constulTabelCodOperacao;
     @FXML private TableColumn<Operacao, String> consultTableOperacaoStatus;
     @FXML private TableColumn<Item, String> consultTableCodItem;
+    @FXML private TableColumn<Item, String> consultTableItemSolicitado;
+    @FXML private TableColumn<Item, String> consultTableItemEntregue;
     @FXML private TableColumn<Item, String> consultTableDescricaoItem;
     @FXML private TableColumn<Item, String> consultTablePedidoItem;
     @FXML private TableColumn<Item, String> consultTableRecebidoItem;
@@ -68,6 +71,7 @@ public class ConsultarOsController implements Initializable {
      * Método de inicialização, chamado automaticamente pelo JavaFX
      * após o FXML ser carregado.
      */
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Carrega a imagem "close.png" para o botão de voltar
@@ -75,72 +79,63 @@ public class ConsultarOsController implements Initializable {
         Image consultarBack = new Image(consultarBackImageURL.toExternalForm());
         consultarBackImage.setImage(consultarBack);
 
-        // --- Configuração das Colunas das Tabelas ---
-        // Vincula as colunas da Tabela de Operações às propriedades da classe 'Operacao'
+        // --- Configuração das Colunas ---
         constulTabelCodOperacao.setCellValueFactory(new PropertyValueFactory<>("codOperacao"));
-        consultTableOperacaoStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        // Vincula as colunas da Tabela de Itens às propriedades da classe 'Item'
         consultTableCodItem.setCellValueFactory(new PropertyValueFactory<>("codItem"));
         consultTableDescricaoItem.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         consultTablePedidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdPedido"));
         consultTableRecebidoItem.setCellValueFactory(new PropertyValueFactory<>("qtdRecebida"));
         consultTableItemStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        consultTableItemSolicitado.setCellValueFactory(new PropertyValueFactory<>("qtdSolicitado"));
+        consultTableItemEntregue.setCellValueFactory(new PropertyValueFactory<>("qtdEntregue"));
 
-        // Define um texto padrão para tabelas vazias (aqui, vazio)
+        constulTabelCodOperacao.setStyle("-fx-alignment: CENTER;");
+        consultTablePedidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableRecebidoItem.setStyle("-fx-alignment: CENTER;");
+        consultTableItemSolicitado.setStyle("-fx-alignment: CENTER;");
+        consultTableItemEntregue.setStyle("-fx-alignment: CENTER;");
+
+
         consultTableOperacao.setPlaceholder(new Label(""));
         consultTableItem.setPlaceholder(new Label(""));
 
-        // Vincula a lista de operações à Tabela de Operações
         consultTableOperacao.setItems(todasOperacoes);
 
-
-        // --- Configuração das Listas e Filtros ---
-
-        // Inicializa a lista de itens filtrados (baseada na 'todosItens'),
-        // começando com um filtro que não mostra nada (item -> false)
+        // --- Configuração de Filtro dos Itens ---
         itensFiltrados = new FilteredList<>(todosItens, item -> false);
-        // Vincula a lista filtrada à Tabela de Itens
         consultTableItem.setItems(itensFiltrados);
 
-        // --- Listener de Seleção (Tabela de Operações) ---
-        // Este é o "coração" da tela: filtra a tabela de itens
-        // com base na operação selecionada na tabela de operações.
+        // --- Listener: seleção de operação ---
         consultTableOperacao.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Se uma nova operação for selecionada:
-                // 1. Torna a tabela de itens visível
                 consultarOsTableViewItens.setVisible(true);
-
-                // 2. Define o filtro (predicado) da 'itensFiltrados'
                 String codOperacaoSelecionada = newSelection.getCodOperacao().trim();
                 itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
                         item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
-
             } else {
-                // Se nenhuma operação for selecionada (ex: limpar seleção),
-                // o filtro esconde todos os itens.
                 itensFiltrados.setPredicate(item -> false);
             }
         });
 
-        // --- Efeitos de Hover (mouse) no botão de Voltar ---
+        // --- Efeito visual no botão voltar ---
         ImageView fecharImagem = (ImageView) consultVoltarButton.getGraphic();
-
-        // Ao entrar com o mouse: aumenta o ícone e muda o cursor
         consultVoltarButton.setOnMouseEntered(e -> {
             fecharImagem.setScaleX(1.2);
             fecharImagem.setScaleY(1.2);
             consultVoltarButton.setCursor(Cursor.HAND);
         });
-
-        // Ao sair com o mouse: retorna ao normal
         consultVoltarButton.setOnMouseExited(e -> {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             consultVoltarButton.setCursor(Cursor.DEFAULT);
         });
-    } // Fim do initialize()
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) consultVoltarButton.getScene().getWindow();
+            FormsUtil.setPrimaryStage(stage);
+        });
+    }
+// Fim do initialize()
 
 
     /**
@@ -171,47 +166,38 @@ public class ConsultarOsController implements Initializable {
      * Chama a procedure 'consultar_os' que retorna TRÊS ResultSets.
      */
     public void BuscarDB() {
-        // Esconde a tabela de itens no início de cada nova busca
         consultarOsTableViewItens.setVisible(false);
 
-        // Listas temporárias para armazenar os resultados da busca
         ObservableList<Item> listaItens = FXCollections.observableArrayList();
         ObservableList<Operacao> listaOperacao = FXCollections.observableArrayList();
 
-        // Pega o número da OS do campo de texto
         String numeroOs = consultNumeroOs.getText();
 
-        // Try-with-resources para garantir que a conexão e o statement sejam fechados
         try (Connection connectDB = new DataBaseConection().getConection();
              CallableStatement cs = connectDB.prepareCall("{ CALL projeto_java_a3.consultar_os(?) }")) {
 
-            cs.setString(1, numeroOs); // Define o parâmetro de entrada (IN) da procedure
-            boolean hasResults = cs.execute(); // Executa a procedure
+            cs.setString(1, numeroOs);
+            boolean hasResults = cs.execute();
 
-            // --- 1️⃣ Leitura do Primeiro ResultSet (COUNT) ---
-            // A procedure primeiro retorna um 'SELECT COUNT(*)' para verificar se a OS existe.
+            // 1️⃣ Verifica se OS existe
             if (hasResults) {
                 try (ResultSet rsCount = cs.getResultSet()) {
                     if (rsCount.next()) {
                         int total = rsCount.getInt("total");
                         if (total == 0) {
-                            // Se a contagem for 0, a OS não foi encontrada
                             alerta.criarAlerta(Alert.AlertType.WARNING, "Aviso", "OS não encontrada").showAndWait();
-                            // Esconde os painéis de resultado
                             consultarOsSplitPane.setVisible(false);
                             consultarOsTableViewOperacao.setVisible(false);
                             consultarOsTableViewItens.setVisible(false);
-                            return; // Interrompe a execução do método
+                            return;
                         }
                     }
                 }
             }
 
-            // --- 2️⃣ Leitura do Segundo ResultSet (Itens) ---
-            // Avança para o próximo resultado (SELECT * FROM itens...)
+            // 2️⃣ Carrega Itens
             if (cs.getMoreResults()) {
                 try (ResultSet rsItens = cs.getResultSet()) {
-                    // Itera sobre todos os itens retornados
                     while (rsItens.next()) {
                         Item item = new Item(
                                 rsItens.getInt("id"),
@@ -221,32 +207,31 @@ public class ConsultarOsController implements Initializable {
                                 rsItens.getString("descricao"),
                                 rsItens.getInt("qtd_pedido"),
                                 rsItens.getInt("qtd_recebida"),
-                                rsItens.getString("status")
+                                rsItens.getString("status"),
+                                rsItens.getInt("qtd_solicitada"),
+                                rsItens.getInt("qtd_retirada")
                         );
-                        listaItens.add(item); // Adiciona na lista temporária
+                        listaItens.add(item);
                     }
                 }
-                // Atualiza a lista principal (que é a fonte do FilteredList)
                 todosItens.clear();
                 todosItens.addAll(listaItens);
             }
 
-            // --- 3️⃣ Leitura do Terceiro ResultSet (Operações) ---
-            // Avança para o último resultado (SELECT ... FROM operacoes GROUP BY...)
+            // 3️⃣ Carrega Operações
             if (cs.getMoreResults()) {
                 try (ResultSet rsOperacoes = cs.getResultSet()) {
-                    // Itera sobre todas as operações retornadas
                     while (rsOperacoes.next()) {
                         Operacao operacao = new Operacao(
                                 rsOperacoes.getInt("id"),
                                 rsOperacoes.getString("cod_operacao"),
                                 rsOperacoes.getString("status")
                         );
-                        listaOperacao.add(operacao); // Adiciona na lista temporária
+                        listaOperacao.add(operacao);
                     }
                 }
-                // Define a lista de operações na tabela (esta é a 'todasOperacoes')
                 consultTableOperacao.setItems(listaOperacao);
+                todasOperacoes.setAll(listaOperacao);
             }
 
         } catch (SQLException e) {
@@ -254,11 +239,23 @@ public class ConsultarOsController implements Initializable {
             alerta.criarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao buscar OS").showAndWait();
         }
 
-        // Se a busca foi bem-sucedida (não saiu no 'return' do 'total == 0'),
-        // torna os painéis de resultado visíveis.
+        // Exibe os painéis
         consultarOsSplitPane.setVisible(true);
         consultarOsTableViewOperacao.setVisible(true);
-    } // Fim do BuscarDB()
+
+        // 🔹 NOVO: pré-seleciona a primeira operação e carrega seus itens
+        if (!todasOperacoes.isEmpty()) {
+            consultTableOperacao.getSelectionModel().selectFirst();
+            Operacao primeiraOperacao = consultTableOperacao.getSelectionModel().getSelectedItem();
+            if (primeiraOperacao != null) {
+                consultarOsTableViewItens.setVisible(true);
+                String codOperacaoSelecionada = primeiraOperacao.getCodOperacao().trim();
+                itensFiltrados.setPredicate(item -> item.getCodOperacao() != null &&
+                        item.getCodOperacao().trim().equalsIgnoreCase(codOperacaoSelecionada));
+            }
+        }
+    }
+// Fim do BuscarDB()
 
 
     /**
@@ -290,13 +287,14 @@ public class ConsultarOsController implements Initializable {
         private SimpleIntegerProperty qtdPedido;
         private SimpleIntegerProperty qtdRecebida;
         private SimpleStringProperty status;
-
+        private SimpleIntegerProperty qtdSolicitado;
+        private SimpleIntegerProperty qtdEntregue;
         // Construtor vazio (potencialmente não utilizado, mas mantido)
         public Item(String codItem, String operacaoString, String descricaoItem, int qtdItem) {
         }
 
         // Construtor principal usado para popular a lista de itens
-        public Item(int idItem, String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status) {
+        public Item(int idItem, String codItem, int idOperacao, String codOperacao, String descricao, int qtdPedido, int qtdRecebida, String status, int qtdSolicitado, int qtdEntregue) {
             this.idItem = new SimpleIntegerProperty(idItem);
             this.codItem = new SimpleStringProperty(codItem);
             this.idOperacao = new SimpleIntegerProperty(idOperacao);
@@ -305,6 +303,8 @@ public class ConsultarOsController implements Initializable {
             this.qtdPedido = new SimpleIntegerProperty(qtdPedido);
             this.qtdRecebida = new SimpleIntegerProperty(qtdRecebida);
             this.status = new SimpleStringProperty(status);
+            this.qtdSolicitado = new SimpleIntegerProperty(qtdSolicitado);
+            this.qtdEntregue = new SimpleIntegerProperty(qtdEntregue);
         }
 
         // --- Getters (usados pelos PropertyValueFactory) ---
@@ -332,7 +332,12 @@ public class ConsultarOsController implements Initializable {
         public String getStatus() {
             return status.get();
         }
-
+        public int getQtdSolicitado() {
+            return qtdSolicitado.get();
+        }
+        public int getQtdEntregue() {
+            return qtdEntregue.get();
+        }
         // --- Setters ---
         public void setIdItem(int idItem) {
             this.idItem.set(idItem);
@@ -358,6 +363,12 @@ public class ConsultarOsController implements Initializable {
         public void setStatus(String status) {
             this.status.set(status);
         }
+        public void setQtdSolicitado(int qtdSolicitado) {
+            this.qtdSolicitado.set(qtdSolicitado);
+        }
+        public void setQtdEntregue(int qtdEntregue) {
+            this.qtdEntregue.set(qtdEntregue);
+        }
 
         // --- Métodos Property (Necessários para o TableView) ---
         public SimpleStringProperty codItemProperty() {
@@ -374,6 +385,18 @@ public class ConsultarOsController implements Initializable {
         }
         public SimpleStringProperty statusProperty() {
             return status;
+        }
+        public SimpleStringProperty codOperacaoProperty() {
+            return codOperacao;
+        }
+        public SimpleIntegerProperty idOperacaoProperty() {
+            return idOperacao;
+        }
+        public SimpleIntegerProperty qtdSolicitadoProperty() {
+            return qtdSolicitado;
+        }
+        public SimpleIntegerProperty qtdEntregueProperty() {
+            return qtdEntregue;
         }
     } // Fim da classe Item
 

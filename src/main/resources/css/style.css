@@ -85,15 +85,10 @@
     -fx-text-fill: white;
 }
 
-/* ========================================================== */
-/* ATUALIZAÇÕES FEITAS AQUI                                   */
-/* 1. '#menuPdf:hover' foi MOVIDO para este grupo.            */
-/* 2. Adicionado '-fx-background-color' e '-fx-background-radius' */
-/* ========================================================== */
 #menuAddUser:hover,
 #menuRemoveUser:hover,
 #menuSair:hover,
-#menuPdf:hover, /* <-- CORREÇÃO 1: Movido para cá */
+#menuPdf:hover,
 #menuImportarOs:hover,
 #menuConsultOs:hover,
 #menuCloseOs:hover,
@@ -109,8 +104,6 @@
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-text-fill: white !important;
-
-    /* CORREÇÃO 2: Adiciona fundo suave ao passar o mouse */
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 4;
 }
@@ -190,22 +183,105 @@
     -fx-text-fill: #000;
 }
 
-.table-row-cell:selected {
-    -fx-background-color: #0a64ad !important;
+/* --- O BLOCO .table-cell:focused FOI REMOVIDO DAQUI --- */
+
+
+/* ========================================================== */
+/* == REGRAS DE SELEÇÃO DE TABELA (BASEADO NOS FXMLs) ==      */
+/* ========================================================== */
+
+/* --- 1. ESTILO PADRÃO DE SELEÇÃO (LARANJA) --- */
+/* Aplica-se a todas as tabelas normais */
+#consultTableOperacao .table-row-cell:selected,
+#consultTableItem .table-row-cell:selected,
+#historicoTableView .table-row-cell:selected,
+#pdfTableOs .table-row-cell:selected,
+#pdfTableOperacao .table-row-cell:selected,
+#consultTableOrdemServico .table-row-cell:selected,
+#inicioTableView .table-row-cell:selected,
+#consultTableOperacao .table-row-cell:selected:focused,
+#consultTableItem .table-row-cell:selected:focused,
+#historicoTableView .table-row-cell:selected:focused,
+#pdfTableOs .table-row-cell:selected:focused,
+#pdfTableOperacao .table-row-cell:selected:focused,
+#consultTableOrdemServico .table-row-cell:selected:focused,
+#inicioTableView .table-row-cell:selected:focused {
+    -fx-background-color: #FCB944 !important; /* <-- COR ATUALIZADA */
 }
 
-.table-row-cell:selected .table-cell {
-    -fx-background-color: #0a64ad !important;
-    -fx-text-fill: white !important;
+#consultTableOperacao .table-row-cell:selected .table-cell,
+#consultTableItem .table-row-cell:selected .table-cell,
+#historicoTableView .table-row-cell:selected .table-cell,
+#pdfTableOs .table-row-cell:selected .table-cell,
+#pdfTableOperacao .table-row-cell:selected .table-cell,
+#consultTableOrdemServico .table-row-cell:selected .table-cell,
+#inicioTableView .table-row-cell:selected .table-cell {
+    -fx-background-color: #FCB944 !important; /* <-- COR ATUALIZADA */
+    -fx-text-fill: #14213d !important; /* <-- TEXTO ATUALIZADO (para escuro) */
 }
 
-.table-row-cell:selected:focused {
-    -fx-background-color: #0a64ad !important;
+
+/* --- 2. EXCEÇÃO: REMOVER SELEÇÃO DA 'pdfTableItem' --- */
+/* Força o texto de volta ao normal em qualquer estado */
+#pdfTableItem .table-row-cell:selected .table-cell,
+#pdfTableItem .table-row-cell:focused .table-cell,
+#pdfTableItem .table-row-cell:selected:focused .table-cell {
+    -fx-text-fill: #14213d !important; /* Sua cor de texto normal */
 }
 
-.table-row-cell:selected:armed {
-    -fx-background-color: #0a64ad !important;
+/* Força a LINHA (row-cell) a ser transparente quando selecionada/focada */
+#pdfTableItem .table-row-cell:selected,
+#pdfTableItem .table-row-cell:focused,
+#pdfTableItem .table-row-cell:selected:focused {
+    -fx-background-color: transparent !important;
+    -fx-focus-color: transparent !important;
+    -fx-box-border: transparent !important;
 }
+
+/* Re-aplica seus estilos :odd e :even às CÉLULAS DENTRO da linha selecionada/focada */
+#pdfTableItem .table-row-cell:odd:selected .table-cell,
+#pdfTableItem .table-row-cell:odd:focused .table-cell {
+    -fx-background-color: #E3E3E3 !important; /* Sua cor :odd */
+}
+
+#pdfTableItem .table-row-cell:even:selected .table-cell,
+#pdfTableItem .table-row-cell:even:focused .table-cell {
+    -fx-background-color: #ffffff !important; /* Sua cor :even */
+}
+
+/* --- 3. EXCEÇÃO ADICIONAL: Resetar CheckBox em pdfTableItem --- */
+
+/* * Regra 3.1: Reseta a "caixa" do checkbox ao seu estado padrão */
+#pdfTableItem .table-row-cell:selected .check-box .box,
+#pdfTableItem .table-row-cell:focused .check-box .box {
+    /* Reseta as cores de fundo para o padrão do tema */
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color !important;
+    /* Reseta os insets para o padrão do tema */
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2 !important;
+    /* Reseta o radius para o padrão do tema */
+    -fx-background-radius: 3, 3, 2, 1 !important;
+    /* Garante que nenhuma borda extra seja aplicada */
+    -fx-border-width: 0 !important;
+    -fx-border-color: transparent !important;
+}
+
+/* * Regra 3.2: Garante que a "marca" (o visto) dentro da caixa não fique branca */
+#pdfTableItem .table-row-cell:selected .check-box:selected .mark,
+#pdfTableItem .table-row-cell:focused .check-box:selected .mark {
+    -fx-background-color: #14213d !important; /* Usa a cor do seu texto normal */
+}
+
+/* * Regra 3.3: Remove o "anel de foco" externo do CheckBox */
+#pdfTableItem .check-box:focused {
+    -fx-focus-color: transparent !important;
+    -fx-faint-focus-color: transparent !important;
+    -fx-effect: null !important; /* Remove qualquer sombra de foco */
+}
+
+/* ========================================================== */
+/* == FIM DAS REGRAS DE SELEÇÃO DE TABELA ==                 */
+/* ========================================================== */
+
 
 .split-pane {
     -fx-background-color: #e5e5e5;
@@ -274,10 +350,6 @@
     -fx-border-radius: 17.5;
 }
 
-/* ========================================================== */
-/* ATUALIZAÇÃO FEITA AQUI                                     */
-/* 1. '#menuPdf:hover' foi REMOVIDO deste grupo.              */
-/* ========================================================== */
 #importSelecionarExcel:hover,
 #importFazerImport:hover,
 #consultBuscarOs:hover,
@@ -287,7 +359,6 @@
 #cadastrarButton:hover,
 #removeConfirmarButton:hover,
 #removeBuscarMatricula:hover,
-/* #menuPdf:hover,  <-- CORREÇÃO 1: Removido daqui */
 #loginButton:hover {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
@@ -304,4 +375,11 @@
     -fx-scale-x: 1.015;
     -fx-scale-y: 1.015;
 }
-loadingPane.setStyle("-fx-background-color: rgba(255,255,255,0.7);");
+
+/* Esta linha estava solta no final do seu CSS, adicionei de volta */
+/* Se "loadingPane" for um ID, deve ser #loadingPane */
+/* Se for uma classe, deve ser .loadingPane */
+/* .loadingPane {
+    -fx-background-color: rgba(255,255,255,0.7);
+}
+*/
