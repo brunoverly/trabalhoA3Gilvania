@@ -24,4 +24,6 @@ module com.example.trabalhoA3Gilvania {
     opens com.example.trabalhoA3Gilvania.screen to javafx.fxml;
     exports com.example.trabalhoA3Gilvania.controller;
     opens com.example.trabalhoA3Gilvania.controller to javafx.fxml;
+    exports com.example.trabalhoA3Gilvania.Utils;
+    opens com.example.trabalhoA3Gilvania.Utils to javafx.fxml;
 }

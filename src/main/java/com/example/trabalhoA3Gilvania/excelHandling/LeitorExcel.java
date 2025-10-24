@@ -1,9 +1,9 @@
 package com.example.trabalhoA3Gilvania.excelHandling;
 
 // Importações de classes do projeto
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.Sessao;
 
 // Importações de classes do JavaFX
 import javafx.scene.control.Alert;

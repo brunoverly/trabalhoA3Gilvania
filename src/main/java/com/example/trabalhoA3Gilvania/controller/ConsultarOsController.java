@@ -1,8 +1,8 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
 
 // Importações de classes do JavaFX
 import javafx.application.Platform;

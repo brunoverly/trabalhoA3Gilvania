@@ -1,10 +1,10 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.OnFecharJanela;
-import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.OnFecharJanela;
+import com.example.trabalhoA3Gilvania.Utils.Sessao;
 
 // Importações de classes do JavaFX
 import javafx.application.Platform;
@@ -220,12 +220,6 @@ public class InicioController implements Initializable {
         URL inicio10URL = getClass().getResource("/imagens/menu21.png");
         Image inicio10Image = new Image(inicio10URL.toExternalForm());
         inicio10.setImage(inicio10Image);
-        URL inicioImagemMaximizarURL = getClass().getResource("/imagens/maximize.png");
-        Image inicioImagemMaximizarImage = new Image(inicioImagemMaximizarURL.toExternalForm());
-        inicioImagemMaximizar.setImage(inicioImagemMaximizarImage);
-        URL inicioImagemMinimizarURL = getClass().getResource("/imagens/minimize.png");
-        Image inicioImagemMinimizarImage = new Image(inicioImagemMinimizarURL.toExternalForm());
-        inicioImagemMinimizar.setImage(inicioImagemMinimizarImage);
         URL inicio15URL = getClass().getResource("/imagens/pdf.png");
         Image inicio15Image = new Image(inicio15URL.toExternalForm());
         inicio15.setImage(inicio15Image);
@@ -272,28 +266,6 @@ public class InicioController implements Initializable {
             fecharImagem.setScaleX(1.0);
             fecharImagem.setScaleY(1.0);
             inicioButtonFecharJanela.setCursor(Cursor.DEFAULT);
-        });
-        ImageView maximizarImagem = (ImageView) inicioButtonMaximizar.getGraphic();
-        inicioButtonMaximizar.setOnMouseEntered(e -> {
-            maximizarImagem.setScaleX(1.2);
-            maximizarImagem.setScaleY(1.2);
-            inicioButtonMaximizar.setCursor(Cursor.HAND);
-        });
-        inicioButtonMaximizar.setOnMouseExited(e -> {
-            maximizarImagem.setScaleX(1.0);
-            maximizarImagem.setScaleY(1.0);
-            inicioButtonMaximizar.setCursor(Cursor.DEFAULT);
-        });
-        ImageView minimizarImagem = (ImageView) inicioButtonMinimizar.getGraphic();
-        inicioButtonMinimizar.setOnMouseEntered(e -> {
-            minimizarImagem.setScaleX(1.2);
-            minimizarImagem.setScaleY(1.2);
-            inicioButtonMinimizar.setCursor(Cursor.HAND);
-        });
-        minimizarImagem.setOnMouseExited(e -> {
-            minimizarImagem.setScaleX(1.0);
-            minimizarImagem.setScaleY(1.0);
-            minimizarImagem.setCursor(Cursor.DEFAULT);
         });
 
         // --- 7. Configuração da Animação do Menu (ATUALIZADO) ---

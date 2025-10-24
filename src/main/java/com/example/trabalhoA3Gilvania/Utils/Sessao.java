@@ -1,4 +1,4 @@
-package com.example.trabalhoA3Gilvania;
+package com.example.trabalhoA3Gilvania.Utils;
 
 public class Sessao {
     private static String nome;

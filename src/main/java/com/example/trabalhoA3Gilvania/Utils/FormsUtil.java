@@ -1,4 +1,4 @@
-package com.example.trabalhoA3Gilvania;
+package com.example.trabalhoA3Gilvania.Utils;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;

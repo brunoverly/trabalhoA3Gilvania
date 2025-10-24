@@ -1,28 +1,32 @@
 package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.screen.InicioScreen;
-import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.Sessao;
 
 // Importações de classes do JavaFX
 import javafx.application.Platform;
 import javafx.concurrent.Task; // Usado para tarefas em background (não travar a UI)
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label; // (Import não utilizado, mas mantido conforme solicitado)
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane; // Usado para o GIF de loading
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.net.URL;
 import javafx.scene.image.Image;
+import javafx.stage.StageStyle;
 import org.mindrot.jbcrypt.BCrypt; // Importa a biblioteca para criptografia (verificar PIN)
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -41,6 +45,7 @@ public class LoginController implements Initializable {
     @FXML private ImageView login1;
     @FXML private ImageView login2;
     @FXML private ImageView login3;
+    @FXML private Stage janelaInicio;
     @FXML private TextField enterUserNameField; // Campo da Matrícula
     @FXML private TextField enterPasswordField; // Campo do PIN (Senha)
     @FXML private Button loginButtonFechar;
@@ -48,6 +53,8 @@ public class LoginController implements Initializable {
     @FXML private AnchorPane rootPane; // Painel raiz (usado para o GIF de loading)
 
     // Instância da classe utilitária para exibir pop-ups de alerta
+    private double xOffset = 0;
+    private double yOffset = 0;
     FormsUtil alerta = new FormsUtil();
 
     /**
@@ -247,9 +254,64 @@ public class LoginController implements Initializable {
      * Método estático para iniciar e exibir a tela principal (Dashboard).
      * Chamado após o login ser bem-sucedido.
      */
-    public static void TelaInicial() {
-        InicioScreen telaInicial = new InicioScreen(); // Instancia a classe da tela
-        Stage stage = new Stage(); // Cria uma nova janela (Stage)
-        telaInicial.start(stage); // Inicia a tela (chama o método start() da classe InicioScreen)
+    public void TelaInicial() {
+            try {
+
+                janelaInicio = new Stage();
+                URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/inicio.fxml");
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
+
+                // 3. Carrega fontes personalizadas
+                String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
+                for (String fontFile : fonts) {
+                    Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
+                }
+
+                // 6. Configura a cena e o Stage para serem transparentes (sem borda)
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
+                janelaInicio.initStyle(StageStyle.TRANSPARENT);
+                janelaInicio.setScene(scene);
+
+                // 7. Adiciona ícone
+                URL logoUrl = getClass().getResource("/imagens/logo.png");
+                janelaInicio.getIcons().add(new Image(logoUrl.toExternalForm()));
+
+                // 8. --- Bloco para arrastar a janela transparente ---
+                root.setOnMousePressed(event2 -> {
+                    xOffset = event2.getSceneX();
+                    yOffset = event2.getSceneY();
+                });
+                root.setOnMouseDragged(event2 -> {
+                    janelaInicio.setX(event2.getScreenX() - xOffset);
+                    janelaInicio.setY(event2.getScreenY() - yOffset);
+                });
+                // -------------------------------------------------
+
+                // 9. Carrega o CSS
+                URL cssUrl = getClass().getResource("/css/style.css");
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+
+                // 10. Configura e mostra a janela
+                janelaInicio.setTitle("Importar ordem de serviço");
+                janelaInicio.setResizable(false);
+                janelaInicio.show();
+
+                // (As linhas abaixo parecem repetidas, mas não causam erro)
+                janelaInicio.setTitle("Importar ordem de serviço");
+                janelaInicio.setResizable(false);
+                janelaInicio.setScene(scene);
+
+                // 11. Limpa a referência da janela quando ela for fechada
+                janelaInicio.setOnHidden(e -> janelaInicio = null);
+
+                janelaInicio.show();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
-} // Fim da classe LoginController
+// Fim da classe LoginController

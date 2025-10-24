@@ -2,9 +2,8 @@ package com.example.trabalhoA3Gilvania.controller;
 
 // Importações de classes do projeto
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -12,7 +11,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

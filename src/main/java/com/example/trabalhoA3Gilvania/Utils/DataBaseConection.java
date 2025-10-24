@@ -1,4 +1,4 @@
-package com.example.trabalhoA3Gilvania;
+package com.example.trabalhoA3Gilvania.Utils;
 import java.sql.*;
 
 public class DataBaseConection {

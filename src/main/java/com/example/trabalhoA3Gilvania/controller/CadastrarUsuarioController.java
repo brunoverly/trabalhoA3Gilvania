@@ -1,7 +1,7 @@
 package com.example.trabalhoA3Gilvania.controller;
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Cursor;

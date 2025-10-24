@@ -459,4 +459,6 @@
     -fx-text-fill: #FCB944; /* laranja */
     -fx-font-weight: bold;
 }
-
+#rootPane {
+    -fx-background-color: transparent; /* ou rgba(0,0,0,0) */
+}

@@ -1,9 +1,9 @@
 package com.example.trabalhoA3Gilvania.controller;
 
-import com.example.trabalhoA3Gilvania.DataBaseConection;
-import com.example.trabalhoA3Gilvania.FormsUtil;
-import com.example.trabalhoA3Gilvania.PdfRetiradaItens;
-import com.example.trabalhoA3Gilvania.Sessao;
+import com.example.trabalhoA3Gilvania.Utils.DataBaseConection;
+import com.example.trabalhoA3Gilvania.Utils.FormsUtil;
+import com.example.trabalhoA3Gilvania.Utils.PdfRetiradaItens;
+import com.example.trabalhoA3Gilvania.Utils.Sessao;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -285,8 +285,8 @@ public class GerarPdfController implements Initializable {
         String matriculaTexto = String.valueOf(matricula);
 
         // 3) Mapear para PdfRetiradaItens.Item
-        List<com.example.trabalhoA3Gilvania.PdfRetiradaItens.Item> itensParaPdf = itensMarcados.stream()
-                .map(i -> new com.example.trabalhoA3Gilvania.PdfRetiradaItens.Item(
+        List<PdfRetiradaItens.Item> itensParaPdf = itensMarcados.stream()
+                .map(i -> new PdfRetiradaItens.Item(
                         i.getCodOs(),
                         i.getCodOperacao(),
                         i.getCodItem(),
@@ -331,7 +331,7 @@ public class GerarPdfController implements Initializable {
                 String caminhoPdf = pastaRetiradas.getAbsolutePath() + File.separator + nomeArquivo;
 
                 // --- Gerar PDF ---
-                com.example.trabalhoA3Gilvania.PdfRetiradaItens.gerarPdf(
+                PdfRetiradaItens.gerarPdf(
                         caminhoPdf,
                         String.valueOf(numeroRegistroPdf),
                         dataPorExtenso,
