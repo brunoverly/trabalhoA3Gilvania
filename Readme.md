@@ -56,8 +56,7 @@ lombok – anotações pontuais (@Cleanup)
 ### 🚀 Como Executar o Projeto
 
 ### 1️⃣ Clonar Repositório
-git clone [URL_DO_SEU_REPOSITORIO_AQUI]
-cd [NOME_DA_PASTA_DO_PROJETO]
+git clone https://github.com/BrunoVerly/trabalhoA3Gilvania.git
 
 ### 2️⃣ Configuração do Banco de Dados
 
@@ -73,9 +72,16 @@ Primeiro tables.sql (estrutura de tabelas)
 Depois procedures.sql (Stored Procedures e usuários de teste)
 
 ### 3️⃣ Configuração da Conexão
+Abra DataBaseConection.java em 
+```
+src/
+└── main/
+    └── java/
+        └── com/example/trabalhoA3Gilvania/
+            ├── DataBaseConection.java
+```
 
-Abra src/main/java/com/example/trabalhoA3Gilvania/Utils/DataBaseConection.java.
-Ajuste databaseUser, databasePassword e a URL (jdbc:mysql://localhost/projeto_java_a3).
+Ajuste databaseUser, databasePassword e a URL (jdbc:mysql://localhost/projeto_java_a3) para o seu banco de dados.
 
 ### 4️⃣ Executar via IDE
 
@@ -91,17 +97,18 @@ src/
 ```
 
 ### 👥 Usuários de Teste
-
-Nome	Perfil	Matrícula
-Bruno Verly Santos	Administrador	47219
-Carla Mendes Oliveira	Aprovisionador	58302
-Lucas Silva Ferreira	Aprovisionador	69047
-Rafael Souza Lima	Mecânico	25138
-Mariana Costa Alves	Mecânico	83714
-Thiago Lima Rocha	Mecânico	41625
+```
+| Nome                  | Perfil        | Matrícula |
+|-----------------------|---------------|-----------|
+| Bruno Verly Santos    | Administrador | 47219     |
+| Carla Mendes Oliveira | Aprovisionador| 58302     |
+| Lucas Silva Ferreira  | Aprovisionador| 69047     |
+| Rafael Souza Lima     | Mecânico      | 25138     |
+| Mariana Costa Alves   | Mecânico      | 83714     |
+| Thiago Lima Rocha     | Mecânico      | 41625     |
 
 PIN para todos: 123456
-
+```
 ### 📝 Testando a Importação de OS
 
 Logue como Administrador ou Aprovisionador.
