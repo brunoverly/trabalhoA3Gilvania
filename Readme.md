@@ -3,7 +3,7 @@
 ### 📖 Descrição
 
 Este é um projeto de conclusão da Avaliação A3 para o curso de Modelagem de Software, baseado em um estudo de caso real.
-O S-GOS (Sistema de Gerenciamento de Ordens de Serviço) é uma aplicação desktop (JavaFX) desenvolvida para gerenciar o fluxo de ordens de serviço (OS) e controlar a entrada e movimentação de peças. O sistema rastreia os itens desde sua entrada na empresa (importação e recebimento no estoque) até a chegada na oficina (solicitação e retirada pelo mecânico).
+O OficinaPro é uma aplicação desktop (JavaFX) desenvolvida para gerenciar o fluxo de ordens de serviço (OS) e controlar a entrada e movimentação de peças. O sistema rastreia os itens desde sua entrada na empresa (importação e recebimento no estoque) até a chegada na oficina (solicitação e retirada pelo mecânico).
 
 ### ✨ Funcionalidades Principais
 
@@ -81,7 +81,14 @@ Ajuste databaseUser, databasePassword e a URL (jdbc:mysql://localhost/projeto_ja
 
 Abra o projeto como Maven/Gradle no IntelliJ ou Eclipse.
 Aguarde download das dependências.
-Execute a classe Main.java ou LoginApplication.java.
+Execute a classe Main.java em
+```
+src/
+└── main/
+    └── java/
+        └── com/example/trabalhoA3Gilvania/
+           ├── Main.java
+```
 
 ### 👥 Usuários de Teste
 
