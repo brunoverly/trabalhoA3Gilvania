@@ -97,6 +97,7 @@ src/
 ```
 
 ### 👥 Usuários de Teste
+Usuários de teste disponíveis no banco cadastrado para testes:
 ```
 | Nome                  | Perfil        | Matrícula |
 |-----------------------|---------------|-----------|
@@ -112,14 +113,22 @@ PIN para todos: 123456
 ### 📝 Testando a Importação de OS
 
 Logue como Administrador ou Aprovisionador.
-Vá em Importar OS no menu e use o arquivo IWBK GERAL.xlsx (src/main/resources/).
+Vá em Importar OS no menu e use o arquivo IWBK GERAL.xlsx disponível em:
+```
+src/
+└── main/
+    └── com/example/trabalhoA3Gilvania/
+        └── resources/
+            └── IWBK GERAL.xlsx
+```
 
 ### 🗂️ Estrutura do Projeto
 ```
 com.example.trabalhoA3Gilvania/
+├── Main.java          # Classe main do projeto
 ├── controller/        # Controladores JavaFX
 │   ├── LoginController.java
-│   ├── InicioController.java       (Dashboard)
+│   ├── InicioController.java       # Dashboard
 │   ├── CadastrarUsuarioController.java
 │   ├── ImportarOsController.java
 │   ├── ConsultarOsController.java
@@ -140,9 +149,9 @@ com.example.trabalhoA3Gilvania/
 ├── excelHandling/     # Leitura de Excel
 │   └── LeitorExcel.java
 └── resources/
-    ├── com/example/trabalhoA3Gilvania/ # FXML das telas
-    ├── css/           # Estilo
-    ├── imagens/       # Ícones
-    ├── fonts/         # Fontes personalizadas
-    ├── SQL/           # Scripts: tables.sql, procedures.sql
-    └── IWBK GERAL.xlsx # Modelo para teste de importação
+    ├── com/example/trabalhoA3Gilvania/   # FXML das telas
+    ├── css/                               # Estilo
+    ├── imagens/                           # Ícones
+    ├── fonts/                             # Fontes personalizadas
+    ├── SQL/                               # Scripts: tables.sql, procedures.sql
+    └── IWBK GERAL.xlsx                     # Modelo para teste de importação
