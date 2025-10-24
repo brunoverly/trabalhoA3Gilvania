@@ -54,7 +54,7 @@
                 <Font name="System Bold" size="31.0" />
             </font>
         </Label>
-      <DatePicker fx:id="historicoDataInicio" editable="true" layoutX="94.0" layoutY="106.0" prefHeight="24.0" prefWidth="120.0" />
+      <DatePicker fx:id="historicoDataInicio" layoutX="94.0" layoutY="106.0" prefHeight="24.0" prefWidth="120.0" />
       <Label layoutX="41.0" layoutY="107.0" prefHeight="21.0" prefWidth="47.0" text="Início" textFill="#434a50">
          <font>
             <Font size="17.0" />
@@ -70,6 +70,6 @@
                 <Font name="System Bold" size="10.0" />
             </font>
         </Button>
-      <DatePicker fx:id="historicoDataFim" editable="true" layoutX="315.0" layoutY="107.0" prefHeight="24.0" prefWidth="120.0" />
+      <DatePicker fx:id="historicoDataFim" layoutX="315.0" layoutY="107.0" prefHeight="24.0" prefWidth="120.0" />
     </children>
 </AnchorPane>

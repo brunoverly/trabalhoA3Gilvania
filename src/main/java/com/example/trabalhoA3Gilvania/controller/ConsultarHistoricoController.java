@@ -131,6 +131,11 @@ public class ConsultarHistoricoController implements Initializable {
             Stage stage = (Stage) historicoCloseButton.getScene().getWindow();
             FormsUtil.setPrimaryStage(stage);
         });
+
+        historicoDataInicio.setEditable(false);
+        historicoDataFim.setEditable(false);
+        historicoDataInicio.getEditor().setDisable(true);
+        historicoDataFim.getEditor().setDisable(true);
     }
 
     @FXML
