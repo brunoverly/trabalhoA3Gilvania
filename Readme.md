@@ -1,21 +1,21 @@
-Sistema de Gerenciamento de Ordens de Serviço (OficinaPro)
+# Sistema de Gerenciamento de Ordens de Serviço (OficinaPro)
 
-📖 Descrição
+### 📖 Descrição
 
 Este é um projeto de conclusão da Avaliação A3 para o curso de Modelagem de Software, baseado em um estudo de caso real.
 O S-GOS (Sistema de Gerenciamento de Ordens de Serviço) é uma aplicação desktop (JavaFX) desenvolvida para gerenciar o fluxo de ordens de serviço (OS) e controlar a entrada e movimentação de peças. O sistema rastreia os itens desde sua entrada na empresa (importação e recebimento no estoque) até a chegada na oficina (solicitação e retirada pelo mecânico).
 
-✨ Funcionalidades Principais
+### ✨ Funcionalidades Principais
 
 O sistema é dividido em três perfis de usuário, cada um com permissões específicas:
 
-👨‍💼 Administrador
+👨‍💼 **Administrador**
 
 Acesso total a todas as funcionalidades.
 Gestão de Usuários: cadastrar/remover usuários (Admin, Aprovisionador, Mecânico).
 Todas as permissões do Aprovisionador.
 
-👷 Aprovisionador (Almoxarifado)
+👷 **Aprovisionador (Almoxarifado)**
 
 Importação de OS: cadastrar novas ordens através de arquivos .xlsx (Apache POI).
 
@@ -27,20 +27,21 @@ Gestão de OS: encerrar ordens concluídas.
 Relatórios: gerar PDFs e consultar históricos por período.
 Consulta: visualizar status de qualquer OS e seus itens.
 
-🔧 Mecânico
+🔧 **Mecânico**
 
 Consulta: visualizar ordens e status dos itens (estoque ou pendentes).
 Solicitar Item: criar solicitação formal para itens recebidos no estoque.
 
-⚡ Outras Funcionalidades
+### ⚡ Outras Funcionalidades
 
 Autenticação Segura: login com matrícula e PIN, usando jBCrypt.
 Dashboard Central: estatísticas de OS (Abertas, Em Andamento, Encerradas) e log em tempo real das atividades.
 Rastreabilidade: todo o fluxo do item é registrado no banco de dados.
 
-🛠️ Tecnologias Utilizadas
+### 🛠️ Tecnologias Utilizadas
 
-Linguagem: Java 17+
+Linguagem: Java 17+ 
+
 Interface Gráfica: JavaFX
 Banco de Dados: MySQL (com uso intensivo de Stored Procedures para a lógica de negócios)
 
@@ -52,13 +53,13 @@ com.itextpdf:itext7-core – geração de PDFs
 org.mindrot:jbcrypt – hashing de senhas
 lombok – anotações pontuais (@Cleanup)
 
-🚀 Como Executar o Projeto
+### 🚀 Como Executar o Projeto
 
-1️⃣ Clonar Repositório
+### 1️⃣ Clonar Repositório
 git clone [URL_DO_SEU_REPOSITORIO_AQUI]
 cd [NOME_DA_PASTA_DO_PROJETO]
 
-2️⃣ Configuração do Banco de Dados
+### 2️⃣ Configuração do Banco de Dados
 
 Teste na Nuvem:
 
@@ -71,18 +72,18 @@ Importe os scripts SQL da pasta src/main/resources/SQL/:
 Primeiro tables.sql (estrutura de tabelas)
 Depois procedures.sql (Stored Procedures e usuários de teste)
 
-3️⃣ Configuração da Conexão
+### 3️⃣ Configuração da Conexão
 
 Abra src/main/java/com/example/trabalhoA3Gilvania/Utils/DataBaseConection.java.
 Ajuste databaseUser, databasePassword e a URL (jdbc:mysql://localhost/projeto_java_a3).
 
-4️⃣ Executar via IDE
+### 4️⃣ Executar via IDE
 
 Abra o projeto como Maven/Gradle no IntelliJ ou Eclipse.
 Aguarde download das dependências.
 Execute a classe Main.java ou LoginApplication.java.
 
-👥 Usuários de Teste
+### 👥 Usuários de Teste
 
 Nome	Perfil	Matrícula
 Bruno Verly Santos	Administrador	47219
@@ -94,15 +95,14 @@ Thiago Lima Rocha	Mecânico	41625
 
 PIN para todos: 123456
 
-📝 Testando a Importação de OS
+### 📝 Testando a Importação de OS
 
 Logue como Administrador ou Aprovisionador.
 Vá em Importar OS no menu e use o arquivo IWBK GERAL.xlsx (src/main/resources/).
 
-🗂️ Estrutura do Projeto
+### 🗂️ Estrutura do Projeto
 ```
 com.example.trabalhoA3Gilvania/
-│
 ├── controller/        # Controladores JavaFX
 │   ├── LoginController.java
 │   ├── InicioController.java       (Dashboard)
@@ -117,21 +117,18 @@ com.example.trabalhoA3Gilvania/
 │   ├── GerarPdfController.java
 │   ├── ConsultarHistoricoController.java
 │   └── RemoverUsuarioController.java
-│
 ├── Utils/             # Classes utilitárias
-│   ├── DataBaseConection.java  # Gerencia conexão JDBC
-│   ├── FormsUtil.java          # Helpers (Alertas, GIF de loading)
-│   ├── Sessao.java             # Dados do usuário logado
-│   ├── OnFecharJanela.java     # Interface callback
-│   └── PdfRetiradaItens.java   # Geração de PDF
-│
+│   ├── DataBaseConection.java
+│   ├── FormsUtil.java
+│   ├── Sessao.java
+│   ├── OnFecharJanela.java
+│   └── PdfRetiradaItens.java
 ├── excelHandling/     # Leitura de Excel
 │   └── LeitorExcel.java
-│
 └── resources/
-├── com/example/trabalhoA3Gilvania/ # FXML das telas
-├── css/           # Estilo
-├── imagens/       # Ícones
-├── fonts/         # Fontes personalizadas
-├── SQL/           # Scripts: tables.sql, procedures.sql
-└── IWBK GERAL.xlsx # Modelo para teste de importação
+    ├── com/example/trabalhoA3Gilvania/ # FXML das telas
+    ├── css/           # Estilo
+    ├── imagens/       # Ícones
+    ├── fonts/         # Fontes personalizadas
+    ├── SQL/           # Scripts: tables.sql, procedures.sql
+    └── IWBK GERAL.xlsx # Modelo para teste de importação
