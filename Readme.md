@@ -110,6 +110,16 @@ Usuários de teste disponíveis no banco cadastrado para testes:
 
 PIN para todos: 123456
 ```
+### ⚙️ Fluxo de Funcionamento da Aplicação
+
+Para o funcionamento correto da aplicação, o fluxo da ordem de serviço (OS) e movimentação de itens deve ser respeitado conforme abaixo:
+1. Importar – Carregar os dados dos itens e operação para dentro do sistema.
+2. Lançar Entrada – Registrar os itens que foram recebidos no estoque.
+3. Solicitar – Realizar solicitações de itens de entrega do estoque a oficina.
+4. Lançar Retirada – Efetuar a retirada e entrega a oficina dos itens solicitados e gerar comprovante em PDF.
+5. Fechar OS – Encerrar a ordem de serviço quando todos os itens forem entregues.
+
+
 ### 📝 Testando a Importação de OS
 
 Logue como Administrador ou Aprovisionador.
