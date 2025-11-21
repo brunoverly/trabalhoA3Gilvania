@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="388.5" prefWidth="721.0" style="-fx-background-color: white;" styleClass="telaLogin" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.LoginController">
+<AnchorPane fx:id="rootPane" prefHeight="388.5" prefWidth="721.0" style="-fx-background-color: white;" styleClass="telaLogin" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.trabalhoA3Gilvania.controller.LoginController">
     <children>
         <AnchorPane prefHeight="388.5" prefWidth="289.8" style="-fx-background-color: #434A50;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="432.8" AnchorPane.topAnchor="0.0">
             <children>
@@ -50,7 +50,7 @@
                 </ImageView>
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="275.1" prefHeight="388.5" prefWidth="350.7" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" />
+        <AnchorPane layoutX="265.0" prefHeight="389.0" prefWidth="378.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" />
         <ImageView fx:id="login1" fitHeight="289.8" fitWidth="289.8" layoutX="356.3" layoutY="60.2" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../../imagens/login1.jpg" />

@@ -4,9 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,46 +13,64 @@ import java.net.URL;
 
 public class LoginScreen extends Application {
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     @Override
     public void start(Stage stage) {
+        // Desativa escalonamento em monitores HiDPI
+        System.setProperty("prism.allowhidpi", "false");
 
         try {
-            // Carregar FXML
             URL fxmlUrl = getClass().getResource("/com/example/trabalhoA3Gilvania/login.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-            Parent root = fxmlLoader.load();
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent root = loader.load();
 
-            // Carregar fontes
-            String[] fonts = {"Poppins-Regular.ttf", "Poppins-Bold.ttf"};
-            for (String fontFile : fonts) {
-                Font.loadFont(getClass().getResource("/fonts/" + fontFile).toExternalForm(), 14);
-            }
+            // Arrastar janela
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
 
-            // Criar cena
+            root.setOnMouseDragged(event -> {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            });
+
+            // Fontes
+            Font.loadFont(getClass().getResource("/fonts/Poppins-Regular.ttf").toExternalForm(), 14);
+            Font.loadFont(getClass().getResource("/fonts/Poppins-Bold.ttf").toExternalForm(), 14);
+
+            // Criar cena exatamente no tamanho do FXML
             Scene scene = new Scene(root);
 
-            // Carregar CSS com teste de retorno
-            URL cssUrl = getClass().getResource("/css/style.css");
-            // Adicionar o ícone (logo)
-            URL logoUrl = getClass().getResource("/imagens/logo.png");
-            stage.getIcons().add(new Image(logoUrl.toExternalForm()));
+            // Remover bordas
+            stage.initStyle(StageStyle.UNDECORATED);
 
-            // Remover bordas e botões do Windows
-            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
-
-// Configurar cena
-            stage.initStyle(StageStyle.TRANSPARENT);
-            scene.setFill(Color.TRANSPARENT);
-
+            // Aplica a cena
             stage.setScene(scene);
+
+            // Ajusta o Stage para o tamanho EXATO do FXML
+            stage.sizeToScene();
+
+            // Bloqueia o tamanho capturado (pixel perfeito)
+            stage.setMinWidth(stage.getWidth());
+            stage.setMaxWidth(stage.getWidth());
+            stage.setMinHeight(stage.getHeight());
+            stage.setMaxHeight(stage.getHeight());
+
+            // Ícone
+            URL logoUrl = getClass().getResource("/imagens/logo.png");
+            if (logoUrl != null) {
+                stage.getIcons().add(new Image(logoUrl.toExternalForm()));
+            }
+
+            // Exibir
             stage.show();
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {

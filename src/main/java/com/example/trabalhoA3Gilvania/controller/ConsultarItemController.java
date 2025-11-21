@@ -539,7 +539,6 @@ public class ConsultarItemController implements Initializable{
                 try (ResultSet rsItens = cs.getResultSet()) {
                     ResultSetMetaData meta = rsItens.getMetaData();
                     for (int i = 1; i <= meta.getColumnCount(); i++) {
-                        System.out.println("COLUNA: " + meta.getColumnName(i));
                     }
                     while (rsItens.next()) {
                         // Tratamento especial: a procedure pode retornar 'resultado = 0' se a OS não existir
