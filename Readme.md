@@ -1,5 +1,13 @@
-# Sistema de Gerenciamento de Ordens de Serviço (OficinaPro)
+## ⚙️ Sistema de Gerenciamento de Ordens de Serviço (OficinaPro)
 
+![Java](https://img.shields.io/badge/Java-17+-%23007396?logo=java&logoColor=white)
+![JavaFX](https://img.shields.io/badge/JavaFX-17+-%23007396?logo=openjdk&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Local-%234479A1?logo=mysql&logoColor=white)
+![Apache POI](https://img.shields.io/badge/Excel%20Import-Apache%20POI-darkgreen?logo=apache&logoColor=white)
+![iTextPDF](https://img.shields.io/badge/PDF%20Generation-iTextPDF-red?logo=adobe-acrobat-reader&logoColor=white)
+![jBCrypt](https://img.shields.io/badge/Security-BCrypt-orange)
+
+---
 ### 📖 Descrição
 
 Este é um projeto de conclusão da Avaliação A3 para o curso de Modelagem de Software, baseado em um estudo de caso real.
@@ -40,18 +48,17 @@ Rastreabilidade: todo o fluxo do item é registrado no banco de dados.
 
 ### 🛠️ Tecnologias Utilizadas
 
-Linguagem: Java 17+ 
+| Categoria              | Tecnologia                                      | Descrição / Uso                                      |
+|------------------------|-------------------------------------------------|-------------------------------------------------------|
+| Linguagem              | **Java 17+**                                    | Linguagem principal do projeto                        |
+| Interface Gráfica      | **JavaFX**                                      | Interface desktop rica e moderna                      |
+| Banco de Dados         | **MySQL**                                       | Banco relacional + Stored Procedures para lógica de negócio |
+| Driver JDBC            | `mysql-connector-java`                          | Conexão Java ↔ MySQL                                  |
+| Leitura Excel          | `org.apache.poi:poi-ooxml`                      | Importação de ordens de serviço (.xlsx)               |
+| Geração de PDF         | `com.itextpdf:itext7-core`                      | Comprovantes de retirada em PDF                       |
+| Hashing de senhas/PIN  | `org.mindrot:jbcrypt`                           | Segurança no armazenamento de PINs                    |
+| Redução de boilerplate | `org.projectlombok:lombok`                      | Anotações como `@Cleanup`, `@Getter`, etc.            |
 
-Interface Gráfica: JavaFX
-Banco de Dados: MySQL (com uso intensivo de Stored Procedures para a lógica de negócios)
-
-Bibliotecas:
-
-mysql-connector-java – Driver JDBC
-org.apache.poi – leitura de Excel (.xlsx)
-com.itextpdf:itext7-core – geração de PDFs
-org.mindrot:jbcrypt – hashing de senhas
-lombok – anotações pontuais (@Cleanup)
 
 ### 🚀 Como Executar o Projeto
 
@@ -59,19 +66,6 @@ lombok – anotações pontuais (@Cleanup)
 git clone https://github.com/BrunoVerly/trabalhoA3Gilvania.git
 
 ### 2️⃣ Configuração do Banco de Dados
-
-Teste na Nuvem:
-
-Um banco MySQL no Azure ficará disponível por 7 dias (a partir de 24/10/2025).
-Permite rodar o software sem configuração local.
-Configuração Local (após período de teste):
-Inicie um servidor MySQL local (XAMPP/WAMP/Docker).
-Crie o banco: projeto_java_a3.
-Importe os scripts SQL da pasta src/main/resources/SQL/:
-Primeiro tables.sql (estrutura de tabelas)
-Depois procedures.sql (Stored Procedures e usuários de teste)
-
-### 3️⃣ Configuração da Conexão
 Abra DataBaseConection.java em 
 ```
 src/
@@ -81,8 +75,18 @@ src/
             ├── DataBaseConection.java
 ```
 
-Ajuste databaseUser, databasePassword e a URL (jdbc:mysql://localhost/projeto_java_a3) para o seu banco de dados.
+Você deve editar as credenciais de acesso ao seu banco de dados local.
 
+Local do arquivo: src/main/java/com/example/trabalhoA3Gilvania/DataBaseConection.java
+
+Edite as seguintes variáveis, substituindo pelos seus dados de acesso:
+```
+// [...]
+private final String databaseUser = "USUARIO";        // seu usuário
+private final String databasePassword = "SENHA";   // sua senha
+private final String url = "jdbc:mysql://localhost:3306/"SCHEMA"?useSSL=false&serverTimezone=UTC"; // seu schema no banco
+// [...] 
+```
 ### 4️⃣ Executar via IDE
 
 Abra o projeto como Maven/Gradle no IntelliJ ou Eclipse.

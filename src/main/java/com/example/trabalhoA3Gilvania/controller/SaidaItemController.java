@@ -233,7 +233,7 @@ public class SaidaItemController implements Initializable {
                         qtdSolcitada = rs2.getInt("qtd_solicitada");
                         matriculaSolicitador = rs2.getInt("solicitador_por");
                         // Popula o campo da quantidade solicitada (apenas visualização)
-                        solicitarQtdSolicitadaAnteriormente.setText(String.valueOf(qtdSolcitada));
+                        //solicitarQtdSolicitadaAnteriormente.setText(String.valueOf(qtdSolcitada));
                     }
                 }
             }

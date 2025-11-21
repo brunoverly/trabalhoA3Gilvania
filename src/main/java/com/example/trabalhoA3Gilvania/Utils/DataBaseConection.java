@@ -5,9 +5,9 @@ public class DataBaseConection {
     public Connection databaseLink;
     public Connection getConection(){
         String databaseName = "projeto_java_a3";
-        String databaseUser = "master";
-        String databasePassword = "bJb%2up0vHcSE^"; // sem \n
-        String url = "jdbc:mysql://azuremysqlbruno.mysql.database.azure.com:3306/"
+        String databaseUser = "root";
+        String databasePassword = "S@Jr%ilh%754vV"; // sem \n
+        String url = "jdbc:mysql://localhost:3306/"
                 + databaseName
                 + "?useSSL=true&requireSSL=true&serverTimezone=UTC";
 
